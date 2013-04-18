@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="beaver-rt">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/beaver-rt.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

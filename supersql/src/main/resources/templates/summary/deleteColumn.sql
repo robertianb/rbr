@@ -1,0 +1,1 @@
+-- Table ${tableName} : drop column ${columnName}

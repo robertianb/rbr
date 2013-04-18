@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Convert crebas.sql to alter script</title>
+    <style>
+        h1 {text-align:center;}
+        p.main {text-align:justify;}
+    </style>
+</head>
+<body>
+<form action="http://192.168.7.45:9090/crebas2alter/alter" method="POST">
+    <h3>Convert previous crebas.sql (old) + crebas.sql (new) to associated alter script</h3>
+      
+
+    <p>
+    <label for="prev">Previous version</label>
+    <input name="prev" />
+    <br/>
+    <label for="next">Next version</label>
+    <input name="next" />
+    <br/>
+    <label for="vendor">Vendor</label>
+    <br>
+    <input type="radio" name="vendor" value="oracle">Oracle<br>
+    <input type="radio" name="vendor" value="sqlserver">Sqlserver<br>
+    <input type="radio" name="vendor" value="sybase">Sybase<br>
+    <br/>
+    </p>
+    <label for="crebas1">Previous crebas.sql (paste the whole file in here)</label>
+    <br>
+    <textarea name="crebas1" cols="110" rows="25"/>
+    </textarea>
+    <br/>
+    <label for="crebas2">Next crebas.sql</label>
+    <br>
+    <textarea name="crebas2" cols="110" rows="25">
+        </textarea>
+    <br/>
+
+    <br/>
+    <input type="submit" value="Alter" />
+
+</form>
+</body>
+</html>

@@ -1,0 +1,170 @@
+%package "supersql";
+%class "SupersqlParser";
+
+%import "supersql.ast.*";
+%import "supersql.ast.entities.*";
+%import "supersql.ast.types.*";
+%import "supersql.ast.changes.*";
+%import "supersql.ast.actions.*";
+
+
+%embed {:
+    ScriptSemantics sema;
+:}
+;
+
+%init {:
+    this.sema = new ScriptSemantics();
+    this.report = new SuperSqlEvents();
+:}
+;
+
+%terminals LPAREN, RPAREN;
+%terminals COMMA, CREATE, TABLE, PRIMARY;
+// %terminals IS, NOT;
+%terminals DEFAULT, KEY, ALTER, ADD, DROP, COLUMN, CONSTRAINT, NULL, NOT, CHECK, IN, BETWEEN, IS;
+%terminals INT, LONG, VARCHAR, FLOAT, STRING_LITERAL, CLOB;
+%terminals FLOATING_POINT_LITERAL, INTEGER_LITERAL, IDENT, NUMBER, CHAR, TIMESTAMP;
+%terminals  LT, GT, GE, LE, EQ, PLUS, MINUS, DIV, MULT;
+%terminals AND, OR;
+
+
+%typeof IDENT = "String";
+%typeof INTEGER_LITERAL = "Integer";
+%typeof FLOATING_POINT_LITERAL = "Float";
+%typeof script = "ScriptSemantics";
+%typeof type = "TypeDefinition";
+%typeof type_and_default_value = "TypeDefinition";
+%typeof columns_list = "Columns";
+%typeof column_def = "ColumnDefinition";
+%typeof columns_def = "ColumnDefinitions";
+%typeof command = "ScriptAction";
+%typeof command_seq= "ScriptActions";
+%typeof create_table = "ScriptAction";
+%typeof expr = "Expr";
+
+%goal script;
+
+
+
+
+script = command_seq.s {: sema.addActions(s); return sema; :}
+;
+
+command_seq = command.c DIV command_seq.s {: ScriptActions res = ScriptActions.create(c); res.addScriptActions(s); return res;  :}
+| command.c {:  return ScriptActions.create(c); :}
+;
+
+
+command = create_table.c {:  return c; :}
+| add_column
+| drop_column
+|  {: return new VoidAction(); :}
+;
+
+add_column = ALTER TABLE IDENT.t ADD COLUMN column_def.c {: return new AddColumnsAction(t, ColumnDefinitions.create(c).getColumnDefinitions());  :}
+| ALTER TABLE IDENT.t ADD LPAREN columns_def.d RPAREN {: return new AddColumnsAction(t, d.getColumnDefinitions());  :}
+;
+
+drop_column =
+ALTER TABLE IDENT.t DROP COLUMN IDENT.c {: return new DeleteColumnsAction(t, Columns.create(c).getColumns());  :}
+| ALTER TABLE IDENT.t DROP LPAREN columns_list.d RPAREN {: return new DeleteColumnsAction(t, d.getColumns());  :}
+;
+
+columns_list = IDENT.c {: return Columns.create(new Column(c)); :}
+| IDENT.d COMMA columns_list.l {: Columns s = Columns.create(new Column(d)); s.addColumns(l); return s; :}
+;
+
+create_table = CREATE TABLE IDENT.i LPAREN columns_def.d COMMA constraint_def RPAREN {: return new CreateTableAction(i,d.getColumnDefinitions()); :}
+| CREATE TABLE IDENT.i LPAREN columns_def.d RPAREN {: return new CreateTableAction(i,d.getColumnDefinitions()); :}
+;
+
+
+
+columns_def = column_def.c  {: return ColumnDefinitions.create(c); :}
+| columns_def.d COMMA column_def.c {: d.addColumnDef(c); return d; :}
+;
+
+
+column_def = IDENT.i type_and_default_value.t null_value column_constraint_def {: return new ColumnDefinition(t, i) ; :}
+;
+
+type_and_default_value = type.t  {: return t; :}
+| type.t default_value  {: return t; :}
+;
+
+default_value = DEFAULT INTEGER_LITERAL
+| DEFAULT FLOATING_POINT_LITERAL
+| DEFAULT STRING_LITERAL
+;
+
+column_constraint_def = CONSTRAINT IDENT.c column_constraint_body
+|
+;
+
+
+column_constraint_body = CHECK LPAREN expression RPAREN
+;
+
+string_list = STRING_LITERAL
+| STRING_LITERAL COMMA string_list.l
+;
+
+value_list = value
+| value COMMA value_list
+;
+
+value =  INTEGER_LITERAL
+| FLOATING_POINT_LITERAL
+; 
+
+
+null_value = NULL
+| NOT NULL
+| 
+;
+
+constraint_def = CONSTRAINT IDENT.c PRIMARY KEY LPAREN columns_list RPAREN
+;
+
+type = INT {: return new TypeDefinition(Type.INT); :}
+| CLOB {: return new TypeDefinition(Type.CLOB); :}
+| TIMESTAMP LPAREN INTEGER_LITERAL.i RPAREN {: return new TimestampTypeDefinition(i); :}
+| CHAR LPAREN INTEGER_LITERAL RPAREN {: return new TypeDefinition(Type.CHAR); :}
+| NUMBER LPAREN INTEGER_LITERAL.i RPAREN {: return new NumberTypeDefinition(i); :}
+| LONG LPAREN INTEGER_LITERAL.n RPAREN {: return new VarcharTypeDefinition(n); :}
+| FLOAT {: return new TypeDefinition(Type.FLOAT); :}
+| VARCHAR LPAREN INTEGER_LITERAL.n RPAREN {: return new VarcharTypeDefinition(n); :}
+;
+
+
+
+
+expression = expression OR expression
+| expression AND expression
+| LPAREN expression RPAREN
+| IDENT.i IN LPAREN string_list RPAREN
+| IDENT.i IN LPAREN columns_list RPAREN
+| IDENT.i IN LPAREN value_list RPAREN
+| IDENT.i BETWEEN expr AND expr
+| IDENT.i IS null_value
+| expr LT expr
+| expr GT expr
+| expr GE expr
+| expr LE expr
+| expr EQ expr
+ 
+;
+
+ 
+
+expr = expr.a MULT  expr.b           {: return new Expr(a.val * b.val);   :}
+    | expr.a DIV   expr.b           {: return new Expr(a.val / b.val);   :}
+    | expr.a PLUS  expr.b           {: return new Expr(a.val + b.val);   :}
+    | expr.a MINUS expr.b           {: return new Expr(a.val - b.val);   :}
+    | LPAREN expr.e RPAREN          {: return e;                         :}
+//    | MINUS expr.e @ UNARY_MINUS    {: return new Expr(-e.val);          :}
+    |  INTEGER_LITERAL.n                      {: return new Expr(n); :}
+    |  FLOATING_POINT_LITERAL.n                      {: return new Expr(n); :}
+    | IDENT.i {: return new Expr(0); :}
+    ;
