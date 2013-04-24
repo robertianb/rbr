@@ -8,6 +8,6 @@ declare @details_count int;
 set @details_count = (select count(*) from syscolumns where upper(name)=upper('${previous}') and id in (select id from sysobjects where upper(name) = upper('${tableName}') and uid=@userid))
 if @details_count > 0
 begin
- execute ('SP_RENAME ''${tableName}.${previous}'', ''${next}'', ''COLUMN''')
+ execute ('sp_rename ''${tableName}.${previous}'', ''${next}'', ''COLUMN''')
 end
 go
