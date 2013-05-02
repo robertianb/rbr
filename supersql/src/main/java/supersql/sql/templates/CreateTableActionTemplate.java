@@ -1,13 +1,13 @@
 package supersql.sql.templates;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import supersql.ast.actions.CreateTableAction;
 import supersql.ast.actions.ScriptAction;
 import supersql.ast.entities.Column;
 import supersql.ast.entities.ColumnDefinition;
 import supersql.ast.entities.PrimaryKeyConstraint;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,13 +41,13 @@ public class CreateTableActionTemplate extends ActionTemplate{
         // Comment
         if (!inner)
         {
-            buf.append("-- Create table " + createTableAction.getTableName().toUpperCase() + '\n');
+            buf.append("-- Create table " + createTableAction.getTableName() + '\n');
         }
 
 
         // CREATE TABLE
         buf.append(actionTemplateHelper.getCreateTable());
-        buf.append(createTableAction.getTableName().toUpperCase());
+        buf.append(createTableAction.getTableName());
         buf.append(' ');
 
         // (
@@ -71,14 +71,24 @@ public class CreateTableActionTemplate extends ActionTemplate{
                 primaryCols.add(new Column(colDef.getName()));
             }
         }
+        
+        
+        // primary key
+        // eg. constraint PK_LEVELLEDMKTSPREADRULE primary key (ulId, bidPrice, maturityValue, maturityUnit)
+        PrimaryKeyConstraint primaryKeyConstraint = createTableAction.getPrimaryKey();
+        
+        
         if (columns.size() > 0)
         {
             // add last
             buf.append(INDENT);
             ColumnDefinition colDef = columns.get(columns.size() - 1);
             buf.append(actionTemplateHelper.getColumnDefinition(colDef));
+            if (primaryKeyConstraint != null)
+            {
+              buf.append(actionTemplateHelper.getColumnSeparator());
+            }
             buf.append(lineSeparator);
-
             if (colDef.isPrimary())
             {
                 primaryCols.add(new Column(colDef.getName()));
@@ -86,9 +96,6 @@ public class CreateTableActionTemplate extends ActionTemplate{
         }
 
 
-        // primary key
-        // eg. constraint PK_LEVELLEDMKTSPREADRULE primary key (ulId, bidPrice, maturityValue, maturityUnit)
-        PrimaryKeyConstraint primaryKeyConstraint = createTableAction.getPrimaryKey();
         if (primaryKeyConstraint!= null)
         {
             // use primary key constraint
@@ -98,7 +105,7 @@ public class CreateTableActionTemplate extends ActionTemplate{
 
         if (primaryCols.size() > 0)
         {
-            String primaryKey = actionTemplateHelper.getPrimaryKey(createTableAction.getTableName(), primaryCols.toArray(new Column[primaryCols.size()]));
+            String primaryKey = actionTemplateHelper.getPrimaryKey(createTableAction.getTableName(), primaryKeyConstraint.getConstraintId(),  primaryCols.toArray(new Column[primaryCols.size()]));
             buf.append(INDENT);
             buf.append(INDENT);
             buf.append(primaryKey);

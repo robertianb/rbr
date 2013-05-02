@@ -27,6 +27,11 @@ public class ActionTemplateHelperFactory
         public String getSendCommand() {
           return "go";
         }
+        
+        @Override
+        public String getLineFeed() {
+          return "+";
+        }
       };
     } else if (Vendor.SYBASE.equals(vendor))
     {

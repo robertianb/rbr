@@ -47,12 +47,12 @@ public abstract class ActionTemplateHelper
   }
 
   public String getPrimaryKey(String tableName,
-                              Column... primaryKeyColumns)
+                              String id, Column... primaryKeyColumns)
   {
     // eg. constraint PK_LEVELLEDMKTSPREADRULE primary key (ulId, bidPrice,
     // maturityValue, maturityUnit)
-    StringBuffer result = new StringBuffer(" constraint PK_"
-        + tableName.toUpperCase() + " primary key (");
+    StringBuffer result = new StringBuffer(" constraint "
+        + id + " primary key (");
     for (int i = 0; i < primaryKeyColumns.length - 1; i++) {
       Column colDef = primaryKeyColumns[i];
       result.append(colDef.getName());
@@ -71,5 +71,9 @@ public abstract class ActionTemplateHelper
     }
     public TypeVisitor getTypeVisitor() {
         return typeVisitor;
+    }
+
+    public String getLineFeed() {
+      return "||";
     }
 }
