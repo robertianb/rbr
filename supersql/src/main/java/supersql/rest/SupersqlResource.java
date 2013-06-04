@@ -139,7 +139,7 @@ public class SupersqlResource
   String crebas1, @FormParam("crebas2")
   String crebas2)
   {
-    log.info("Alter Request for " + vendor + " script (" + prev + " to " + next
+    log.info("Rollback Request for " + vendor + " script (" + prev + " to " + next
         + ")");
     return producScripts(vendor, component, next, prev, crebas2, crebas1);
   }
