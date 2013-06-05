@@ -33,7 +33,7 @@
 %terminals COMMA, CREATE, TABLE, PRIMARY;
 // %terminals IS, NOT;
 %terminals DEFAULT, KEY, ALTER, ADD, DROP, COLUMN, CONSTRAINT, NULL, NOT, CHECK, IN, BETWEEN, IS;
-%terminals INT, LONG, VARCHAR, FLOAT, STRING_LITERAL, CLOB;
+%terminals INT, LONG, VARCHAR, FLOAT, STRING_LITERAL, CLOB, NVARCHAR;
 %terminals FLOATING_POINT_LITERAL, INTEGER_LITERAL, IDENT, NUMBER, CHAR, TIMESTAMP, DATE;
 %terminals  LT, GT, GE, LE, EQ, PLUS, MINUS, DIV, MULT;
 %terminals AND, OR;
@@ -148,6 +148,7 @@ type = INT {: return new TypeDefinition(Type.INT); :}
 | LONG LPAREN INTEGER_LITERAL.n RPAREN {: return new VarcharTypeDefinition(n); :}
 | FLOAT {: return new TypeDefinition(Type.FLOAT); :}
 | VARCHAR LPAREN INTEGER_LITERAL.n RPAREN {: return new VarcharTypeDefinition(n); :}
+| NVARCHAR LPAREN INTEGER_LITERAL.n RPAREN {: return new NVarcharTypeDefinition(n); :}
 ;
 
 

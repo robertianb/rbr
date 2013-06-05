@@ -15,4 +15,6 @@ public interface TypeVisitor
 
   void date(DateTypeDefinition dateTypeDefinition);
 
+  void nvarchar(NVarcharTypeDefinition nVarcharTypeDefinition);
+
 }

@@ -9,6 +9,7 @@ package supersql.ast;
  */
 public enum Type {
     VARCHAR,
+    NVARCHAR,
     INT,
     FLOAT,
     BOOLEAN,

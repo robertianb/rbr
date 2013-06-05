@@ -40,13 +40,14 @@ public class Terminals {
 	static public final short NUMBER = 32;
 	static public final short LONG = 33;
 	static public final short VARCHAR = 34;
-	static public final short IN = 35;
-	static public final short CHECK = 36;
-	static public final short BETWEEN = 37;
-	static public final short DEFAULT = 38;
-	static public final short IS = 39;
-	static public final short INT = 40;
-	static public final short CLOB = 41;
-	static public final short DATE = 42;
-	static public final short FLOAT = 43;
+	static public final short NVARCHAR = 35;
+	static public final short IN = 36;
+	static public final short CHECK = 37;
+	static public final short BETWEEN = 38;
+	static public final short DEFAULT = 39;
+	static public final short IS = 40;
+	static public final short INT = 41;
+	static public final short CLOB = 42;
+	static public final short DATE = 43;
+	static public final short FLOAT = 44;
 }

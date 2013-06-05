@@ -1,6 +1,7 @@
 package supersql.sql.templates.sqlserver;
 
 import supersql.ast.types.DateTypeDefinition;
+import supersql.ast.types.NVarcharTypeDefinition;
 import supersql.ast.types.NumberTypeDefinition;
 import supersql.ast.types.TimestampTypeDefinition;
 import supersql.ast.types.TypeDefinition;
@@ -43,6 +44,10 @@ public class SqlserverTypeVisitor
     result = typeProvider.getType(typeDefinition.getType());
   }
 
+  @Override
+  public void nvarchar(NVarcharTypeDefinition nVarcharTypeDefinition) {
+    result = "NVARCHAR("  + nVarcharTypeDefinition.getNbChar() + ")";
+  }
   
   @Override
   public String getResult() {

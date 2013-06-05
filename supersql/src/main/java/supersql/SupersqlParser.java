@@ -16,29 +16,29 @@ import supersql.ast.entities.*;
 public class SupersqlParser extends Parser {
 
 	static final ParsingTables PARSING_TABLES = new ParsingTables(
-		"U9ozbcTm5LKKn$$xDiK06a928264I0eXfl98u2KGcYAeMC0k4B60YWhOfIXgB22YekCt7J#" +
-		"9CtxI6SSk88e5eo4a50iYgDX0K4IbUFtVa$CskpilyCtT#TtpttFkkNVVBNiVu5IZ0TDm4Q" +
-		"AeGIr6nAqnk1mtO1vknPrOZ2gCmJXCm1cu3jVZPYpowjyF5n6acMFcNwGW5IUX1vAwwfjt6" +
-		"4z6Jzo7F8qtu6GizVBFn6au1QCmMbGVJ$NoL8QeHiJObrLfNgxrfLkVEHZmvKgzl81leFYk" +
-		"2lWo9VVxWEy2hxU#4jqTY5ueqUK1twFYwntmPOals$Fbu1pCnCMu18zmjCz5a#YpSBxKpl7" +
-		"wV4XKYJSBRPXfDc4eXg228zWaoh9CoacOXKjHZEcu5hEfPw4KPQZ4uoZ773o85UY7$kOhjZ" +
-		"y0#UOF560GJiLZACHW5A4Qmp0STHY9Uep5U9oEYPZCDpeRKt0Uffhlp2vSXYim0rVYQip5D" +
-		"PYF6t4JRiC2t8AxS3lkm1BSZOLu6FVWNZHpnEsTWPNiyGa0Jv87EF$3#LiwvpxDi#2QoEVx" +
-		"5F2D1dEii#sxCg#KlwoCinwlbywH6CPrOQywZkH8ZdIAh$vOYJiS7qVZBaVFzV8Thawx8fD" +
-		"5PNegugaAJwMBwXF87IM#nEtvVVNY6ntmESV9ZN15TXSziIzFV16VhugxgDDdHpjBT8mxhU" +
-		"izhCe8jUKoo#LCz69PmIohB54f2xcEYhcUXaXMEUzAtkLifv8jvt9LLJ7FbTwhQJEvjntsK" +
-		"SJT7v7wuJl2F5Vkc9JMLyrtQ6IaHER4JL1MIEdeNI5b5RzGBkdDTR5ggImFqJr98Pb8Ygm$" +
-		"3g$#f8PC9dF9218bp$lgB2OhoJpo4bbBVYLxIHFPJmuOOtwZVO7iqhn3f4FrFwIHRD3d2MG" +
-		"ZcKHQo1JIQcDivnZDL3ADJ2Spo6moXymd2yX2ieWqarh$RzBsbv7bv2doD7cMF4TManV9cu" +
-		"2JHFioRN9dZfEYDbNRM48Eyzdkp1NaDUeUlZxUjPN9Ul8#MTSLSrojqvViKxqZ$9vQDuDmD" +
-		"pjPFbycOQxJJv#p2UVAoTNd73A03FJbv95yKX1gVn2nyzz6NgKkKdynYsTKbx3OGrkgpqD9" +
-		"MRmDExS#RHBz3j#uw3YYy0JrreIUrwkDeNDCt$B5$FeLdtvTxHjgtmwrsQfsazesjPlLjgl" +
-		"jwEOTjwZTgdQRsksXUis9ydtnjhZcyBM4Ol7zibljpcxQQ3zU7$ytl0wgNUtp7GdLEUhJg$" +
-		"ZhxNT0IdFK73674RZCx$8DIN2PhyqUiq$KZ#hv8H1lbV8JyW7XRZHSGUOzyQupQyqQmzrgF" +
-		"YOVaG$91kkH#EVaCz8IQF5RirFLf#nze$c6QWVPQ$ZjCx#OdyrFvalpXTRPRhQfsgfsYzeE" +
-		"qwvgipbWzljw#5lAl$Jfa9H$iXZF4zpX2UxAALuJm7wXKqWgJ$KKaifpnf4pfuwdLnrzKJv" +
-		"7zOIefwxdYT7eeu6n1hOpXl4Ou$RKgQMjbNybZb0jH0XusgVo37UK99zD2ZnNCh#Bv11kGi" +
-		"eJudYC#m$4S9Ff");
+		"U9p5bcbm54KOXj$99fk3I6wIa8GGY2J4x2QRX63k14Jn00#KIqM3U07YoU75eQ1uWNYLno#" +
+		"robzKMQMKLPOHn5lnW900KL5Cy4HG10s2ylbsRsSoCswKVyxKqz$RRtT$FKTlpm9M5URYUj" +
+		"oCnRW3oqLGYH36O2okmRLOWDjHXnGvRhjbQ48BncE2xIHXfiFr8Ge9B6FWHopYJ7aF1Z5Fl" +
+		"BJPeyx0ANWGzMZGAj5MkRQwNwj6r72qKl7sMEMbQM#bonkiF3diyeRgViakJyyXtxYyy#tP" +
+		"ChHATRNcQM#soylMMNfSteMwtwEsburpv2zCnJIaOmec8nghi0vduJpT#oHxpaojHlMDass" +
+		"O9Lin6aK8SCHbMYaUqkL4j68wJiObk19NKRUY62K8OWXASRMURGekmYpSXuUn1bdo1JDa8m" +
+		"V3i5OEOJZoKO2H6852bAC2LQZ6gQX5CyRXD9oECtbrPsCIpiK5ibUwCGCNur9SZYim3tDm0" +
+		"#RZEjo26t4Jbc0X5k5Et8hRi09BiGmFu2xSZTLymkfCmIESzp40ZvDxENy#Po$Wp2DP3w#C" +
+		"UDvH2TzsATTCqE5cy6uoaSNnVKu3rr2$My5dbQpBiRpw6bCcmMAULAx5lb4MrsCKdtkCHrc" +
+		"sIh5LabQfhh7XVZwNbt22ti1ZbShJAitLMgUznXFC4kNmoldib9VBzLDDFyZxgkKAKxshx3" +
+		"dBFRby$Ctu#5mJzTDFrqfHfSj2hhvH$6qNwr41dcKy0ynJnipAKtCDvcyiX#FLcQwl9AHt0" +
+		"FKBjRXAcza$4E6COexmg5fTAY$4R4riAT9loZTW6TIbPSwWBikvT$b8Cf$44ykXZn5wHG4l" +
+		"aXQIelm#U6IH46aY4yXCifWiSFIPeVAHkQIRF4r#8ll977AG718HrTP6zffnHqYdqKT93Tb" +
+		"iwetaNJAUl4ycaYscBP5C8fF9D3ATj9BPP1wPJnQIHMGPANVUaycnagmYQyXQyYHvYZn7dY" +
+		"SR02k6SJsZFpp6YZKnpkHOGewndi3u3EcX7kIOurMIGJQIJMHtVviLRVfOv83HNTxhD7rJI" +
+		"Hh9S7ZfP0Z9ClLCaaroJ7qeoIN376FoI3ufCFNXXE$VAlJCnxt7Ag9e9xNKnSOVpMAVqIKi" +
+		"Nc0iDVK02VRbuBi#xD2zaUxByPnMctxT$z5ldQV#bebJbIPjZhRN77gzGxzauiiclkB9kTN" +
+		"4RIQscxZTn0uJEmUunXqcxZHnbubTddvB8urtjBSxz0PFMxU9FIRk6I17nx$DyN$3ezV4Pn" +
+		"tUSKyVSMZkCVA7DbdAdt9CZi9roA$oCo8Uibk#amDQVM#SRrtjd#ho0$8suMgIDybcxRuXc" +
+		"sIZl4x5dKZU8zoPv1tbwFPFoCVa8rV6hsMFKLiu#uVo5TMNPBzmRvHzygFy89$BPwPFb#mo" +
+		"QgU9Eqpib0wZjflOBWVb5yTCHtJPQsg$w$8tgBspXVjB9Ry3bOmLBi1$0tuIortNJsBvLL9" +
+		"V9X$$9yGHFxzm5Wb$IUgew$XbQN9GpxPwvcbcUotRrJUgch6QSGoZ8gI9qb#G1ixHo7gOQ4" +
+		"UC$aUzZ3dwYV7WYqWW8fRDkBy1#w#OyG==");
 
 	static final Action RETURN2 = new Action() {
 		public Symbol reduce(Symbol[] _symbols, int offset) {
@@ -314,20 +314,27 @@ public class SupersqlParser extends Parser {
 					 return new VarcharTypeDefinition(n);
 				}
 			},
-			RETURN3,	// [45] expression = expression OR expression; returns 'expression' although none is marked
-			RETURN3,	// [46] expression = expression AND expression; returns 'expression' although none is marked
-			RETURN3,	// [47] expression = LPAREN expression RPAREN; returns 'RPAREN' although none is marked
-			Action.RETURN,	// [48] expression = IDENT.i IN LPAREN string_list RPAREN
-			Action.RETURN,	// [49] expression = IDENT.i IN LPAREN columns_list RPAREN
-			Action.RETURN,	// [50] expression = IDENT.i IN LPAREN value_list RPAREN
-			Action.RETURN,	// [51] expression = IDENT.i BETWEEN expr AND expr
-			Action.RETURN,	// [52] expression = IDENT.i IS null_value
-			RETURN3,	// [53] expression = expr LT expr; returns 'expr' although none is marked
-			RETURN3,	// [54] expression = expr GT expr; returns 'expr' although none is marked
-			RETURN3,	// [55] expression = expr GE expr; returns 'expr' although none is marked
-			RETURN3,	// [56] expression = expr LE expr; returns 'expr' although none is marked
-			RETURN3,	// [57] expression = expr EQ expr; returns 'expr' although none is marked
-			new Action() {	// [58] expr = expr.a MULT expr.b
+			new Action() {	// [45] type = NVARCHAR LPAREN INTEGER_LITERAL.n RPAREN
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_n = _symbols[offset + 3];
+					final Integer n = (Integer) _symbol_n.value;
+					 return new NVarcharTypeDefinition(n);
+				}
+			},
+			RETURN3,	// [46] expression = expression OR expression; returns 'expression' although none is marked
+			RETURN3,	// [47] expression = expression AND expression; returns 'expression' although none is marked
+			RETURN3,	// [48] expression = LPAREN expression RPAREN; returns 'RPAREN' although none is marked
+			Action.RETURN,	// [49] expression = IDENT.i IN LPAREN string_list RPAREN
+			Action.RETURN,	// [50] expression = IDENT.i IN LPAREN columns_list RPAREN
+			Action.RETURN,	// [51] expression = IDENT.i IN LPAREN value_list RPAREN
+			Action.RETURN,	// [52] expression = IDENT.i BETWEEN expr AND expr
+			Action.RETURN,	// [53] expression = IDENT.i IS null_value
+			RETURN3,	// [54] expression = expr LT expr; returns 'expr' although none is marked
+			RETURN3,	// [55] expression = expr GT expr; returns 'expr' although none is marked
+			RETURN3,	// [56] expression = expr GE expr; returns 'expr' although none is marked
+			RETURN3,	// [57] expression = expr LE expr; returns 'expr' although none is marked
+			RETURN3,	// [58] expression = expr EQ expr; returns 'expr' although none is marked
+			new Action() {	// [59] expr = expr.a MULT expr.b
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_a = _symbols[offset + 1];
 					final Expr a = (Expr) _symbol_a.value;
@@ -336,7 +343,7 @@ public class SupersqlParser extends Parser {
 					 return new Expr(a.val * b.val);
 				}
 			},
-			new Action() {	// [59] expr = expr.a DIV expr.b
+			new Action() {	// [60] expr = expr.a DIV expr.b
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_a = _symbols[offset + 1];
 					final Expr a = (Expr) _symbol_a.value;
@@ -345,7 +352,7 @@ public class SupersqlParser extends Parser {
 					 return new Expr(a.val / b.val);
 				}
 			},
-			new Action() {	// [60] expr = expr.a PLUS expr.b
+			new Action() {	// [61] expr = expr.a PLUS expr.b
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_a = _symbols[offset + 1];
 					final Expr a = (Expr) _symbol_a.value;
@@ -354,7 +361,7 @@ public class SupersqlParser extends Parser {
 					 return new Expr(a.val + b.val);
 				}
 			},
-			new Action() {	// [61] expr = expr.a MINUS expr.b
+			new Action() {	// [62] expr = expr.a MINUS expr.b
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_a = _symbols[offset + 1];
 					final Expr a = (Expr) _symbol_a.value;
@@ -363,28 +370,28 @@ public class SupersqlParser extends Parser {
 					 return new Expr(a.val - b.val);
 				}
 			},
-			new Action() {	// [62] expr = LPAREN expr.e RPAREN
+			new Action() {	// [63] expr = LPAREN expr.e RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_e = _symbols[offset + 2];
 					final Expr e = (Expr) _symbol_e.value;
 					 return e;
 				}
 			},
-			new Action() {	// [63] expr = INTEGER_LITERAL.n
+			new Action() {	// [64] expr = INTEGER_LITERAL.n
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 1];
 					final Integer n = (Integer) _symbol_n.value;
 					 return new Expr(n);
 				}
 			},
-			new Action() {	// [64] expr = FLOATING_POINT_LITERAL.n
+			new Action() {	// [65] expr = FLOATING_POINT_LITERAL.n
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 1];
 					final Float n = (Float) _symbol_n.value;
 					 return new Expr(n);
 				}
 			},
-			new Action() {	// [65] expr = IDENT.i
+			new Action() {	// [66] expr = IDENT.i
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_i = _symbols[offset + 1];
 					final String i = (String) _symbol_i.value;

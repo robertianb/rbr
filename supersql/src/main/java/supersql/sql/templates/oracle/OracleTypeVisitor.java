@@ -1,6 +1,7 @@
 package supersql.sql.templates.oracle;
 
 import supersql.ast.types.DateTypeDefinition;
+import supersql.ast.types.NVarcharTypeDefinition;
 import supersql.ast.types.NumberTypeDefinition;
 import supersql.ast.types.TimestampTypeDefinition;
 import supersql.ast.types.TypeDefinition;
@@ -48,4 +49,8 @@ public class OracleTypeVisitor
     return result;
   }
 
+  @Override
+  public void nvarchar(NVarcharTypeDefinition nVarcharTypeDefinition) {
+    result = "NVARCHAR2("  + nVarcharTypeDefinition.getNbChar() + ")";
+  }
 }

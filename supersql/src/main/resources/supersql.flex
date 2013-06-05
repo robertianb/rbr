@@ -108,6 +108,10 @@ StringCharacter = [^\r\n\'\\]
     "varchar2"       { return newToken(Terminals.VARCHAR); }
     "varchar"       { return newToken(Terminals.VARCHAR); }
     "VARCHAR"       { return newToken(Terminals.VARCHAR); }
+    "NVARCHAR2"       { return newToken(Terminals.NVARCHAR); }
+    "NVARCHAR"       { return newToken(Terminals.NVARCHAR); }
+    "nvarchar2"       { return newToken(Terminals.NVARCHAR); }
+    "nvarchar"       { return newToken(Terminals.NVARCHAR); }
     ","         { return newToken(Terminals.COMMA); }
     \'                             { yybegin(STRING); string.setLength(0); }
     {DecIntegerLiteral}    { return newToken(Terminals.INTEGER_LITERAL, new Integer(yytext())); }

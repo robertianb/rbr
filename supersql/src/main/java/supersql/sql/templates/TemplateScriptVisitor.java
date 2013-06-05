@@ -98,8 +98,9 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     }
     
     @Override
-    public void modifyColumn(ModifyColumnTypeAction modifyColumnTypeAction) {
-      throw new UnsupportedOperationException("Column type modificatipon is not supported");
+    public void modifyColumn(ModifyColumnTypeAction action) {
+      ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
+      out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
 
 

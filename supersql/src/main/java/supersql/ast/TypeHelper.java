@@ -18,6 +18,9 @@ public class TypeHelper {
         } else if (s.equalsIgnoreCase("VARCHAR2"))
         {
             result = Type.VARCHAR;
+        }  else if (s.equalsIgnoreCase("NVARCHAR2"))
+        {
+          result = Type.NVARCHAR;
         } else if (s.equalsIgnoreCase("float"))
         {
             result = Type.FLOAT;

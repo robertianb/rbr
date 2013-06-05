@@ -1,6 +1,7 @@
 package supersql.sql.templates.sybase;
 
 import supersql.ast.types.DateTypeDefinition;
+import supersql.ast.types.NVarcharTypeDefinition;
 import supersql.ast.types.NumberTypeDefinition;
 import supersql.ast.types.TimestampTypeDefinition;
 import supersql.ast.types.TypeDefinition;
@@ -41,6 +42,11 @@ public class SybaseTypeVisitor
   @Override
   public void simpleType(TypeDefinition typeDefinition) {
     result = typeProvider.getType(typeDefinition.getType());
+  }
+  
+  @Override
+  public void nvarchar(NVarcharTypeDefinition nVarcharTypeDefinition) {
+    result = "NVARCHAR("  + nVarcharTypeDefinition.getNbChar() + ")";
   }
 
   @Override

@@ -89,6 +89,7 @@ public class SupersqlResource
       StringWriter sw = new StringWriter();
       PrintWriter p = new PrintWriter(sw);
       sb.append(SuperSqlEvents.getInstance().getErrorSummary());
+      sb.append("\nIs this Oracle SQL ?");
       e.printStackTrace(p);
       sb.append('\n');
       sb.append(sw.getBuffer());
