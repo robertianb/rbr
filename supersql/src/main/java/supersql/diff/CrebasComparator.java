@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.StringReader;
 import java.util.Map;
 
-import beaver.Parser;
 import org.apache.log4j.Logger;
+
 import supersql.CrebasReader;
 import supersql.LogChangesVisitor;
 import supersql.ast.DatabaseModel;
@@ -18,6 +18,7 @@ import supersql.sql.ScriptSemanticsVisitor;
 import supersql.sql.templates.ActionTemplateHelper;
 import supersql.sql.templates.TemplateScriptVisitor;
 import supersql.sql.templates.TypeVisitorFactory;
+import beaver.Parser;
 
 /**
  * Created with IntelliJ IDEA. User: ian Date: 29/01/13 Time: 22:00 To change
@@ -179,16 +180,4 @@ public class CrebasComparator
         log.debug(sb.toString());
   }
 
-  private void compare() {
-    compareModels(previousCrebas.getDatabaseModel(),
-                  nextCrebas.getDatabaseModel());
-
-  }
-
-  private void compareModels(DatabaseModel previousModel,
-                             DatabaseModel nextModel)
-  {
-
-    
-  }
 }

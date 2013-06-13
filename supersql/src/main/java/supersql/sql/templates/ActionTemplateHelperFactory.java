@@ -1,5 +1,6 @@
 package supersql.sql.templates;
 
+import supersql.sql.templates.mysql.MySqlTypeVisitor;
 import supersql.sql.templates.oracle.OracleTypeVisitor;
 import supersql.sql.templates.sqlserver.SqlserverTypeVisitor;
 import supersql.sql.templates.sybase.SybaseTypeVisitor;
@@ -8,6 +9,8 @@ import supersql.sql.templates.sybase.SybaseTypeVisitor;
 public class ActionTemplateHelperFactory
 {
   
+  private static final String GO = "go";
+
   public ActionTemplateHelper createHelper(String vendor)
   {
     ActionTemplateHelper result;
@@ -25,7 +28,7 @@ public class ActionTemplateHelperFactory
       result = new ActionTemplateHelper(new SqlserverTypeVisitor()) {
         @Override
         public String getSendCommand() {
-          return "go";
+          return GO;
         }
         
         @Override
@@ -38,14 +41,22 @@ public class ActionTemplateHelperFactory
       result = new ActionTemplateHelper(new SybaseTypeVisitor()) {
         @Override
         public String getSendCommand() {
-          return "go";
+          return GO;
+        }
+      };
+    } else if (Vendor.MYSQL.equals(vendor))
+    {
+      result = new ActionTemplateHelper(new MySqlTypeVisitor()) {
+        @Override
+        public String getSendCommand() {
+          return GO;
         }
       };
     } else {
       result = new ActionTemplateHelper(new SqlserverTypeVisitor()) {
         @Override
         public String getSendCommand() {
-          return "go";
+          return GO;
         }
       };
     }

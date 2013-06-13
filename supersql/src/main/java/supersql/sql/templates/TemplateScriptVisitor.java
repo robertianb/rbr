@@ -29,13 +29,18 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     private String prefix;
     private ActionTemplateHelper actionTemplateHelper;
     private final ActionTemplateManager actionTemplateManager;
+    private boolean check;
 
 
+    public TemplateScriptVisitor(String prefix, ActionTemplateHelper actionTemplateHelper, boolean check) {
+      this.check = check;
+      this.prefix = prefix;
+      this.actionTemplateHelper = actionTemplateHelper;
+      this.actionTemplateManager = new ActionTemplateManager(check);
+      out = new StringBuffer();
+    }
     public TemplateScriptVisitor(String prefix, ActionTemplateHelper actionTemplateHelper) {
-        this.prefix = prefix;
-        this.actionTemplateHelper = actionTemplateHelper;
-        this.actionTemplateManager = new ActionTemplateManager();
-        out = new StringBuffer();
+      this(prefix, actionTemplateHelper, true);
     }
 
 

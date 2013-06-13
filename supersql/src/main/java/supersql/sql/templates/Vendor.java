@@ -12,7 +12,8 @@ public class Vendor {
     public static final String SYBASE = "sybase";
     public static final String SQLSERVER = "sqlserver";
     public static final String SUMMARY = "summary";
-    public static final String[] ALL =  new String[] {SUMMARY, ORACLE, SQLSERVER, SYBASE };
+    public static final String MYSQL = "mysql";
+    public static final String[] ALL =  new String[] {SUMMARY, ORACLE, SQLSERVER, SYBASE , MYSQL};
 
 
 }

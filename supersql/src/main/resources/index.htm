@@ -61,6 +61,7 @@
                 <option value="sqlserver">Sqlserver</option>
                 <option value="sybase">Sybase</option>
                 <option value="oracle">Oracle</option>
+			 <option value="mysql">MySQL</option>
             </select>
 
         </div>
@@ -88,6 +89,10 @@
         <div class="fm-req">
             <label for="rollback">Rollback</label>
             <input id="rollback" type="radio" name="target_type" value="http://192.168.7.45:9090/crebas2alter/rollback" />
+        </div>
+	    <div class="fm-req">
+            <label for="check">Check 'IF NOT EXIST'</label>
+            <input id="check" type="checkbox" name="check" checked />
         </div>
     </fieldset>
 

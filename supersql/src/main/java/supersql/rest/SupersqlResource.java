@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 
 import supersql.SuperSqlEvents;
 import supersql.ast.actions.ActionCodes;
-import supersql.ast.types.TypeVisitor;
 import supersql.diff.CrebasComparator;
 import supersql.sql.templates.ActionTemplateHelperFactory;
 import supersql.sql.templates.CreateTableTemplateFactory;
@@ -48,17 +47,20 @@ public class SupersqlResource
   String prev, @FormParam("next")
   String next, @FormParam("crebas1")
   String crebas1, @FormParam("crebas2")
-  String crebas2)
+  String crebas2, @FormParam("check")
+  String check)
   {
     // log.info("Alter request from " + request.getRemoteUser() +
     // " on " + request.getRemoteAddr() + "(" + request.getRemoteHost() + ")");
     log.info("Alter Request for " + vendor + " script (" + prev + " to " + next
-        + ")");
-    return producScripts(vendor, component, prev, next, crebas1, crebas2);
+        + ") with check[" + check + "]");
+    return produceScripts(vendor, component, prev, next, crebas1, crebas2,
+                          "on".equals(check));
   }
 
-  private String producScripts(String vendor, String component, String prev,
-                               String next, String crebas1, String crebas2)
+  private String produceScripts(String vendor, String component, String prev,
+                                String next, String crebas1, String crebas2,
+                                boolean check)
   {
     SuperSqlEvents.getInstance().clear();
     StringBuffer sb = new StringBuffer();
@@ -73,7 +75,7 @@ public class SupersqlResource
                                            crebas1), new StringReader(crebas2),
                                            prev, next),
                                        new TypeVisitorFactory(),
-                                       new ActionTemplateHelperFactory()));
+                                       new ActionTemplateHelperFactory(), check));
         }
       }
       else {
@@ -82,7 +84,7 @@ public class SupersqlResource
                                          crebas1), new StringReader(crebas2),
                                          prev, next),
                                      new TypeVisitorFactory(),
-                                     new ActionTemplateHelperFactory()));
+                                     new ActionTemplateHelperFactory(), check));
       }
     }
     catch (Exception e) {
@@ -138,27 +140,29 @@ public class SupersqlResource
   String prev, @FormParam("next")
   String next, @FormParam("crebas1")
   String crebas1, @FormParam("crebas2")
-  String crebas2)
+  String crebas2, @FormParam("check")
+  String check)
   {
-    log.info("Rollback Request for " + vendor + " script (" + prev + " to " + next
-        + ")");
-    return producScripts(vendor, component, next, prev, crebas2, crebas1);
+    log.info("Rollback Request for " + vendor + " script (" + prev + " to "
+        + next + ") with check[" + check + "]");
+    return produceScripts(vendor, component, next, prev, crebas2, crebas1,
+                          "on".equals(check));
   }
 
   private String produceAlterScript(String vendor, String component,
                                     CrebasComparator crebasComparator,
                                     TypeVisitorFactory typeVisitorFactory,
-                                    ActionTemplateHelperFactory helperFactory)
+                                    ActionTemplateHelperFactory helperFactory,
+                                    boolean check)
   {
 
-    TypeVisitor typeVisitor = typeVisitorFactory.createTypeVisitor(vendor);
-
     TemplateScriptVisitor scriptVisitor = new TemplateScriptVisitor(vendor,
-        helperFactory.createHelper(vendor));
+        helperFactory.createHelper(vendor), check);
     if (!Vendor.SUMMARY.equals(vendor)) {
       // create table template
       scriptVisitor.setActionTemplateFactory(ActionCodes.CREATE_TABLE,
-                                             new CreateTableTemplateFactory());
+                                             new CreateTableTemplateFactory(
+                                                 check));
       scriptVisitor.setActionTemplateFactory(ActionCodes.UPGRADE_VERSION,
                                              new UpgradeVersionTemplateFactory(
                                                  component));
