@@ -8,7 +8,7 @@ public class NVarcharTypeDefinition
   private final int nbChar;
 
   public NVarcharTypeDefinition(int nbChar) {
-    super(Type.NVARCHAR);
+    super(Type.VARCHAR);
     this.nbChar = nbChar;
   }
   
@@ -18,7 +18,7 @@ public class NVarcharTypeDefinition
 
   @Override
   public String toString() {
-    return "NVARCHAR(" + nbChar + ")";
+    return "VARCHAR(" + nbChar + ")";
   }
   
   @Override

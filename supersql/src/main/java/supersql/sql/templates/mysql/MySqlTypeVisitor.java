@@ -57,7 +57,7 @@ public class MySqlTypeVisitor
 
   @Override
   public void timestamp(TimestampTypeDefinition typeDefinition) {
-    result = "TIMESTAMP"; // + typeDefinition.getPrecision() + ")"; // TIMESTAMP(3) is deprecated
+    result = "TIMESTAMP"; // + typeDefinition.getPrecision() + ")";
   }
 
   @Override

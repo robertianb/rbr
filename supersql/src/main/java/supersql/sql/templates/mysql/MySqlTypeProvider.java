@@ -15,10 +15,6 @@ public class MySqlTypeProvider
         break;
       case INT:
         toReturn = "INT";
-        break;
-      case CLOB:
-        toReturn = "TEXT";
-        break;
       default:
         toReturn = super.getType(type);
         break;
