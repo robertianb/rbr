@@ -2,7 +2,9 @@ package supersql.sql;
 
 import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
+import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
+import supersql.ast.actions.DeleteAllAction;
 import supersql.ast.actions.DeleteColumnsAction;
 import supersql.ast.actions.DropTableAction;
 import supersql.ast.actions.ModifyColumnTypeAction;
@@ -37,4 +39,8 @@ public interface ScriptSemanticsVisitor {
     void modifyColumn(ModifyColumnTypeAction modifyColumnTypeAction);
 
     void renameColumn(RenameColumnAction renameColumnAction);
+
+    void copyTableContents(CopyTableAction copyTableAction);
+
+    void deleteTableContents(DeleteAllAction deleteAllAction);
 }

@@ -1,12 +1,17 @@
 -- Drop table ${tableName}
-declare @username varchar(200);
-set @username = (select user_name())
-declare @userid int;
-set @userid = (select user_id(@username))
+DELIMITER $$
 
-declare @l_count INT
-set @l_count = (select count(*) from sysobjects WHERE upper(name)= upper('${tableName}') and uid=@userid)
-if (@l_count = 1) begin
-  execute ('drop table ${tableName}')
-end
-go
+DROP PROCEDURE IF EXISTS upgrade_database $$
+CREATE PROCEDURE upgrade_database()
+BEGIN
+-- Drop table ${tableName}
+IF EXISTS( (SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()
+        AND TABLE_NAME='${tableName}') ) THEN
+    DROP TABLE ${tableName};
+END IF;
+
+END $$
+
+CALL upgrade_database() $$
+
+DELIMITER ;

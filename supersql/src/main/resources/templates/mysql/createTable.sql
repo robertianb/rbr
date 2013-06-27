@@ -1,12 +1,17 @@
 -- Create table ${tableName}
-declare @username varchar(200);
-set @username = (select user_name())
-declare @userid int;
-set @userid = (select user_id(@username))
+DELIMITER $$
 
-declare @l_count INT
-set @l_count = (select count(*) from sysobjects WHERE upper(name)= upper('${tableName}') and uid=@userid)
-if (@l_count = 0) begin
-  execute ('${createTableBody}')
-end
-go
+DROP PROCEDURE IF EXISTS upgrade_database $$
+CREATE PROCEDURE upgrade_database()
+BEGIN
+-- Create table ${tableName}
+IF NOT EXISTS( (SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()
+        AND TABLE_NAME='${tableName}') ) THEN
+    ${createTableBody};
+END IF;
+
+END $$
+
+CALL upgrade_database() $$
+
+DELIMITER ;

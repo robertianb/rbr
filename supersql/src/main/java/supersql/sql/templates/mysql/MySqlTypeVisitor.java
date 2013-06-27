@@ -57,7 +57,7 @@ public class MySqlTypeVisitor
 
   @Override
   public void timestamp(TimestampTypeDefinition typeDefinition) {
-    result = "TIMESTAMP"; // + typeDefinition.getPrecision() + ")";
+    result = "DATETIME(" + typeDefinition.getPrecision() + ")";
   }
 
   @Override
@@ -77,7 +77,7 @@ public class MySqlTypeVisitor
 
   @Override
   public void nvarchar(NVarcharTypeDefinition nVarcharTypeDefinition) {
-    result = "TEXT";
+    result = "VARCHAR(" + nVarcharTypeDefinition.getNbChar() + ") CHARACTER SET utf8";
   }
 
 }

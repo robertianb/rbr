@@ -1,15 +1,24 @@
 -- Version management - Check
 -- IF THE VERSION IS NOT THE EXPECTED, YOU SHOULD MANUALLY STOP THE SCRIPT (it loops indefinitely)
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS upgrade_database $$
+CREATE PROCEDURE upgrade_database()
+proc_start:BEGIN
+-- Update version from ${previous} to ${next}
 if not exists (select 1 from Version where databaseVersion like '${previous}' and component = '${component}')
-begin
-	RAISERROR ('Incorrect database version, please check your version before running this script!', 17, 1);
-	while 1 = 1
-	begin
-		WaitFor Delay '00:00:05'
-	end
-end
-go
+then
+	SIGNAL SQLSTATE '01000'
+      SET MESSAGE_TEXT = 'Incorrect database version, please check your version before running this script!', MYSQL_ERRNO = 1000;
+	  LEAVE proc_start;	
+end if;
+
 -- End of the Version management - Check (DO NOT REMOVE THIS COMMENT)
 
-update Version set databaseVersion='${next}' where databaseVersion='${previous}' and component = '${component}'
-go
+update Version set databaseVersion='${next}' where databaseVersion='${previous}' and component = '${component}';
+
+END $$
+
+CALL upgrade_database() $$
+
+DELIMITER ;

@@ -7,7 +7,9 @@ import java.util.Map;
 
 import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
+import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
+import supersql.ast.actions.DeleteAllAction;
 import supersql.ast.actions.DeleteColumnsAction;
 import supersql.ast.actions.DropTableAction;
 import supersql.ast.actions.ModifyColumnTypeAction;
@@ -101,5 +103,22 @@ public class DatabaseModelVisitor implements ScriptSemanticsVisitor {
         }
       }
       databaseModel.getTablesDefinitions().put(tableDefinition.getName(), new TableDefinition(tableDefinition.getName(), newColumnDefinitions));
+    }
+
+    @Override
+    public void copyTableContents(CopyTableAction copyTableAction) {
+//      TableDefinition sourceTableDefinition = databaseModel.getTablesDefinitions().get(copyTableAction.getSourceTableName());
+//      TableDefinition targettableDefinition = databaseModel.getTablesDefinitions().get(copyTableAction.getTargetTableName());
+//      if (targettableDefinition == null)
+//      {
+//        targettableDefinition = new TableDefinition(sourceTableDefinition.getName(), sourceTableDefinition.getColumns());
+//        databaseModel.addTable(targettableDefinition);
+//      }
+      // nothing to do to model
+    }
+
+    @Override
+    public void deleteTableContents(DeleteAllAction deleteAllAction) {
+      // nothing to do to model
     }
 }

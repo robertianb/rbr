@@ -47,7 +47,7 @@ public class CreateTableActionComparator {
                 if (prevCol.getName().equalsIgnoreCase(nextCol.getName())) {
                     // same name, the type or default value might have changed
                     // TODO manage default value & type
-                    visitor.modifyColumn(new ModifyColumnTypeAction(tableName, prevCol, nextCol));
+                    visitor.modifyColumn(new ModifyColumnTypeAction(tableName, prevCol, nextCol, previousCreateTableAction , nextCreateTableAction));
                 } else if (nextCreateTableAction.indexOfSame(prevCol) >= 0) {
                     // column still exists in next version, but has been shifted
                     log.warn(this + "Seems like column [" + nextCol.getName()

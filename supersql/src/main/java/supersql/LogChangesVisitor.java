@@ -4,7 +4,9 @@ import org.apache.log4j.Logger;
 
 import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
+import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
+import supersql.ast.actions.DeleteAllAction;
 import supersql.ast.actions.DeleteColumnsAction;
 import supersql.ast.actions.DropTableAction;
 import supersql.ast.actions.ModifyColumnTypeAction;
@@ -59,6 +61,16 @@ public class LogChangesVisitor
 
   @Override
   public void renameColumn(RenameColumnAction action) {
+    log.info(action);
+  }
+
+  @Override
+  public void copyTableContents(CopyTableAction action) {
+    log.info(action);
+  }
+
+  @Override
+  public void deleteTableContents(DeleteAllAction action) {
     log.info(action);
   }
 

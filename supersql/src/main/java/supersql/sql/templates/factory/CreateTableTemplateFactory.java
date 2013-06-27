@@ -1,4 +1,9 @@
-package supersql.sql.templates;
+package supersql.sql.templates.factory;
+
+import supersql.sql.templates.ActionTemplate;
+import supersql.sql.templates.ActionTemplateFactory;
+import supersql.sql.templates.CreateTableActionTemplate;
+import supersql.sql.templates.CreateTableIfNotExistsActionTemplate;
 
 /**
  * Created with IntelliJ IDEA. User: ian Date: 13/02/13 Time: 23:12 To change

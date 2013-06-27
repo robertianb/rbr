@@ -1,4 +1,8 @@
-package supersql.sql.templates;
+package supersql.sql.templates.factory;
+
+import supersql.sql.templates.ActionTemplate;
+import supersql.sql.templates.ActionTemplateFactory;
+import supersql.sql.templates.UpgradeComponentVersionActionTemplate;
 
 public class UpgradeVersionTemplateFactory extends ActionTemplateFactory
 {

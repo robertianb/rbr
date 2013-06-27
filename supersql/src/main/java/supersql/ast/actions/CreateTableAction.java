@@ -27,6 +27,16 @@ public class CreateTableAction extends TableAction {
         this(tableName, columnDefinitions);
         this.primaryKey = primaryKey;
     }
+    
+    /**
+     * Creates a table with the given name and using the col definitions and PKey of the given action 
+     * @param tableName
+     * @param action
+     */
+    public CreateTableAction(String tableName, CreateTableAction action)
+    {
+      this(tableName, action.getColumns(), action.getPrimaryKey());
+    }
 
     @Override
     protected void setParameters() {

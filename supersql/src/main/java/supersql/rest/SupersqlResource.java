@@ -21,11 +21,12 @@ import supersql.SuperSqlEvents;
 import supersql.ast.actions.ActionCodes;
 import supersql.diff.CrebasComparator;
 import supersql.sql.templates.ActionTemplateHelperFactory;
-import supersql.sql.templates.CreateTableTemplateFactory;
 import supersql.sql.templates.TemplateScriptVisitor;
 import supersql.sql.templates.TypeVisitorFactory;
-import supersql.sql.templates.UpgradeVersionTemplateFactory;
 import supersql.sql.templates.Vendor;
+import supersql.sql.templates.factory.CreateTableTemplateFactory;
+import supersql.sql.templates.factory.ModifyColumnWithTempTableTemplateFactory;
+import supersql.sql.templates.factory.UpgradeVersionTemplateFactory;
 
 /**
  * Created with IntelliJ IDEA. User: ian Date: 01/02/13 Time: 08:35 To change
@@ -166,7 +167,9 @@ public class SupersqlResource
       scriptVisitor.setActionTemplateFactory(ActionCodes.UPGRADE_VERSION,
                                              new UpgradeVersionTemplateFactory(
                                                  component));
-    }
+      scriptVisitor.setActionTemplateFactory(ActionCodes.MODIFY_COLUMN,
+                                             new ModifyColumnWithTempTableTemplateFactory(vendor, scriptVisitor.getActionTemplateManager())); 
+    } 
 
     crebasComparator.visit(scriptVisitor);
     return scriptVisitor.getOutput().toString();

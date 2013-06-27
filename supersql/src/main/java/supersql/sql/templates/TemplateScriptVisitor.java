@@ -3,7 +3,9 @@ package supersql.sql.templates;
 import supersql.ast.actions.ActionCodes;
 import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
+import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
+import supersql.ast.actions.DeleteAllAction;
 import supersql.ast.actions.DeleteColumnsAction;
 import supersql.ast.actions.DropTableAction;
 import supersql.ast.actions.ModifyColumnTypeAction;
@@ -114,7 +116,6 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
       // TODO Auto-generated method stub
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
-      
     }
 
 
@@ -126,5 +127,21 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     public void setActionTemplateFactory(String code, ActionTemplateFactory templateFactory)
     {
         actionTemplateManager.setActionTemplateFactory(code, templateFactory);
+    }
+    
+    public ActionTemplateManager getActionTemplateManager() {
+      return actionTemplateManager;
+    }
+    
+    @Override
+    public void copyTableContents(CopyTableAction action) {
+      ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
+      out.append(actionTemplate.apply(action, actionTemplateHelper));
+    }
+    
+    @Override
+    public void deleteTableContents(DeleteAllAction action) {
+      ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
+      out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
 }
