@@ -6,7 +6,7 @@ if (l_count = 1) then
 	execute immediate '${createTempTableBody}';
 	execute immediate 'insert into ${tempTableName} (select ${columnName} from ${tableName})';
 	execute immediate 'delete ${columnName} from ${tableName}';
-	execute immediate 'drop ${tempTableName}';
+	-- execute immediate 'drop ${tempTableName}';
 end if;
 end;
 /

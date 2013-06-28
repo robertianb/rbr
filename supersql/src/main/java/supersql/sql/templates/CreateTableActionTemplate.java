@@ -23,6 +23,8 @@ public class CreateTableActionTemplate extends ActionTemplate{
     public static final String DEFAULT_LINE_SEPARATOR = "\n";
     private boolean inner;
     private String lineSeparator = DEFAULT_LINE_SEPARATOR;
+    private boolean temp; 
+    private String postTableClause = ""; 
 
     public CreateTableActionTemplate() {
         super("");
@@ -32,6 +34,15 @@ public class CreateTableActionTemplate extends ActionTemplate{
         super(templateTxt);
     }
 
+    public CreateTableActionTemplate(String templateText,
+                                     boolean temp,
+                                     String postTableClause)
+    {
+      super(templateText);
+      this.temp = temp;
+      this.postTableClause = postTableClause;
+    }
+
     @Override
     public String apply(ScriptAction action, ActionTemplateHelper actionTemplateHelper) {
 
@@ -39,14 +50,16 @@ public class CreateTableActionTemplate extends ActionTemplate{
         CreateTableAction createTableAction = (CreateTableAction) action;
 
         // Comment
+        String createTable = (temp?actionTemplateHelper.getCreateTempTable():actionTemplateHelper.getCreateTable());
         if (!inner)
         {
-            buf.append("-- Create table " + createTableAction.getTableName() + '\n');
+            buf.append("-- " +
+            		createTable + createTableAction.getTableName() + '\n');
         }
 
 
         // CREATE TABLE
-        buf.append(actionTemplateHelper.getCreateTable());
+        buf.append(createTable);
         buf.append(createTableAction.getTableName());
         buf.append(' ');
 
@@ -118,6 +131,7 @@ public class CreateTableActionTemplate extends ActionTemplate{
             buf.append(DEFAULT_LINE_SEPARATOR);
         }
         buf.append(actionTemplateHelper.getDefinitionEnd());
+        buf.append(("".equals(postTableClause)?"":" " + postTableClause));
         if (!inner)
         {
             buf.append(DEFAULT_LINE_SEPARATOR);

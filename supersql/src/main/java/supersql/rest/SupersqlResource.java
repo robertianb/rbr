@@ -20,11 +20,13 @@ import org.apache.log4j.Logger;
 import supersql.SuperSqlEvents;
 import supersql.ast.actions.ActionCodes;
 import supersql.diff.CrebasComparator;
+import supersql.sql.templates.ActionTemplateCode;
 import supersql.sql.templates.ActionTemplateHelperFactory;
 import supersql.sql.templates.TemplateScriptVisitor;
 import supersql.sql.templates.TypeVisitorFactory;
 import supersql.sql.templates.Vendor;
 import supersql.sql.templates.factory.CreateTableTemplateFactory;
+import supersql.sql.templates.factory.CreateTempTableTemplateFactory;
 import supersql.sql.templates.factory.ModifyColumnWithTempTableTemplateFactory;
 import supersql.sql.templates.factory.UpgradeVersionTemplateFactory;
 
@@ -164,6 +166,9 @@ public class SupersqlResource
       scriptVisitor.setActionTemplateFactory(ActionCodes.CREATE_TABLE,
                                              new CreateTableTemplateFactory(
                                                  check));
+      scriptVisitor.setActionTemplateFactory(ActionTemplateCode.CREATE_TEMP_TABLE,
+                                             new CreateTempTableTemplateFactory(
+                                                                            check));
       scriptVisitor.setActionTemplateFactory(ActionCodes.UPGRADE_VERSION,
                                              new UpgradeVersionTemplateFactory(
                                                  component));

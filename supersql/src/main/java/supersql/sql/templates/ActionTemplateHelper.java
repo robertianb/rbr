@@ -42,6 +42,10 @@ public abstract class ActionTemplateHelper
     return ")";
   }
 
+  public String getCreateTempTable() {
+    return "create global temporary table ";
+  }
+  
   public String getCreateTable() {
     return "create table ";
   }

@@ -2,8 +2,8 @@ package supersql.sql.templates;
 
 import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
+import supersql.ast.actions.CreateTempTableCopyAction;
 import supersql.ast.actions.DeleteAllAction;
-import supersql.ast.actions.DropTableAction;
 import supersql.ast.actions.ModifyColumnTypeAction;
 import supersql.ast.actions.ScriptAction;
 import supersql.ast.entities.ColumnDefinition;
@@ -46,16 +46,22 @@ public class ModifyColumnActionTemplate
     {
       // create temp table
       String tempTableName = prevCreateTableAction.getTableName()+"_TMP";
-      CreateTableAction createTempTableAction = new CreateTableAction(tempTableName, prevCreateTableAction);
-      ActionTemplate createTempTableActionTemplate = new CreateTableActionTemplate();
+      ScriptAction createTempTableAction = new CreateTempTableCopyAction(prevCreateTableAction.getTableName(), tempTableName);
+      ActionTemplate createTempTableActionTemplate = actionTemplateManager.getActionTemplate(vendor, ActionTemplateCode.CREATE_TEMP_TABLE_COPY);
       String createTempTable = createTempTableActionTemplate.apply(createTempTableAction, actionTemplateHelper);
       sb.append(createTempTable);
       
-      // copy data from table to temp table 
-      CopyTableAction copyTableContentsAction = new CopyTableAction(prevCreateTableAction.getTableName(), tempTableName);
-      ActionTemplate copyTableContentsTemplate = actionTemplateManager.getActionTemplate(vendor, copyTableContentsAction);
-      String copyOut = copyTableContentsTemplate.apply(copyTableContentsAction, actionTemplateHelper);
-      sb.append(copyOut);
+//      // Delete data from Temp table (in case is already existed and contained data
+//      DeleteAllAction deleteTmp = new DeleteAllAction(tempTableName); 
+//      ActionTemplate deleteTmpTemplate = actionTemplateManager.getActionTemplate(vendor, deleteTmp);
+//      String deleteTmpOut = deleteTmpTemplate.apply(deleteTmp, actionTemplateHelper);
+//      sb.append(deleteTmpOut);
+//      
+//      // copy data from table to temp table 
+//      CopyTableAction copyTableContentsAction = new CopyTableAction(prevCreateTableAction.getTableName(), tempTableName);
+//      ActionTemplate copyTableContentsTemplate = actionTemplateManager.getActionTemplate(vendor, copyTableContentsAction);
+//      String copyOut = copyTableContentsTemplate.apply(copyTableContentsAction, actionTemplateHelper);
+//      sb.append(copyOut);
       
       // Delete FROM table
       DeleteAllAction deleteAllAction = new DeleteAllAction(nextCreateTableAction.getTableName()); 
@@ -75,9 +81,9 @@ public class ModifyColumnActionTemplate
       
       
       // drop temp table
-      DropTableAction dropTableAction = new DropTableAction(tempTableName);
-      ActionTemplate dropTableActionTemplate = actionTemplateManager.getActionTemplate(vendor, dropTableAction);
-      sb.append(dropTableActionTemplate.apply(dropTableAction, actionTemplateHelper));
+//      DropTableAction dropTableAction = new DropTableAction(tempTableName);
+//      ActionTemplate dropTableActionTemplate = actionTemplateManager.getActionTemplate(vendor, dropTableAction);
+//      sb.append(dropTableActionTemplate.apply(dropTableAction, actionTemplateHelper));
       
       
     } else {

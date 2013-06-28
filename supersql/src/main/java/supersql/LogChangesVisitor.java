@@ -6,6 +6,7 @@ import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
 import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
+import supersql.ast.actions.CreateTempTableCopyAction;
 import supersql.ast.actions.DeleteAllAction;
 import supersql.ast.actions.DeleteColumnsAction;
 import supersql.ast.actions.DropTableAction;
@@ -71,6 +72,12 @@ public class LogChangesVisitor
 
   @Override
   public void deleteTableContents(DeleteAllAction action) {
+    log.info(action);
+  }
+  
+  @Override
+  public void copyInTempTable(CreateTempTableCopyAction action)
+  {
     log.info(action);
   }
 

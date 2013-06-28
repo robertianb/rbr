@@ -20,5 +20,6 @@ public class ActionCodes {
     public static final String MODIFY_COLUMN = "modifyColumn";
     public static final String VOID_ACTION = "voidAction";
     public static final String COPY_TABLE_CONTENT = "copyTableContent";
+    public static final String CREATE_TABLE_COPY = "createTableCopy";
     public static final String DELETE_ALL = "delete";
 }

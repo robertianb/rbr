@@ -1,8 +1,8 @@
 package supersql.ast.entities;
 
-import beaver.Symbol;
-
 import java.util.List;
+
+import beaver.Symbol;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +24,7 @@ public class PrimaryKeyConstraint extends Symbol {
     public PrimaryKeyConstraint(String id, Columns columnDefinitions) {
         this(id,columnDefinitions.getColumns());
     }
-
+    
 
 
     public List<Column> getColumns() {

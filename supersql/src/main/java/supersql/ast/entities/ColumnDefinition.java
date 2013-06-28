@@ -1,5 +1,8 @@
 package supersql.ast.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import supersql.ast.types.TypeDefinition;
 import beaver.Symbol;
 
@@ -110,6 +113,13 @@ public class ColumnDefinition extends Symbol {
       return mandatory;
     }
     
-    
+    public static List<Column> toColumns(List<ColumnDefinition> columnDefinitions) {
+      List<Column> columns = new ArrayList<Column>();
+      for (ColumnDefinition columnDefinition : columnDefinitions) {
+        columns.add(new Column(columnDefinition.getName()));
+      }
+      return columns;
+    }
+
     
 }

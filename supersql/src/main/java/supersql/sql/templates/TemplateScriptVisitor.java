@@ -5,6 +5,7 @@ import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
 import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
+import supersql.ast.actions.CreateTempTableCopyAction;
 import supersql.ast.actions.DeleteAllAction;
 import supersql.ast.actions.DeleteColumnsAction;
 import supersql.ast.actions.DropTableAction;
@@ -141,6 +142,12 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     
     @Override
     public void deleteTableContents(DeleteAllAction action) {
+      ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
+      out.append(actionTemplate.apply(action, actionTemplateHelper));
+    }
+    @Override
+    public void copyInTempTable(CreateTempTableCopyAction action)
+    {
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
     }

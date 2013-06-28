@@ -9,6 +9,7 @@ import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
 import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
+import supersql.ast.actions.CreateTempTableCopyAction;
 import supersql.ast.actions.DeleteAllAction;
 import supersql.ast.actions.DeleteColumnsAction;
 import supersql.ast.actions.DropTableAction;
@@ -119,6 +120,12 @@ public class DatabaseModelVisitor implements ScriptSemanticsVisitor {
 
     @Override
     public void deleteTableContents(DeleteAllAction deleteAllAction) {
+      // nothing to do to model
+    }
+
+    @Override
+    public void copyInTempTable(CreateTempTableCopyAction createTempTableCopyAction)
+    {
       // nothing to do to model
     }
 }
