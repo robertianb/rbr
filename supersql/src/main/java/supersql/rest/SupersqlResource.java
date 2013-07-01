@@ -169,12 +169,12 @@ public class SupersqlResource
       scriptVisitor.setActionTemplateFactory(ActionTemplateCode.CREATE_TEMP_TABLE,
                                              new CreateTempTableTemplateFactory(
                                                                             check));
-      scriptVisitor.setActionTemplateFactory(ActionCodes.UPGRADE_VERSION,
-                                             new UpgradeVersionTemplateFactory(
-                                                 component));
       scriptVisitor.setActionTemplateFactory(ActionCodes.MODIFY_COLUMN,
                                              new ModifyColumnWithTempTableTemplateFactory(vendor, scriptVisitor.getActionTemplateManager())); 
     } 
+    scriptVisitor.setActionTemplateFactory(ActionCodes.UPGRADE_VERSION,
+                                           new UpgradeVersionTemplateFactory(
+                                                                             component));
 
     crebasComparator.visit(scriptVisitor);
     return scriptVisitor.getOutput().toString();
