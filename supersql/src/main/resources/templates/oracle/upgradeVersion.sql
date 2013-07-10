@@ -2,7 +2,7 @@
 -- IF THE VERSION IS NOT THE EXPECTED, YOU SHOULD MANUALLY STOP THE SCRIPT (it loops indefinitely)
 declare l_version VARCHAR2(100);
 begin
-select databaseVersion into l_version from Version where databaseVersion = '${previous}' and component = '${component}';
+select databaseVersion into l_version from Version where databaseVersion like '${previous}' and component = '${component}';
 exception
      when no_data_found then
      begin
