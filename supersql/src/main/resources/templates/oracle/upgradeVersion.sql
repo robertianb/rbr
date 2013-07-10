@@ -15,6 +15,6 @@ end;
 /
 -- End of the Version management - Check (DO NOT REMOVE THIS comments)
 
-update Version set databaseVersion='${next}' where databaseVersion = '${previous}' and component = '${component}'
+update Version set databaseVersion='${next}' where databaseVersion like '${previous}' and component = '${component}'
 /
 
