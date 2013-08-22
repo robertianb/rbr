@@ -9,6 +9,7 @@ import supersql.sql.templates.sybase.SybaseTypeVisitor;
 public class ActionTemplateHelperFactory
 {
   
+  private static final String SEMICOLON = ";";
   private static final String GO = "go";
 
   public ActionTemplateHelper createHelper(String vendor)
@@ -49,7 +50,7 @@ public class ActionTemplateHelperFactory
       result = new ActionTemplateHelper(new MySqlTypeVisitor()) {
         @Override
         public String getSendCommand() {
-          return GO;
+          return SEMICOLON;
         }
       };
     } else {
