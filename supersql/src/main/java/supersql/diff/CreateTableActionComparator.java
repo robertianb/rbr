@@ -61,12 +61,20 @@ public class CreateTableActionComparator {
                     }
                     newIndex = newIndexShifted;
                 } else if (prevCol.getType().isTheSameAs(nextCol.getType())) {
-
-                    // type is the same, could be a rename
+                    // type is the same, could be a rename, or a delete
+                  if (previousCreateTableAction.indexOfSame(nextCol) >= 0) {
+                    // column was deleted
                     log.warn(this + "Supposing column [" + prevCol.getName()
-                            + "] was renamed to [" + nextCol.getName() + "]");
+                        + "] was deleted");
+                    visitor.deleteColumn(new DeleteColumnAction(tableName, prevCol
+                        .getName()));
+                  }
+                  else {
+                    log.warn(this + "Supposing column [" + prevCol.getName()
+                        + "] was renamed to [" + nextCol.getName() + "]");
                     visitor.renameColumn(new RenameColumnAction(tableName, prevCol
-                            .getName(), nextCol.getName()));
+                        .getName(), nextCol.getName()));
+                  }
                 } else {
                     // type and name have changed, looks like a delete and and insert
                     log.warn(this + "Supposing column [" + prevCol.getName()

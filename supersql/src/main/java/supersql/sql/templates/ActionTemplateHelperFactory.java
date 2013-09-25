@@ -34,7 +34,7 @@ public class ActionTemplateHelperFactory
         
         @Override
         public String getLineFeed() {
-          return "+";
+          return "'\n" + "+" +  "'";
         }
       };
     } else if (Vendor.SYBASE.equals(vendor))
@@ -51,6 +51,11 @@ public class ActionTemplateHelperFactory
         @Override
         public String getSendCommand() {
           return SEMICOLON;
+        }
+        
+        @Override
+        public String getLineFeed() {
+         return "\n";
         }
       };
     } else {

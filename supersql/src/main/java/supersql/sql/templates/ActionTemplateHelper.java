@@ -78,6 +78,6 @@ public abstract class ActionTemplateHelper
     }
 
     public String getLineFeed() {
-      return "||";
+      return  "'\n" + "||" +  "'";
     }
 }

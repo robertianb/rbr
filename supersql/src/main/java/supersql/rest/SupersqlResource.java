@@ -71,7 +71,7 @@ public class SupersqlResource
       if (vendor.equalsIgnoreCase("All")) {
 
         for (String v : Vendor.ALL) {
-          sb.append("-- ############################### " + v
+          sb.append("-- ############################### " + v + (Vendor.MYSQL.equals(v)?"/MariaDB":"")
               + " ############################### \n");
           sb.append(produceAlterScript(v, component,
                                        new CrebasComparator(new StringReader(

@@ -27,8 +27,8 @@ public class CreateTableIfNotExistsActionTemplate
                       ActionTemplateHelper actionTemplateHelper)
   {
     createTableActionTemplate.setInner(true);
-    createTableActionTemplate.setLineSeparator("'\n"
-        + actionTemplateHelper.getLineFeed() + "'");
+    createTableActionTemplate.setLineSeparator(
+        actionTemplateHelper.getLineFeed());
 
     String createBody = createTableActionTemplate.apply(action,
                                                         actionTemplateHelper);
