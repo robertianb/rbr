@@ -31,9 +31,9 @@
 <form action="" method="POST" onSubmit="return myTarget(this);" target="_blank">
 
     <fieldset>
-        <legend>Component version jump</legend>
+        <legend>Database version jump</legend>
         <div class="fm-req" title="Choose hmm-broker for trunk and recent branches">
-            <label for="component">Choose component version to update:</label>
+            <label for="component">Choose component to update databaseVersion for:</label>
             <select id="component" name="component">
                 <option value="hmm-broker" selected="selected">hmm-broker</option>
                 <option value="hmm-database">hmm-database</option>
@@ -44,6 +44,7 @@
                 <option value="hmm-risk-analysis">hmm-risk-analysis</option>
                 <option value="hmm-volatility-autofit">hmm-volatility-autofit</option>
                 <option value="hmm-web-imc-driver">hmm-web-imc-driver</option>
+                <option value="hmm-marketmaking-stat">hmm-marketmaking-stat</option>
             </select>
 		</div> <br/>
 		     
@@ -68,7 +69,7 @@
                 <option value="sqlserver">Sqlserver</option>
                 <option value="sybase">Sybase</option>
                 <option value="oracle">Oracle</option>
-			 <option value="mysql">MySQL</option>
+			 <option value="mysql">MySQL/MariaDB</option>
             </select>
 
         </div>
