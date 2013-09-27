@@ -22,4 +22,5 @@ public class ActionCodes {
     public static final String COPY_TABLE_CONTENT = "copyTableContent";
     public static final String CREATE_TABLE_COPY = "createTableCopy";
     public static final String DELETE_ALL = "delete";
+    public static final String CHANGE_PRIMARY_KEY = "changePrimaryKey";
 }

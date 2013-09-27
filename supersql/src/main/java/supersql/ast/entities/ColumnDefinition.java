@@ -13,7 +13,7 @@ import beaver.Symbol;
  * Time: 18:49
  * To change this template use File | Settings | File Templates.
  */
-public class ColumnDefinition extends Symbol {
+public class ColumnDefinition extends Symbol implements Cloneable {
     private final String name;
     private final TypeDefinition type;
     private final boolean primary;
@@ -121,5 +121,11 @@ public class ColumnDefinition extends Symbol {
       return columns;
     }
 
+    @Override
+    public Object clone()
+      throws CloneNotSupportedException
+    {
+      return super.clone();
+    }
     
 }

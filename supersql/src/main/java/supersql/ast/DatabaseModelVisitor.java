@@ -5,8 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
+import supersql.ast.actions.ChangePrimaryKeyAction;
 import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
 import supersql.ast.actions.CreateTempTableCopyAction;
@@ -30,6 +33,8 @@ import supersql.sql.ScriptSemanticsVisitor;
  */
 public class DatabaseModelVisitor implements ScriptSemanticsVisitor {
 
+    private static Logger log = Logger.getLogger(DatabaseModelVisitor.class);
+  
     private final DatabaseModel databaseModel;
 
     public DatabaseModelVisitor() {
@@ -127,5 +132,28 @@ public class DatabaseModelVisitor implements ScriptSemanticsVisitor {
     public void copyInTempTable(CreateTempTableCopyAction createTempTableCopyAction)
     {
       // nothing to do to model
+    }
+
+    @Override
+    public void changePrimaryKey(ChangePrimaryKeyAction changePrimaryKeyAction)
+    {
+      TableDefinition modelTableDef = databaseModel.getTablesDefinitions().get(changePrimaryKeyAction.getTableName());
+      List<ColumnDefinition> newColumnDefinitions = new LinkedList<ColumnDefinition>();
+      for (int i = 0; i < modelTableDef.getColumns().size();i++) {
+        ColumnDefinition modelColDef =  modelTableDef.getColumns().get(i);
+        ColumnDefinition nextColDef = changePrimaryKeyAction.getNextCreateTableAction().getColumnDefinition(i);
+        if (modelColDef.isPrimary() != nextColDef.isPrimary())
+        {
+          try {
+            newColumnDefinitions.add((ColumnDefinition) nextColDef.clone());
+          }
+          catch (CloneNotSupportedException e) {
+            log.error("Error ", e);
+          } 
+        } else {
+          newColumnDefinitions.add(modelColDef);
+        }
+      }
+      databaseModel.getTablesDefinitions().put(modelTableDef.getName(), new TableDefinition(modelTableDef.getName(), newColumnDefinitions));
     }
 }

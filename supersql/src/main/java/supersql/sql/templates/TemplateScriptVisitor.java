@@ -3,6 +3,7 @@ package supersql.sql.templates;
 import supersql.ast.actions.ActionCodes;
 import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
+import supersql.ast.actions.ChangePrimaryKeyAction;
 import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
 import supersql.ast.actions.CreateTempTableCopyAction;
@@ -150,5 +151,12 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     {
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
+    }
+   
+    @Override
+    public void changePrimaryKey(ChangePrimaryKeyAction action)
+    {
+      ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
+      out.append(actionTemplate.apply(action, actionTemplateHelper));   
     }
 }

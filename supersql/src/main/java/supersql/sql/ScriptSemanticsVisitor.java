@@ -2,6 +2,7 @@ package supersql.sql;
 
 import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
+import supersql.ast.actions.ChangePrimaryKeyAction;
 import supersql.ast.actions.CopyTableAction;
 import supersql.ast.actions.CreateTableAction;
 import supersql.ast.actions.CreateTempTableCopyAction;
@@ -46,4 +47,6 @@ public interface ScriptSemanticsVisitor {
     void deleteTableContents(DeleteAllAction deleteAllAction);
 
     void copyInTempTable(CreateTempTableCopyAction createTempTableCopyAction);
+
+    void changePrimaryKey(ChangePrimaryKeyAction changePrimaryKeyAction);
 }

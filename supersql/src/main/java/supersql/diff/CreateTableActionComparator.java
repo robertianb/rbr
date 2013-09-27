@@ -3,11 +3,13 @@ package supersql.diff;
 import org.apache.log4j.Logger;
 
 import supersql.ast.actions.AddColumnAction;
+import supersql.ast.actions.ChangePrimaryKeyAction;
 import supersql.ast.actions.CreateTableAction;
 import supersql.ast.actions.ModifyColumnTypeAction;
 import supersql.ast.actions.RenameColumnAction;
 import supersql.ast.entities.ColumnDefinition;
 import supersql.ast.entities.DeleteColumnAction;
+import supersql.ast.entities.PrimaryKeyConstraint;
 import supersql.sql.ScriptSemanticsVisitor;
 
 public class CreateTableActionComparator {
@@ -31,6 +33,20 @@ public class CreateTableActionComparator {
 
     public void visit(ScriptSemanticsVisitor visitor) {
         int newIndex = 0;
+        
+     // Check PKey
+        PrimaryKeyConstraint previousPK = previousCreateTableAction.getPrimaryKey();
+        PrimaryKeyConstraint nextPK = nextCreateTableAction.getPrimaryKey();
+        if (!previousPK.equals(nextPK))
+        {
+          if (log.isDebugEnabled()) {
+            log.debug("Primary key has changed, previous[" + previousPK +
+                    "] new [" + nextPK + "]");
+          }
+          ChangePrimaryKeyAction changePrimaryKeyAction = new ChangePrimaryKeyAction(tableName, previousPK, nextPK, previousCreateTableAction, nextCreateTableAction);
+          visitor.changePrimaryKey(changePrimaryKeyAction);
+        }
+        
         for (int i = 0; i < previousCreateTableAction.getColumns().size(); i++) {
             ColumnDefinition prevCol = previousCreateTableAction
                     .getColumnDefinition(i);
@@ -97,6 +113,9 @@ public class CreateTableActionComparator {
             visitor.addColumn(new AddColumnAction(tableName, nextCol));
             newIndex++;
         }
+        
+        
+        
     }
 
     @Override
