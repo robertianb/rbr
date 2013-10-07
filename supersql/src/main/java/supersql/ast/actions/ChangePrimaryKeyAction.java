@@ -33,8 +33,8 @@ public class ChangePrimaryKeyAction
     this.nextPK = nextPK;
     this.previousCreateTableAction = previousCreateTableAction;
     this.nextCreateTableAction = nextCreateTableAction;
-    parameters.put("previousPK", previousPK);
-    parameters.put("nextPK", nextPK);
+    parameters.put("previousPrimaryKey", previousPK);
+    parameters.put("nextPrimaryKey", nextPK);
     parameters.put("nextConstraintId", nextPK.getConstraintId());
     parameters.put("previousConstraintId", previousPK.getConstraintId());
     parameters.put("tableName", tableName);
