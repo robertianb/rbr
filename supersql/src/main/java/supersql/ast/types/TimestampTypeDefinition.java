@@ -26,4 +26,9 @@ public class TimestampTypeDefinition extends TypeDefinition {
     public void visit(TypeVisitor v) {
       v.timestamp(this);
     }
+    
+    @Override
+    public boolean isTheSameAs(Object obj) {
+      return super.isTheSameAs(obj) && ((TimestampTypeDefinition) obj).precision == precision;
+    }
 }

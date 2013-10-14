@@ -26,4 +26,8 @@ public class VarcharTypeDefinition
     v.varchar(this);
   }
   
+  @Override
+  public boolean isTheSameAs(Object obj) {
+    return super.isTheSameAs(obj) && ((VarcharTypeDefinition) obj).nbChar == nbChar;
+  }
 }

@@ -26,4 +26,9 @@ public class NumberTypeDefinition extends TypeDefinition {
     public void visit(TypeVisitor v) {
       v.number(this);
     }
+    
+    @Override
+    public boolean isTheSameAs(Object obj) {
+      return super.isTheSameAs(obj) && ((NumberTypeDefinition) obj).nbDigit == nbDigit;
+    }
 }
