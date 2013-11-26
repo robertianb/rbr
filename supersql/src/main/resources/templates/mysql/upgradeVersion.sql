@@ -8,8 +8,8 @@ proc_start:BEGIN
 -- Update version from ${previous} to ${next}
 if not exists (select 1 from Version where databaseVersion like '${previous}' and component = '${component}')
 then
-	SIGNAL SQLSTATE '01000'
-      SET MESSAGE_TEXT = 'Incorrect database version, please check your version before running this script!', MYSQL_ERRNO = 1000;
+	SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Incorrect database version, please check your version before running this script!', MYSQL_ERRNO = 45000;
 	  LEAVE proc_start;	
 end if;
 
