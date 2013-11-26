@@ -37,13 +37,14 @@ public class CreateTableActionComparator {
      // Check PKey
         PrimaryKeyConstraint previousPK = previousCreateTableAction.getPrimaryKey();
         PrimaryKeyConstraint nextPK = nextCreateTableAction.getPrimaryKey();
+        ChangePrimaryKeyAction changePrimaryKeyAction = null;
         if (!previousPK.equals(nextPK))
         {
           if (log.isDebugEnabled()) {
             log.debug("Primary key has changed, previous[" + previousPK +
                     "] new [" + nextPK + "]");
           }
-          ChangePrimaryKeyAction changePrimaryKeyAction = new ChangePrimaryKeyAction(tableName, previousPK, nextPK, previousCreateTableAction, nextCreateTableAction);
+          changePrimaryKeyAction = new ChangePrimaryKeyAction(tableName, previousPK, nextPK, previousCreateTableAction, nextCreateTableAction);
           visitor.changePrimaryKey(changePrimaryKeyAction);
         }
         
@@ -56,14 +57,17 @@ public class CreateTableActionComparator {
                 // columns were deleted
                 visitor.deleteColumn(new DeleteColumnAction(tableName, prevCol
                         .getName()));
+                newIndex++;
             } else if (prevCol.isTheSameAs(nextCol)) {
                 // column unchanged, do nothing
+              newIndex++;
             } else {
                 // column is not the same
                 if (prevCol.getName().equalsIgnoreCase(nextCol.getName())) {
                     // same name, the type or default value might have changed
                     // TODO manage default value & type
                     visitor.modifyColumn(new ModifyColumnTypeAction(tableName, prevCol, nextCol, previousCreateTableAction , nextCreateTableAction));
+                    newIndex++;
                 } else if (nextCreateTableAction.indexOfSame(prevCol) >= 0) {
                     // column still exists in next version, but has been shifted
                     log.warn(this + "Seems like column [" + nextCol.getName()
@@ -73,7 +77,10 @@ public class CreateTableActionComparator {
                     for (int ci = newIndex; ci < newIndexShifted; ci++) {
                         // add intermediary cols
                         nextCol = nextCreateTableAction.getColumnDefinition(ci);
-                        visitor.addColumn(new AddColumnAction(tableName, nextCol));
+                        if (previousCreateTableAction.indexOfSame(nextCol) < 0)
+                        {
+                          visitor.addColumn(new AddColumnAction(tableName, nextCol));
+                        }
                     }
                     newIndex = newIndexShifted;
                 } else if (prevCol.getType().isTheSameAs(nextCol.getType())) {
@@ -91,6 +98,7 @@ public class CreateTableActionComparator {
                     visitor.renameColumn(new RenameColumnAction(tableName, prevCol
                         .getName(), nextCol.getName()));
                   }
+                  newIndex++;
                 } else {
                     // type and name have changed, looks like a delete and and insert
                     log.warn(this + "Supposing column [" + prevCol.getName()
@@ -98,11 +106,14 @@ public class CreateTableActionComparator {
                             + "] was added in its place");
                     visitor.deleteColumn(new DeleteColumnAction(tableName, prevCol
                             .getName()));
-                    visitor.addColumn(new AddColumnAction(tableName, nextCol));
+                    if (previousCreateTableAction.indexOfSame(nextCol) >= 0) {
+                    } else {
+                      
+                    }
                 }
             }
-            newIndex++;
         }
+        
 
         // iterate over remaining columns if any (table has more columns than
         // before)
@@ -110,7 +121,10 @@ public class CreateTableActionComparator {
                 .getColumns().size()) {
             // all these are new columns, supposing new columns are always added last
             ColumnDefinition nextCol = nextCreateTableAction.getColumnDefinition(newIndex);
-            visitor.addColumn(new AddColumnAction(tableName, nextCol));
+            if (previousCreateTableAction.indexOfSame(nextCol) < 0)
+            {
+              visitor.addColumn(new AddColumnAction(tableName, nextCol));
+            }
             newIndex++;
         }
         

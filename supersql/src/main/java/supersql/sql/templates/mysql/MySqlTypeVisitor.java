@@ -47,11 +47,13 @@ public class MySqlTypeVisitor
     }
     else if (nbDigit <= 19) {
       result = "BIGINT";
+    } else {
+      result = "DECIMAL";
     }
-    else {
-      throw new IllegalStateException("Non-standard type NUMBER(" + nbDigit
-          + ")");
-    }
+//    else {
+//      throw new IllegalStateException("Non-standard type NUMBER(" + nbDigit
+//          + ")");
+//    }
     result = result + "(" + nbDigit + ")";
   }
 
