@@ -26,7 +26,12 @@ public class SybaseTypeVisitor
 
   @Override
   public void number(NumberTypeDefinition typeDefinition) {
-    result = "NUMBER(" + typeDefinition.getNbDigit() + ")";
+    if (typeDefinition.getNbDigit() == 1)
+    {
+      result = "INT";
+    } else {
+      result = "NUMBER(" + typeDefinition.getNbDigit() + ")";
+    }
   }
 
   @Override
