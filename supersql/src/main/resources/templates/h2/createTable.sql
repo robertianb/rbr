@@ -1,0 +1,2 @@
+-- Create table ${tableName}
+${createTableBody};

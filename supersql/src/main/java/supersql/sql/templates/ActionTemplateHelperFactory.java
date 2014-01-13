@@ -1,5 +1,6 @@
 package supersql.sql.templates;
 
+import supersql.sql.templates.h2.H2TypeVisitor;
 import supersql.sql.templates.mysql.MySqlTypeVisitor;
 import supersql.sql.templates.oracle.OracleTypeVisitor;
 import supersql.sql.templates.sqlserver.SqlserverTypeVisitor;
@@ -48,6 +49,19 @@ public class ActionTemplateHelperFactory
     } else if (Vendor.MYSQL.equals(vendor))
     {
       result = new ActionTemplateHelper(new MySqlTypeVisitor()) {
+        @Override
+        public String getSendCommand() {
+          return SEMICOLON;
+        }
+        
+        @Override
+        public String getLineFeed() {
+         return "\n";
+        }
+      };
+    } else if (Vendor.H2.equals(vendor))
+    {
+      result = new ActionTemplateHelper(new H2TypeVisitor()) {
         @Override
         public String getSendCommand() {
           return SEMICOLON;
