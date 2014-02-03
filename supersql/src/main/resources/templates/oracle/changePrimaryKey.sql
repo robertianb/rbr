@@ -7,5 +7,12 @@ if (l_name is not null) then
 end if;
 END;
 /
-alter table ${tableName} add constraint ${nextConstraintId} primary key ${nextPrimaryKey}
+
+DECLARE l_name VARCHAR2(30);
+BEGIN
+select ${nextConstraintId} into l_name from user_constraints WHERE table_name=upper('${tableName}') AND constraint_type = 'P';
+if (l_name is null) then
+  execute immediate 'alter table ${tableName} add constraint ${nextConstraintId} primary key ${nextPrimaryKey}';
+end if;
+END;
 /
