@@ -143,3 +143,17 @@ create table SafetyRulesSetChange
     constraint PK_SAFETYRULESETCHANGE primary key (changeId)
 )
 /
+
+create table SafetyBypassAudit
+(
+ bypassId                         VARCHAR2(64)            not null,
+ ruleId                           VARCHAR2(64)            not null,
+ ruleLevel                        VARCHAR2(16)            not null,
+ action                           VARCHAR2(16)            not null,
+ bypassTime                       TIMESTAMP(3)            not null,
+ login                            VARCHAR2(64)            not null,
+ productId                        VARCHAR2(64)            not null,
+ transactionDesc                  VARCHAR2(4000)          not null,
+ constraint PK_SAFETYBYPASSAUDIT primary key (bypassId)
+)
+/
