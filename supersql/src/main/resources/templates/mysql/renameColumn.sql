@@ -1,5 +1,5 @@
 -- Table ${tableName} : rename column ${previous} to ${next}
-DELIMITER $$
+
 
 DROP PROCEDURE IF EXISTS upgrade_database $$
 CREATE PROCEDURE upgrade_database()
@@ -14,4 +14,3 @@ END $$
 
 CALL upgrade_database() $$
 
-DELIMITER ;

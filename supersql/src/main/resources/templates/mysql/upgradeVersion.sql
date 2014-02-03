@@ -1,6 +1,6 @@
 -- Version management - Check
 -- IF THE VERSION IS NOT THE EXPECTED, YOU SHOULD MANUALLY STOP THE SCRIPT (it loops indefinitely)
-DELIMITER $$
+
 
 DROP PROCEDURE IF EXISTS upgrade_database $$
 CREATE PROCEDURE upgrade_database()
@@ -21,4 +21,4 @@ END $$
 
 CALL upgrade_database() $$
 
-DELIMITER ;
+

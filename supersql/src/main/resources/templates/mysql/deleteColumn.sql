@@ -1,5 +1,5 @@
 -- Table ${tableName} : drop column ${columnName}
-DELIMITER $$
+
 
 DROP PROCEDURE IF EXISTS upgrade_database $$
 CREATE PROCEDURE upgrade_database()
@@ -14,4 +14,3 @@ END $$
 
 CALL upgrade_database() $$
 
-DELIMITER ;
