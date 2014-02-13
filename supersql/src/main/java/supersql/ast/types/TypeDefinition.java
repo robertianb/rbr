@@ -43,7 +43,7 @@ public class TypeDefinition extends Symbol{
     }
     
     
-    public void visit(TypeVisitor v)
+    public void accept(TypeVisitor v)
     {
       v.simpleType(this);
     }

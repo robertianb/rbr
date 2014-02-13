@@ -7,16 +7,16 @@ package supersql.exceptions;
  * Time: 19:14
  * To change this template use File | Settings | File Templates.
  */
-public class SSQLException extends Exception {
-    public SSQLException(String s) {
+public class SQLGeneratorException extends Exception {
+    public SQLGeneratorException(String s) {
         super(s);
     }
 
-    public SSQLException(String s, Throwable throwable) {
+    public SQLGeneratorException(String s, Throwable throwable) {
         super(s, throwable);
     }
 
-    public SSQLException(Throwable throwable) {
+    public SQLGeneratorException(Throwable throwable) {
         super(throwable);
     }
 }

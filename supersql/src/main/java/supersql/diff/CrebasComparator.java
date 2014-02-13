@@ -110,7 +110,7 @@ public class CrebasComparator
       crebasComparator = new CrebasComparator(previous, next);
     }
 
-    crebasComparator.visit(new LogChangesVisitor());
+    crebasComparator.accept(new LogChangesVisitor());
     
     TypeVisitorFactory typeVisitorFactory = new TypeVisitorFactory();
     TypeVisitor typeVisitor = typeVisitorFactory.createTypeVisitor(dbVendor);
@@ -119,13 +119,13 @@ public class CrebasComparator
                                                                     dbVendor, new ActionTemplateHelper(typeVisitor) {
                                                             });
     
-    crebasComparator.visit(scriptVisitor);
+    crebasComparator.accept(scriptVisitor);
     log.debug(scriptVisitor.getOutput());
     
 
   }
 
-  public void visit(ScriptSemanticsVisitor visitor) {
+  public void accept(ScriptSemanticsVisitor visitor) {
     DatabaseModel previousModel = previousCrebas.getDatabaseModel();
     DatabaseModel nextModel = nextCrebas.getDatabaseModel();
     

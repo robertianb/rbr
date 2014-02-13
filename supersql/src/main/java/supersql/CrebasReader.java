@@ -44,7 +44,7 @@ public class CrebasReader {
     public DatabaseModel getDatabaseModel()
     {
         DatabaseModelVisitor visitor = new DatabaseModelVisitor();
-        sema.visit(visitor);
+        sema.accept(visitor);
         return visitor.getDatabaseModel();
     }
     

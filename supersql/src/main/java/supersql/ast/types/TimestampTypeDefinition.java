@@ -23,7 +23,7 @@ public class TimestampTypeDefinition extends TypeDefinition {
     }
     
     @Override
-    public void visit(TypeVisitor v) {
+    public void accept(TypeVisitor v) {
       v.timestamp(this);
     }
     

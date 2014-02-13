@@ -39,7 +39,7 @@ public class CopyTableAction extends ScriptAction {
 
 
     @Override
-    public void visit(ScriptSemanticsVisitor visitor) {
+    public void accept(ScriptSemanticsVisitor visitor) {
       visitor.copyTableContents(this);
     }
     public String getSourceTableName() {

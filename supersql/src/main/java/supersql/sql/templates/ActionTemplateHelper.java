@@ -18,7 +18,7 @@ public abstract class ActionTemplateHelper
   }
 
   public String getColumnDefinition(ColumnDefinition colDef) {
-    colDef.getType().visit(typeVisitor);
+    colDef.getType().accept(typeVisitor);
 
     return colDef.getName()
         + " "

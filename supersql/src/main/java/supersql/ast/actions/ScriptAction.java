@@ -23,7 +23,7 @@ public abstract class ScriptAction extends Symbol {
 
     protected abstract void setParameters();
 
-    public abstract void visit(ScriptSemanticsVisitor visitor);
+    public abstract void accept(ScriptSemanticsVisitor visitor);
 
     public Properties getParameters()
     {

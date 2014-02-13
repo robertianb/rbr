@@ -25,7 +25,7 @@ public class RenameColumnAction
   }
 
   @Override
-  public void visit(ScriptSemanticsVisitor visitor) {
+  public void accept(ScriptSemanticsVisitor visitor) {
     visitor.renameColumn(this);
 
   }

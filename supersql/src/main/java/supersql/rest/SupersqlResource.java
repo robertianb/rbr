@@ -179,7 +179,7 @@ public class SupersqlResource
                                            new UpgradeVersionTemplateFactory(
                                                                              component));
 
-    crebasComparator.visit(scriptVisitor);
+    crebasComparator.accept(scriptVisitor);
     return scriptVisitor.getOutput().toString();
   }
 

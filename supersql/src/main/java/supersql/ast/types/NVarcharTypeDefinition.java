@@ -22,7 +22,7 @@ public class NVarcharTypeDefinition
   }
   
   @Override
-  public void visit(TypeVisitor v) {
+  public void accept(TypeVisitor v) {
     v.nvarchar(this);
   }
   

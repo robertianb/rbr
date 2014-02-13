@@ -38,7 +38,7 @@ public class UpgradeVersionAction extends ScriptAction {
     }
 
     @Override
-    public void visit(ScriptSemanticsVisitor visitor) {
+    public void accept(ScriptSemanticsVisitor visitor) {
         visitor.upgradeVersion(this);
     }
 }

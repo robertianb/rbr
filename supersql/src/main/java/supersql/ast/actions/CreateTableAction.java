@@ -65,7 +65,7 @@ public class CreateTableAction
   }
 
   @Override
-  public void visit(ScriptSemanticsVisitor visitor) {
+  public void accept(ScriptSemanticsVisitor visitor) {
     visitor.createTable(this);
   }
 

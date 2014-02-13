@@ -17,107 +17,118 @@ import supersql.ast.actions.ScriptAction;
 public class ActionTemplateManager
 {
 
-  private final static Logger log = Logger
-      .getLogger(ActionTemplateManager.class);
-  
-  private boolean check;
+	private final static Logger log = Logger
+			.getLogger(ActionTemplateManager.class);
 
-  private Map<String, ActionTemplate> actionTemplates;
+	private boolean check;
 
-  private Map<String, ActionTemplateFactory> metaActionTemplateFactories;
-  private Map<String, ActionTemplateFactory> basicActionTemplateFactories;
+	private Map<String, ActionTemplate> actionTemplates;
 
-  public ActionTemplateManager() {
-    this(true);
-  }
-  
-  public ActionTemplateManager(boolean check) {
-    this.check = check;
-    this.actionTemplates = new HashMap<String, ActionTemplate>();
-    this.metaActionTemplateFactories = new HashMap<String, ActionTemplateFactory>();
-    this.basicActionTemplateFactories = new HashMap<String, ActionTemplateFactory>();
-  }
+	private Map<String, ActionTemplateFactory> metaActionTemplateFactories;
+	private Map<String, ActionTemplateFactory> basicActionTemplateFactories;
 
-  public ActionTemplate getActionTemplate(String prefix, ScriptAction action) {
-    String actionCode = action.getCode();
-    return getActionTemplate(prefix, actionCode);
-  }
+	public ActionTemplateManager()
+	{
+		this(true);
+	}
 
-  public ActionTemplate getActionTemplate(String prefix, String actionCode)
-  {
-    ActionTemplate actionTemplate = actionTemplates.get(actionCode);
-    if (actionTemplate == null) {
-      actionTemplate = loadMetaTemplate(prefix, actionCode);
-      actionTemplates.put(actionCode, actionTemplate);
-    }
-    return actionTemplate;
-  }
+	public ActionTemplateManager(boolean check)
+	{
+		this.check = check;
+		actionTemplates = new HashMap<String, ActionTemplate>();
+		metaActionTemplateFactories = new HashMap<String, ActionTemplateFactory>();
+		basicActionTemplateFactories = new HashMap<String, ActionTemplateFactory>();
+	}
 
-  protected ActionTemplate loadTemplate(String prefix, String actionCode, Map<String, ActionTemplateFactory> factories)
-  {
-    ActionTemplate actionTemplate;
-    String resource = actionCode + ".sql";
-    InputStream stream = getClass().getResourceAsStream(resource);
-    String pathToResources = "src/main/resources/templates/";
-    String pathname = pathToResources + prefix + "/" + actionCode + (!check?"-nocheck":"") + ".sql";
-    File file = new File(pathname);
-    if (!check && !file.exists())
-    {
-      log.warn("Could not find file " + pathname);
-      file = new File(pathToResources + prefix + "/" + actionCode + ".sql");
-    }
-    log.debug("Trying to scan " + resource);
-    StringBuffer sb = new StringBuffer();
-    try {
-      Scanner scanner = new Scanner(file);
-      while (scanner.hasNext()) {
-        String s = scanner.nextLine();
-        sb.append(s + "\n");
-      }
-      sb.append("\n");
-      ActionTemplateFactory f = factories.get(actionCode);
-      if (f != null) {
-        actionTemplate = f.create(sb.toString());
-      }
-      else {
-        actionTemplate = new ActionTemplate(sb.toString());
-      }
+	public ActionTemplate getActionTemplate(String prefix, ScriptAction action)
+	{
+		String actionCode = action.getCode();
+		return getActionTemplate(prefix, actionCode);
+	}
 
-    }
-    catch (Exception e) {
-      log.warn("Resource not found :" + prefix + "/" + resource);
-      // return empty action template
-      ActionTemplate emptyTemplate = new ActionTemplate("-- Action :"
-          + actionCode + "(no template found)\n\n");
-      
-      actionTemplate = emptyTemplate;
-    }
-    return actionTemplate;
-  }
-  
-  protected ActionTemplate loadMetaTemplate(String prefix, String actionCode)
-  {
-    return loadTemplate(prefix, actionCode, metaActionTemplateFactories); 
-  }
-  
-  protected ActionTemplate loadBasicTemplate(String prefix, String actionCode)
-  {
-      return loadTemplate(prefix, actionCode, basicActionTemplateFactories); 
-  }
+	public ActionTemplate getActionTemplate(String prefix, String actionCode)
+	{
+		ActionTemplate actionTemplate = actionTemplates.get(actionCode);
+		if (actionTemplate == null)
+		{
+			actionTemplate = loadMetaTemplate(prefix, actionCode);
+			actionTemplates.put(actionCode, actionTemplate);
+		}
+		return actionTemplate;
+	}
 
-  public void setActionTemplate(String code, ActionTemplate template) {
-    actionTemplates.put(code, template);
-  }
+	protected ActionTemplate loadTemplate(String prefix, String actionCode,
+			Map<String, ActionTemplateFactory> factories)
+	{
+		ActionTemplate actionTemplate;
+		String resource = actionCode + ".sql";
+		InputStream stream = getClass().getResourceAsStream(resource);
+		String pathToResources = "src/main/resources/templates/";
+		String pathname = pathToResources + prefix + "/" + actionCode
+				+ (!check ? "-nocheck" : "") + ".sql";
+		File file = new File(pathname);
+		if (!check && !file.exists())
+		{
+			log.warn("Could not find file " + pathname);
+			file = new File(pathToResources + prefix + "/" + actionCode
+					+ ".sql");
+		}
+		log.debug("Trying to scan " + resource);
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNext())
+			{
+				String s = scanner.nextLine();
+				sb.append(s + "\n");
+			}
+			sb.append("\n");
+			ActionTemplateFactory f = factories.get(actionCode);
+			if (f != null)
+			{
+				actionTemplate = f.create(sb.toString());
+			} else
+			{
+				actionTemplate = new ActionTemplate(sb.toString());
+			}
 
-  public void setActionTemplateFactory(String code,
-                                       ActionTemplateFactory templateFactory)
-  {
-    metaActionTemplateFactories.put(code, templateFactory);
-  }
-  
-  public void setBasicActionTemplateFactory(String code,
-                                       ActionTemplateFactory templateFactory)
-  {
-    basicActionTemplateFactories.put(code, templateFactory);
-  }
+		} catch (Exception e)
+		{
+			log.warn("Resource not found :" + prefix + "/" + resource);
+			// return empty action template
+			ActionTemplate emptyTemplate = new ActionTemplate("-- Action :"
+					+ actionCode + "(no template found)\n\n");
+
+			actionTemplate = emptyTemplate;
+		}
+		return actionTemplate;
+	}
+
+	protected ActionTemplate loadMetaTemplate(String prefix, String actionCode)
+	{
+		return loadTemplate(prefix, actionCode, metaActionTemplateFactories);
+	}
+
+	public ActionTemplate loadBasicTemplate(String prefix, String actionCode)
+	{
+		return loadTemplate(prefix, actionCode, basicActionTemplateFactories);
+	}
+
+	public void setActionTemplate(String code, ActionTemplate template)
+	{
+		actionTemplates.put(code, template);
+	}
+
+	public void setActionTemplateFactory(String code,
+			ActionTemplateFactory templateFactory)
+	{
+		metaActionTemplateFactories.put(code, templateFactory);
+	}
+
+	public void setBasicActionTemplateFactory(String code,
+			ActionTemplateFactory templateFactory)
+	{
+		basicActionTemplateFactories.put(code, templateFactory);
+	}
 }

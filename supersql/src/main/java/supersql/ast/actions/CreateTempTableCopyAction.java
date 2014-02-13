@@ -39,7 +39,7 @@ public class CreateTempTableCopyAction
 
 
   @Override
-  public void visit(ScriptSemanticsVisitor visitor) {
+  public void accept(ScriptSemanticsVisitor visitor) {
     visitor.copyInTempTable(this);
   }
   public String getSourceTableName() {

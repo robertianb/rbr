@@ -84,7 +84,7 @@ public class SupersqlParserTest {
                             TemplateScriptVisitor scriptVisitor = new TemplateScriptVisitor(
                                     Vendor.SUMMARY, new ActionTemplateHelper(typeVisitor) {
                             });
-                            crebasComparator.visit(scriptVisitor);
+                            crebasComparator.accept(scriptVisitor);
 
                             FileReader fileReader = new FileReader(expectedResult);
                             BufferedReader expectedBR = new BufferedReader(fileReader);

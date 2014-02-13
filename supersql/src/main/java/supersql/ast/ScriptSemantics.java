@@ -47,10 +47,10 @@ public class ScriptSemantics extends Symbol{
                 '}';
     }
 
-    public void visit(ScriptSemanticsVisitor visitor)
+    public void accept(ScriptSemanticsVisitor visitor)
     {
         for (ScriptAction a : actionSequence) {
-            a.visit(visitor);
+            a.accept(visitor);
         }
     }
     

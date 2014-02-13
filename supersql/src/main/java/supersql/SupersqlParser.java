@@ -16,29 +16,29 @@ import supersql.ast.entities.*;
 public class SupersqlParser extends Parser {
 
 	static final ParsingTables PARSING_TABLES = new ParsingTables(
-		"U9p5bcbm54KOXj$99fk3I6wIa8GGY2J4x2QRX63k14Jn00#KIqM3U07YoU75eQ1uWNYLno#" +
-		"robzKMQMKLPOHn5lnW900KL5Cy4HG10s2ylbsRsSoCswKVyxKqz$RRtT$FKTlpm9M5URYUj" +
-		"oCnRW3oqLGYH36O2okmRLOWDjHXnGvRhjbQ48BncE2xIHXfiFr8Ge9B6FWHopYJ7aF1Z5Fl" +
-		"BJPeyx0ANWGzMZGAj5MkRQwNwj6r72qKl7sMEMbQM#bonkiF3diyeRgViakJyyXtxYyy#tP" +
-		"ChHATRNcQM#soylMMNfSteMwtwEsburpv2zCnJIaOmec8nghi0vduJpT#oHxpaojHlMDass" +
-		"O9Lin6aK8SCHbMYaUqkL4j68wJiObk19NKRUY62K8OWXASRMURGekmYpSXuUn1bdo1JDa8m" +
-		"V3i5OEOJZoKO2H6852bAC2LQZ6gQX5CyRXD9oECtbrPsCIpiK5ibUwCGCNur9SZYim3tDm0" +
-		"#RZEjo26t4Jbc0X5k5Et8hRi09BiGmFu2xSZTLymkfCmIESzp40ZvDxENy#Po$Wp2DP3w#C" +
-		"UDvH2TzsATTCqE5cy6uoaSNnVKu3rr2$My5dbQpBiRpw6bCcmMAULAx5lb4MrsCKdtkCHrc" +
-		"sIh5LabQfhh7XVZwNbt22ti1ZbShJAitLMgUznXFC4kNmoldib9VBzLDDFyZxgkKAKxshx3" +
-		"dBFRby$Ctu#5mJzTDFrqfHfSj2hhvH$6qNwr41dcKy0ynJnipAKtCDvcyiX#FLcQwl9AHt0" +
-		"FKBjRXAcza$4E6COexmg5fTAY$4R4riAT9loZTW6TIbPSwWBikvT$b8Cf$44ykXZn5wHG4l" +
-		"aXQIelm#U6IH46aY4yXCifWiSFIPeVAHkQIRF4r#8ll977AG718HrTP6zffnHqYdqKT93Tb" +
-		"iwetaNJAUl4ycaYscBP5C8fF9D3ATj9BPP1wPJnQIHMGPANVUaycnagmYQyXQyYHvYZn7dY" +
-		"SR02k6SJsZFpp6YZKnpkHOGewndi3u3EcX7kIOurMIGJQIJMHtVviLRVfOv83HNTxhD7rJI" +
-		"Hh9S7ZfP0Z9ClLCaaroJ7qeoIN376FoI3ufCFNXXE$VAlJCnxt7Ag9e9xNKnSOVpMAVqIKi" +
-		"Nc0iDVK02VRbuBi#xD2zaUxByPnMctxT$z5ldQV#bebJbIPjZhRN77gzGxzauiiclkB9kTN" +
-		"4RIQscxZTn0uJEmUunXqcxZHnbubTddvB8urtjBSxz0PFMxU9FIRk6I17nx$DyN$3ezV4Pn" +
-		"tUSKyVSMZkCVA7DbdAdt9CZi9roA$oCo8Uibk#amDQVM#SRrtjd#ho0$8suMgIDybcxRuXc" +
-		"sIZl4x5dKZU8zoPv1tbwFPFoCVa8rV6hsMFKLiu#uVo5TMNPBzmRvHzygFy89$BPwPFb#mo" +
-		"QgU9Eqpib0wZjflOBWVb5yTCHtJPQsg$w$8tgBspXVjB9Ry3bOmLBi1$0tuIortNJsBvLL9" +
-		"V9X$$9yGHFxzm5Wb$IUgew$XbQN9GpxPwvcbcUotRrJUgch6QSGoZ8gI9qb#G1ixHo7gOQ4" +
-		"UC$aUzZ3dwYV7WYqWW8fRDkBy1#w#OyG==");
+		"U9pDbcTm5LKOXj#zcoBfG488gK12CEJUDBn980a9JHJi1hiGi8681LGK8qr4AMANSSOPomz" +
+		"d$E4C$d36KKDGn88D4pge808gDOeDuVYUa#zkTczkvAzdv$c#xxodxvxTiu0r0hDmD#x50t" +
+		"WOYt4UAb29Qip4xRWBpQXLfvLor2YKeG5ZC0xdXpHr1jUxL1i#nD568mQnE4TiBPQfTvrUB" +
+		"e0VYQZ3A1CbE56y4wMQg1uZyPY9UZbjUzAoZFQeHqlIclhDemqmzR8yMbzdj3uc6kGflSdq" +
+		"ij#ZNM7gzVPeQKPBSRGC9EDYN8rhS26cubhSY4PSogW9bsEIQT7aZ9jXeg7EFVqQwUeh3CE" +
+		"vA44USasawMVipRW5sPYEsr18Enr5ACQjA5Nx433ZDU8gF879M86diGpzyIIUGuRQXKprAr" +
+		"RZAUHW85PobODHW7mCGJcUmN04KOKHgC5eZCLuJC14plCYN8BBSANwGUt5TRW1Kp2DzsC6x" +
+		"i1it8bxC0TpSH$knpmyYFbu20km48km18zWAPRpBgyYMRnFptA5pmDu0PtfSQufZxFGSyYN" +
+		"FTABAolY#egvUtGAgJ5STJfNaS5d5zB0lTAb3kTzwsriDLSmKgpDkz7WjB2uBuFSlz4cyZc" +
+		"HvKJPJfHYehwUjf6qphQsHulhKRCYjDLHeeaIFQMfFVOIy6WvtUhLeTHe1TnzXTnHbNogoT" +
+		"oRINookaLQsCgxsjfiQVE#9j2MSn$gIECpLjUjvPivYZlIpwk4LnAzJQ$Bz3XwZfbytW6gj" +
+		"XcXiyyWzJBss8UhjBZVwbdcPyxVxVAnJzjSDSPghOppJ#MCz3Epps8jNW6NBUMtorOcSOS0" +
+		"QnPsxhywaaAIoGIIg$KGJEba3AabJMGQcKTUSzLPG8h9Kj96MibXSfpC8YT81mVUI$ygcI$" +
+		"jZee$HRP9V9fKalMIho4RIGFvX8mdcwGidamaaqWZcKocaAba1fb9vf2vf9a4t6kJFXQJ9M" +
+		"GbMKL2x#RBv1Mo0h3qM$O6VLnd6ojUV8BqiPgSOJw9Ngzn7#DarnZla3JIGjQHrxlAh5Yfe" +
+		"rExTswM7PRdix3waVukRG3989cIpoPP94VoUIIN37Ir6Km6aNp93o45f31ilA6aYC5cSeZn" +
+		"CD7zD4Sa3j0Seo#LV1af3$N1PzxXYa#w#m#7AKhyxBFKUp4ilq7yI#HZxIM$qLMdnHM$wOh" +
+		"NYdzB$DjXVRU9to9#g$ZGVjqkVaSFSzqfVfVutUBtXDLhZjJULTxkYjU6bHqGVr3y$l$gAx" +
+		"pT$mKc9RwrIxDytZfTxmJJ6ZRvopIaLV#eK#flU9BgKCSGCQdTwe0wIewOt45HV$JK#T9OV" +
+		"dNKX#G3ifwq6dMTQb7lg$SOSSSfVg7KHsI3Lapv5#HpiidJu$VgEua#umm#LTyoscFoFwkV" +
+		"r25rMFsYTgeTKcUxsYRHLl5RnBUhDec#4RzPdL37NIFzQUmVallTs9CqO$abjVX$O1EBVmf" +
+		"kmB#561BBVuOO4iipopBdLZNFnMfgGUQ3vdyYYkXpq28#SoQ5g61v1VkgPnrzqkhpgug#Yh" +
+		"wINbDcy15z0iNoBBM4A9UFwfOlCQTiYEWmx8Zu8s8vZFuN#nUXNm==");
 
 	static final Action RETURN2 = new Action() {
 		public Symbol reduce(Symbol[] _symbols, int offset) {
@@ -205,54 +205,67 @@ public class SupersqlParser extends Parser {
 					final Symbol _symbol_i = _symbols[offset + 1];
 					final String i = (String) _symbol_i.value;
 					final Symbol _symbol_t = _symbols[offset + 2];
-					final TypeDefinition t = (TypeDefinition) _symbol_t.value;
+					final TypeAndDefaultValue t = (TypeAndDefaultValue) _symbol_t.value;
 					final Symbol _symbol_m = _symbols[offset + 3];
 					final MandatorySymbol m = (MandatorySymbol) _symbol_m.value;
-					 return new ColumnDefinition(i, t, false, m.isMandatory()) ;
+					 return new ColumnDefinition(i, t.getTypeDefinition(), false, m.isMandatory()) ;
 				}
 			},
-			new Action() {	// [18] type_and_default_value = type.t
+			new Action() {	// [18] column_def = IDENT.i type_and_default_value.t null_value.m default_value column_constraint_def
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_i = _symbols[offset + 1];
+					final String i = (String) _symbol_i.value;
+					final Symbol _symbol_t = _symbols[offset + 2];
+					final TypeAndDefaultValue t = (TypeAndDefaultValue) _symbol_t.value;
+					final Symbol _symbol_m = _symbols[offset + 3];
+					final MandatorySymbol m = (MandatorySymbol) _symbol_m.value;
+					 return new ColumnDefinition(i, t.getTypeDefinition(), false, m.isMandatory()) ;
+				}
+			},
+			new Action() {	// [19] type_and_default_value = type.t
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_t = _symbols[offset + 1];
 					final TypeDefinition t = (TypeDefinition) _symbol_t.value;
-					 return t;
+					 return new TypeAndDefaultValue(t);
 				}
 			},
-			new Action() {	// [19] type_and_default_value = type.t default_value
+			new Action() {	// [20] type_and_default_value = type.t default_value.d
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_t = _symbols[offset + 1];
 					final TypeDefinition t = (TypeDefinition) _symbol_t.value;
-					 return t;
+					final Symbol _symbol_d = _symbols[offset + 2];
+					final Object d = (Object) _symbol_d.value;
+					 return new TypeAndDefaultValue(t,d);
 				}
 			},
-			RETURN2,	// [20] default_value = DEFAULT INTEGER_LITERAL; returns 'INTEGER_LITERAL' although none is marked
-			RETURN2,	// [21] default_value = DEFAULT FLOATING_POINT_LITERAL; returns 'FLOATING_POINT_LITERAL' although none is marked
-			RETURN2,	// [22] default_value = DEFAULT STRING_LITERAL; returns 'STRING_LITERAL' although none is marked
-			RETURN2,	// [23] column_constraint_def = CONSTRAINT IDENT.c column_constraint_body
-			Action.NONE,  	// [24] column_constraint_def = 
-			RETURN4,	// [25] column_constraint_body = CHECK LPAREN expression RPAREN; returns 'RPAREN' although none is marked
-			Action.RETURN,	// [26] string_list = STRING_LITERAL
-			RETURN3,	// [27] string_list = STRING_LITERAL COMMA string_list.l
-			Action.RETURN,	// [28] value_list = value
-			RETURN3,	// [29] value_list = value COMMA value_list; returns 'value_list' although none is marked
-			Action.RETURN,	// [30] value = INTEGER_LITERAL
-			Action.RETURN,	// [31] value = FLOATING_POINT_LITERAL
-			new Action() {	// [32] null_value = NULL
+			RETURN2,	// [21] default_value = DEFAULT INTEGER_LITERAL; returns 'INTEGER_LITERAL' although none is marked
+			RETURN2,	// [22] default_value = DEFAULT FLOATING_POINT_LITERAL; returns 'FLOATING_POINT_LITERAL' although none is marked
+			RETURN2,	// [23] default_value = DEFAULT STRING_LITERAL; returns 'STRING_LITERAL' although none is marked
+			RETURN2,	// [24] column_constraint_def = CONSTRAINT IDENT.c column_constraint_body
+			Action.NONE,  	// [25] column_constraint_def = 
+			RETURN4,	// [26] column_constraint_body = CHECK LPAREN expression RPAREN; returns 'RPAREN' although none is marked
+			Action.RETURN,	// [27] string_list = STRING_LITERAL
+			RETURN3,	// [28] string_list = STRING_LITERAL COMMA string_list.l
+			Action.RETURN,	// [29] value_list = value
+			RETURN3,	// [30] value_list = value COMMA value_list; returns 'value_list' although none is marked
+			Action.RETURN,	// [31] value = INTEGER_LITERAL
+			Action.RETURN,	// [32] value = FLOATING_POINT_LITERAL
+			new Action() {	// [33] null_value = NULL
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new MandatorySymbol(false);
 				}
 			},
-			new Action() {	// [33] null_value = NOT NULL
+			new Action() {	// [34] null_value = NOT NULL
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new MandatorySymbol(true);
 				}
 			},
-			new Action() {	// [34] null_value = 
+			new Action() {	// [35] null_value = 
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new MandatorySymbol(false);
 				}
 			},
-			new Action() {	// [35] constraint_def = CONSTRAINT IDENT.c PRIMARY KEY LPAREN columns_list.l RPAREN
+			new Action() {	// [36] constraint_def = CONSTRAINT IDENT.c PRIMARY KEY LPAREN columns_list.l RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_c = _symbols[offset + 2];
 					final String c = (String) _symbol_c.value;
@@ -261,80 +274,80 @@ public class SupersqlParser extends Parser {
 					 return new PrimaryKeyConstraint(c,l);
 				}
 			},
-			new Action() {	// [36] type = INT
+			new Action() {	// [37] type = INT
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new TypeDefinition(Type.INT);
 				}
 			},
-			new Action() {	// [37] type = CLOB
+			new Action() {	// [38] type = CLOB
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new TypeDefinition(Type.CLOB);
 				}
 			},
-			new Action() {	// [38] type = TIMESTAMP LPAREN INTEGER_LITERAL.i RPAREN
+			new Action() {	// [39] type = TIMESTAMP LPAREN INTEGER_LITERAL.i RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_i = _symbols[offset + 3];
 					final Integer i = (Integer) _symbol_i.value;
 					 return new TimestampTypeDefinition(i);
 				}
 			},
-			new Action() {	// [39] type = DATE
+			new Action() {	// [40] type = DATE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new DateTypeDefinition();
 				}
 			},
-			new Action() {	// [40] type = CHAR LPAREN INTEGER_LITERAL RPAREN
+			new Action() {	// [41] type = CHAR LPAREN INTEGER_LITERAL RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new TypeDefinition(Type.CHAR);
 				}
 			},
-			new Action() {	// [41] type = NUMBER LPAREN INTEGER_LITERAL.i RPAREN
+			new Action() {	// [42] type = NUMBER LPAREN INTEGER_LITERAL.i RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_i = _symbols[offset + 3];
 					final Integer i = (Integer) _symbol_i.value;
 					 return new NumberTypeDefinition(i);
 				}
 			},
-			new Action() {	// [42] type = LONG LPAREN INTEGER_LITERAL.n RPAREN
+			new Action() {	// [43] type = LONG LPAREN INTEGER_LITERAL.n RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 3];
 					final Integer n = (Integer) _symbol_n.value;
 					 return new VarcharTypeDefinition(n);
 				}
 			},
-			new Action() {	// [43] type = FLOAT
+			new Action() {	// [44] type = FLOAT
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new TypeDefinition(Type.FLOAT);
 				}
 			},
-			new Action() {	// [44] type = VARCHAR LPAREN INTEGER_LITERAL.n RPAREN
+			new Action() {	// [45] type = VARCHAR LPAREN INTEGER_LITERAL.n RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 3];
 					final Integer n = (Integer) _symbol_n.value;
 					 return new VarcharTypeDefinition(n);
 				}
 			},
-			new Action() {	// [45] type = NVARCHAR LPAREN INTEGER_LITERAL.n RPAREN
+			new Action() {	// [46] type = NVARCHAR LPAREN INTEGER_LITERAL.n RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 3];
 					final Integer n = (Integer) _symbol_n.value;
 					 return new NVarcharTypeDefinition(n);
 				}
 			},
-			RETURN3,	// [46] expression = expression OR expression; returns 'expression' although none is marked
-			RETURN3,	// [47] expression = expression AND expression; returns 'expression' although none is marked
-			RETURN3,	// [48] expression = LPAREN expression RPAREN; returns 'RPAREN' although none is marked
-			Action.RETURN,	// [49] expression = IDENT.i IN LPAREN string_list RPAREN
-			Action.RETURN,	// [50] expression = IDENT.i IN LPAREN columns_list RPAREN
-			Action.RETURN,	// [51] expression = IDENT.i IN LPAREN value_list RPAREN
-			Action.RETURN,	// [52] expression = IDENT.i BETWEEN expr AND expr
-			Action.RETURN,	// [53] expression = IDENT.i IS null_value
-			RETURN3,	// [54] expression = expr LT expr; returns 'expr' although none is marked
-			RETURN3,	// [55] expression = expr GT expr; returns 'expr' although none is marked
-			RETURN3,	// [56] expression = expr GE expr; returns 'expr' although none is marked
-			RETURN3,	// [57] expression = expr LE expr; returns 'expr' although none is marked
-			RETURN3,	// [58] expression = expr EQ expr; returns 'expr' although none is marked
-			new Action() {	// [59] expr = expr.a MULT expr.b
+			RETURN3,	// [47] expression = expression OR expression; returns 'expression' although none is marked
+			RETURN3,	// [48] expression = expression AND expression; returns 'expression' although none is marked
+			RETURN3,	// [49] expression = LPAREN expression RPAREN; returns 'RPAREN' although none is marked
+			Action.RETURN,	// [50] expression = IDENT.i IN LPAREN string_list RPAREN
+			Action.RETURN,	// [51] expression = IDENT.i IN LPAREN columns_list RPAREN
+			Action.RETURN,	// [52] expression = IDENT.i IN LPAREN value_list RPAREN
+			Action.RETURN,	// [53] expression = IDENT.i BETWEEN expr AND expr
+			Action.RETURN,	// [54] expression = IDENT.i IS null_value
+			RETURN3,	// [55] expression = expr LT expr; returns 'expr' although none is marked
+			RETURN3,	// [56] expression = expr GT expr; returns 'expr' although none is marked
+			RETURN3,	// [57] expression = expr GE expr; returns 'expr' although none is marked
+			RETURN3,	// [58] expression = expr LE expr; returns 'expr' although none is marked
+			RETURN3,	// [59] expression = expr EQ expr; returns 'expr' although none is marked
+			new Action() {	// [60] expr = expr.a MULT expr.b
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_a = _symbols[offset + 1];
 					final Expr a = (Expr) _symbol_a.value;
@@ -343,7 +356,7 @@ public class SupersqlParser extends Parser {
 					 return new Expr(a.val * b.val);
 				}
 			},
-			new Action() {	// [60] expr = expr.a DIV expr.b
+			new Action() {	// [61] expr = expr.a DIV expr.b
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_a = _symbols[offset + 1];
 					final Expr a = (Expr) _symbol_a.value;
@@ -352,7 +365,7 @@ public class SupersqlParser extends Parser {
 					 return new Expr(a.val / b.val);
 				}
 			},
-			new Action() {	// [61] expr = expr.a PLUS expr.b
+			new Action() {	// [62] expr = expr.a PLUS expr.b
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_a = _symbols[offset + 1];
 					final Expr a = (Expr) _symbol_a.value;
@@ -361,7 +374,7 @@ public class SupersqlParser extends Parser {
 					 return new Expr(a.val + b.val);
 				}
 			},
-			new Action() {	// [62] expr = expr.a MINUS expr.b
+			new Action() {	// [63] expr = expr.a MINUS expr.b
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_a = _symbols[offset + 1];
 					final Expr a = (Expr) _symbol_a.value;
@@ -370,28 +383,28 @@ public class SupersqlParser extends Parser {
 					 return new Expr(a.val - b.val);
 				}
 			},
-			new Action() {	// [63] expr = LPAREN expr.e RPAREN
+			new Action() {	// [64] expr = LPAREN expr.e RPAREN
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_e = _symbols[offset + 2];
 					final Expr e = (Expr) _symbol_e.value;
 					 return e;
 				}
 			},
-			new Action() {	// [64] expr = INTEGER_LITERAL.n
+			new Action() {	// [65] expr = INTEGER_LITERAL.n
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 1];
 					final Integer n = (Integer) _symbol_n.value;
 					 return new Expr(n);
 				}
 			},
-			new Action() {	// [65] expr = FLOATING_POINT_LITERAL.n
+			new Action() {	// [66] expr = FLOATING_POINT_LITERAL.n
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 1];
 					final Float n = (Float) _symbol_n.value;
 					 return new Expr(n);
 				}
 			},
-			new Action() {	// [66] expr = IDENT.i
+			new Action() {	// [67] expr = IDENT.i
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_i = _symbols[offset + 1];
 					final String i = (String) _symbol_i.value;

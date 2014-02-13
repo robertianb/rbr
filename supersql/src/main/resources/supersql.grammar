@@ -45,7 +45,7 @@
 %typeof FLOATING_POINT_LITERAL = "Float";
 %typeof script = "ScriptSemantics";
 %typeof type = "TypeDefinition";
-%typeof type_and_default_value = "TypeDefinition";
+%typeof type_and_default_value = "TypeAndDefaultValue";
 %typeof constraint_def="PrimaryKeyConstraint";
 %typeof columns_list = "Columns";
 %typeof column_def = "ColumnDefinition";
@@ -54,6 +54,8 @@
 %typeof command_seq= "ScriptActions";
 %typeof create_table = "ScriptAction";
 %typeof expr = "Expr";
+%typeof default_value = "Object";
+
 
 %goal script;
 
@@ -98,11 +100,12 @@ columns_def = column_def.c  {: return ColumnDefinitions.create(c); :}
 ;
 
 
-column_def = IDENT.i type_and_default_value.t null_value.m column_constraint_def {: return new ColumnDefinition(i, t, false, m.isMandatory()) ; :}
+column_def = IDENT.i type_and_default_value.t null_value.m column_constraint_def {: return new ColumnDefinition(i, t.getTypeDefinition(), false, m.isMandatory()) ; :}
+  | IDENT.i type_and_default_value.t null_value.m default_value column_constraint_def {: return new ColumnDefinition(i, t.getTypeDefinition(), false, m.isMandatory()) ; :}
 ;
 
-type_and_default_value = type.t  {: return t; :}
-| type.t default_value  {: return t; :}
+type_and_default_value = type.t  {: return new TypeAndDefaultValue(t); :}
+| type.t default_value.d  {: return new TypeAndDefaultValue(t,d); :}
 ;
 
 default_value = DEFAULT INTEGER_LITERAL

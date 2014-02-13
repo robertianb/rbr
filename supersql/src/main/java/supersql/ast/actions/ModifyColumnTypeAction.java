@@ -56,7 +56,7 @@ public class ModifyColumnTypeAction
   }
 
   @Override
-  public void visit(ScriptSemanticsVisitor visitor) {
+  public void accept(ScriptSemanticsVisitor visitor) {
     visitor.modifyColumn(this);    
   }
   

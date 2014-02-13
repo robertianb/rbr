@@ -41,7 +41,7 @@ public class ActionTemplate {
             String valueToString;
             if (value instanceof TypeDefinition)
             {
-                ((TypeDefinition) value).visit(actionTemplateHelper.getTypeVisitor());
+                ((TypeDefinition) value).accept(actionTemplateHelper.getTypeVisitor());
                 valueToString = actionTemplateHelper.getTypeVisitor().getResult();
             } else {
                 valueToString = value.toString();

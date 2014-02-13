@@ -18,7 +18,7 @@ public class DateTypeDefinition extends TypeDefinition {
 
     
     @Override
-    public void visit(TypeVisitor v) {
+    public void accept(TypeVisitor v) {
       v.date(this);
     }
 }

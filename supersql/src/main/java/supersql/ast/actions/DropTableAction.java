@@ -33,7 +33,7 @@ public class DropTableAction
   }
 
   @Override
-  public void visit(ScriptSemanticsVisitor visitor) {
+  public void accept(ScriptSemanticsVisitor visitor) {
     visitor.dropTable(this);
 
   }

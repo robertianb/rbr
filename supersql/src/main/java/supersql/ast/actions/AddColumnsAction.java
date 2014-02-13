@@ -24,7 +24,7 @@ public class AddColumnsAction extends TableAction {
     }
 
     @Override
-    public void visit(ScriptSemanticsVisitor visitor) {
+    public void accept(ScriptSemanticsVisitor visitor) {
         visitor.addColumns(this);
     }
 }
