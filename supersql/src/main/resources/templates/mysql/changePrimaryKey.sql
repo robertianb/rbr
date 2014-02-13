@@ -1,5 +1,5 @@
 -- Table ${tableName} : remove primary key ${previousConstraintId}, add new primary key ${nextConstraintId} : ${nextPrimaryKey}
-DELIMITER $$
+
 
 DROP PROCEDURE IF EXISTS upgrade_database $$
 CREATE PROCEDURE upgrade_database()
@@ -15,4 +15,3 @@ END $$
 
 CALL upgrade_database() $$
 
-DELIMITER ;

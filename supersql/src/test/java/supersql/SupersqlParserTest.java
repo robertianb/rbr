@@ -100,9 +100,9 @@ public class SupersqlParserTest {
                                 //System.out.println(expectedLine);
                                 //System.out.println(actualLine);
                             }
-                            if (actualLine != null)
+                            if (actualLine != null && !actualLine.isEmpty())
                             {
-                                Assert.fail("Did not expect " + actualLine);
+                                Assert.fail("Did not expect this line :" + actualLine);
                             }
 
                         }

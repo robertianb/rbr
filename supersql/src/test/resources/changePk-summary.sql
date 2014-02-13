@@ -1,0 +1,1 @@
+-- Table LevelledMktSpreadRule : remove primary key PK_LEVELLEDMKTSPREADRULE, add new primary key PK_LEVELLEDMKTSPREADRULE : PK [PK_LEVELLEDMKTSPREADRULE, columns=[Column{name='ulId'}, Column{name='bidPrice'}, Column{name='maturityValue'}, Column{name='maturityUnit'}]]
