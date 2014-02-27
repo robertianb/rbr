@@ -3,6 +3,8 @@
 
 %import "supersql.ast.*";
 %import "supersql.ast.entities.*";
+%import "supersql.ast.entities.predicate.*";
+%import "supersql.ast.entities.expr.*";
 %import "supersql.ast.types.*";
 %import "supersql.ast.changes.*";
 %import "supersql.ast.actions.*";
@@ -32,7 +34,7 @@
 %terminals LPAREN, RPAREN;
 %terminals COMMA, CREATE, TABLE, PRIMARY;
 // %terminals IS, NOT;
-%terminals DEFAULT, KEY, ALTER, ADD, DROP, COLUMN, CONSTRAINT, NULL, NOT, CHECK, IN, BETWEEN, IS;
+%terminals DEFAULT, KEY, ALTER, MODIFY, ADD, DROP, COLUMN, CONSTRAINT, NULL, NOT, CHECK, IN, BETWEEN, IS;
 %terminals INT, LONG, VARCHAR, FLOAT, STRING_LITERAL, CLOB, NVARCHAR;
 %terminals FLOATING_POINT_LITERAL, INTEGER_LITERAL, IDENT, NUMBER, CHAR, TIMESTAMP, DATE;
 %terminals  LT, GT, GE, LE, EQ, PLUS, MINUS, DIV, MULT;
@@ -43,6 +45,7 @@
 %typeof null_value="MandatorySymbol";
 %typeof INTEGER_LITERAL = "Integer";
 %typeof FLOATING_POINT_LITERAL = "Float";
+%typeof STRING_LITERAL = "String";
 %typeof script = "ScriptSemantics";
 %typeof type = "TypeDefinition";
 %typeof type_and_default_value = "TypeAndDefaultValue";
@@ -54,8 +57,13 @@
 %typeof command_seq= "ScriptActions";
 %typeof create_table = "ScriptAction";
 %typeof expr = "Expr";
-%typeof default_value = "Object";
-
+%typeof default_value = "Expr";
+%typeof predicate = "Predicate";
+%typeof column_constraint_body = "Predicate";
+%typeof value_list = "ValueList";
+%typeof string_list = "StringList";
+%typeof value = "Expr";
+%typeof column_constraint_def = "ColumnConstraintDefinition";
 
 %goal script;
 
@@ -73,7 +81,12 @@ command_seq = command.c DIV command_seq.s {: ScriptActions res = ScriptActions.c
 command = create_table.c {:  return c; :}
 | add_column
 | drop_column
+| modify_column
 |  {: return new VoidAction(); :}
+;
+
+
+modify_column = ALTER TABLE IDENT.t MODIFY COLUMN column_def.c {: return new ModifyColumnTypeAction(t, c);  :}
 ;
 
 add_column = ALTER TABLE IDENT.t ADD COLUMN column_def.c {: return new AddColumnsAction(t, ColumnDefinitions.create(c).getColumnDefinitions());  :}
@@ -100,37 +113,37 @@ columns_def = column_def.c  {: return ColumnDefinitions.create(c); :}
 ;
 
 
-column_def = IDENT.i type_and_default_value.t null_value.m column_constraint_def {: return new ColumnDefinition(i, t.getTypeDefinition(), false, m.isMandatory()) ; :}
-  | IDENT.i type_and_default_value.t null_value.m default_value column_constraint_def {: return new ColumnDefinition(i, t.getTypeDefinition(), false, m.isMandatory()) ; :}
+column_def = IDENT.i type_and_default_value.t null_value.m column_constraint_def.c {: return new ColumnDefinition(i, t.getTypeDefinition(), t.getDefaultValue(), m.isMandatory(), c) ; :}
+  | IDENT.i type_and_default_value.t null_value.m default_value column_constraint_def.c {: return new ColumnDefinition(i, t.getTypeDefinition(), t.getDefaultValue(), m.isMandatory(), c) ; :}
 ;
 
 type_and_default_value = type.t  {: return new TypeAndDefaultValue(t); :}
 | type.t default_value.d  {: return new TypeAndDefaultValue(t,d); :}
 ;
 
-default_value = DEFAULT INTEGER_LITERAL
-| DEFAULT FLOATING_POINT_LITERAL
-| DEFAULT STRING_LITERAL
+default_value = DEFAULT INTEGER_LITERAL.n {: return new IntExpr(n); :}
+| DEFAULT FLOATING_POINT_LITERAL.f {: return new DoubleExpr(f); :}
+| DEFAULT STRING_LITERAL.s  {: return new StringExpr(s); :}
 ;
 
-column_constraint_def = CONSTRAINT IDENT.c column_constraint_body 
-|
+column_constraint_def = CONSTRAINT IDENT.c column_constraint_body.b {: return new ColumnConstraintDefinition(c,b); :}
+| 
 ;
 
 
-column_constraint_body = CHECK LPAREN expression RPAREN
+column_constraint_body = CHECK LPAREN predicate.p RPAREN {: return p; :}
 ;
 
-string_list = STRING_LITERAL
-| STRING_LITERAL COMMA string_list.l
+string_list = STRING_LITERAL.s {: return new StringList(s); :}
+| STRING_LITERAL.s COMMA string_list.l {: return new StringList(s).append(l); :}
 ;
 
-value_list = value
-| value COMMA value_list
+value_list = value.v
+| value.v COMMA value_list.l {: return l.prepend(v) ; :}
 ;
 
-value =  INTEGER_LITERAL
-| FLOATING_POINT_LITERAL
+value =  INTEGER_LITERAL.n {: return new IntExpr(n);  :}
+| FLOATING_POINT_LITERAL.n  {: return new DoubleExpr(n);  :}
 ; 
 
 
@@ -157,31 +170,30 @@ type = INT {: return new TypeDefinition(Type.INT); :}
 
 
 
-expression = expression OR expression
-| expression AND expression
-| LPAREN expression RPAREN
-| IDENT.i IN LPAREN string_list RPAREN
-| IDENT.i IN LPAREN columns_list RPAREN
-| IDENT.i IN LPAREN value_list RPAREN
-| IDENT.i BETWEEN expr AND expr
-| IDENT.i IS null_value
-| expr LT expr
-| expr GT expr
-| expr GE expr
-| expr LE expr
-| expr EQ expr
- 
+predicate = predicate OR predicate
+| predicate AND predicate
+| LPAREN predicate.p RPAREN {: return new EnclosedPredicate(p); :} 
+| IDENT.i IN LPAREN string_list.l RPAREN {: return new InListPredicate(i,l); :} 
+| IDENT.i IN LPAREN columns_list.l RPAREN {: return new InListPredicate(i,l); :} 
+| IDENT.i IN LPAREN value_list.l RPAREN {: return new InListPredicate(i,l); :} 
+| IDENT.i BETWEEN expr.a AND expr.b {: return new BetweenPredicate(i,a,b); :}
+| IDENT.i IS null_value {: return new IsNullPredicate(i); :}
+| expr.a LT expr.b {: return new ComparisonPredicate(a,b,ComparisonPredicate.OP.LT); :}
+| expr.a GT expr.b {: return new ComparisonPredicate(a,b,ComparisonPredicate.OP.GT); :}
+| expr.a GE expr.b {: return new ComparisonPredicate(a,b,ComparisonPredicate.OP.GE); :}
+| expr.a LE expr.b {: return new ComparisonPredicate(a,b,ComparisonPredicate.OP.LE); :}
+| expr.a EQ expr.b {: return new ComparisonPredicate(a,b,ComparisonPredicate.OP.EQ); :}
 ;
 
  
 
-expr = expr.a MULT  expr.b           {: return new Expr(a.val * b.val);   :}
-    | expr.a DIV   expr.b           {: return new Expr(a.val / b.val);   :}
-    | expr.a PLUS  expr.b           {: return new Expr(a.val + b.val);   :}
-    | expr.a MINUS expr.b           {: return new Expr(a.val - b.val);   :}
-    | LPAREN expr.e RPAREN          {: return e;                         :}
+expr = expr.a MULT  expr.b           {: return new BinaryExpr(a,'*',b);   :}
+    | expr.a DIV   expr.b           {: return new BinaryExpr(a,'/',b);   :}
+    | expr.a PLUS  expr.b           {: return new BinaryExpr(a,'+',b);   :}
+    | expr.a MINUS expr.b           {: return new BinaryExpr(a,'-',b);    :}
+    | LPAREN expr.e RPAREN          {: return new EnclosedExpr(e); :}
 //    | MINUS expr.e @ UNARY_MINUS    {: return new Expr(-e.val);          :}
-    |  INTEGER_LITERAL.n                      {: return new Expr(n); :}
-    |  FLOATING_POINT_LITERAL.n                      {: return new Expr(n); :}
-    | IDENT.i {: return new Expr(0); :}
+    |  INTEGER_LITERAL.n                      {: return new IntExpr(n); :}
+    |  FLOATING_POINT_LITERAL.n                      {: return new DoubleExpr(n); :}
+    | IDENT.i {: return new VarExpr(i); :}
     ;

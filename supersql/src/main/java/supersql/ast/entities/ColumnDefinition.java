@@ -3,7 +3,9 @@ package supersql.ast.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import supersql.ast.entities.expr.Expr;
 import supersql.ast.types.TypeDefinition;
+import supersql.sql.templates.ExprTextVisitor;
 import beaver.Symbol;
 
 /**
@@ -15,8 +17,11 @@ public class ColumnDefinition extends Symbol implements Cloneable
 	private final String name;
 	private final TypeDefinition type;
 	private final boolean primary;
+	private final Expr defaultExprValue;
 	private final String defaultValue;
+
 	private final boolean mandatory;
+	private final ColumnConstraintDefinition constraint;
 
 	public ColumnDefinition(String name, TypeDefinition type)
 	{
@@ -35,24 +40,47 @@ public class ColumnDefinition extends Symbol implements Cloneable
 		this.name = name;
 		primary = isPrimary;
 		defaultValue = null;
+		defaultExprValue = null;
 		mandatory = isMandatory;
+		constraint = ColumnConstraintDefinition.EMPTY;
 	}
 
-	public ColumnDefinition(String name, TypeDefinition type,
-			String defaultValue)
+	public ColumnDefinition(String name, TypeDefinition type, Expr defaultValue)
 	{
 		this(name, type, defaultValue, false);
 	}
 
 	public ColumnDefinition(String name, TypeDefinition type,
-			String defaultValue, boolean isMandatory)
+			Expr defaultExprValue, boolean isMandatory)
 	{
 		super();
 		this.name = name;
 		this.type = type;
 		mandatory = isMandatory;
 		primary = false;
-		this.defaultValue = defaultValue;
+		this.defaultExprValue = defaultExprValue;
+		ExprTextVisitor exprTextVisitor = new ExprTextVisitor();
+		defaultExprValue.accept(exprTextVisitor);
+		defaultValue = (exprTextVisitor.getString().isEmpty() ? null
+				: exprTextVisitor.getString());
+		constraint = ColumnConstraintDefinition.EMPTY;
+	}
+
+	public ColumnDefinition(String name, TypeDefinition type,
+			Expr defaultExprValue, boolean isMandatory,
+			ColumnConstraintDefinition constraint)
+	{
+		super();
+		this.name = name;
+		this.type = type;
+		mandatory = isMandatory;
+		primary = false;
+		this.defaultExprValue = defaultExprValue;
+		ExprTextVisitor exprTextVisitor = new ExprTextVisitor();
+		this.defaultExprValue.accept(exprTextVisitor);
+		defaultValue = (exprTextVisitor.getString().isEmpty() ? null
+				: exprTextVisitor.getString());
+		this.constraint = constraint;
 	}
 
 	@Override
@@ -126,6 +154,16 @@ public class ColumnDefinition extends Symbol implements Cloneable
 		{
 			return false;
 		}
+		if (constraint == null)
+		{
+			if (other.constraint != null)
+			{
+				return false;
+			}
+		} else if (!constraint.equals(other.constraint))
+		{
+			return false;
+		}
 		return true;
 	}
 
@@ -167,4 +205,8 @@ public class ColumnDefinition extends Symbol implements Cloneable
 		}
 	}
 
+	public ColumnConstraintDefinition getConstraint()
+	{
+		return constraint;
+	}
 }

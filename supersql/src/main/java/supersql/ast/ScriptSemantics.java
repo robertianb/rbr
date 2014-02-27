@@ -11,61 +11,61 @@ import supersql.sql.ScriptSemanticsVisitor;
 import beaver.Symbol;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ian
- * Date: 15/01/13
- * Time: 19:04
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: ian Date: 15/01/13 Time: 19:04 To change
+ * this template use File | Settings | File Templates.
  */
-public class ScriptSemantics extends Symbol{
-    private List<ScriptAction> actionSequence;
+public class ScriptSemantics extends Symbol implements
+		supersql.diff.ScriptSemantics
+{
+	private List<ScriptAction> actionSequence;
 
+	private List<TableAlter> alters;
+	private final DatabaseModel databaseModel;
 
-    private List<TableAlter> alters;
-    private final DatabaseModel databaseModel;
+	public ScriptSemantics()
+	{
+		actionSequence = new ArrayList<ScriptAction>();
+		alters = new ArrayList<TableAlter>();
+		databaseModel = new DatabaseModel();
+	}
 
-    public ScriptSemantics() {
-        this.actionSequence = new ArrayList<ScriptAction>();
-        this.alters = new ArrayList<TableAlter>();
-        this.databaseModel = new DatabaseModel();
-    }
+	public void addAction(ScriptAction a)
+	{
+		actionSequence.add(a);
+	}
 
-    public void addAction(ScriptAction a)
-    {
-        actionSequence.add(a);
-    }
+	public void addActions(ScriptActions scriptActions)
+	{
+		actionSequence.addAll(scriptActions.getActions());
+	}
 
-    public void addActions(ScriptActions scriptActions)
-    {
-        actionSequence.addAll(scriptActions.getActions());
-    }
+	@Override
+	public String toString()
+	{
+		return "ScriptSemantics{" + "actionSequence=" + actionSequence + '}';
+	}
 
-    @Override
-    public String toString() {
-        return "ScriptSemantics{" +
-                "actionSequence=" + actionSequence +
-                '}';
-    }
+	public void accept(ScriptSemanticsVisitor visitor)
+	{
+		for (ScriptAction a : actionSequence)
+		{
+			a.accept(visitor);
+		}
+	}
 
-    public void accept(ScriptSemanticsVisitor visitor)
-    {
-        for (ScriptAction a : actionSequence) {
-            a.accept(visitor);
-        }
-    }
-    
-    public CreateTableAction getCreateTableAction(String tableName)
-    {
-      for (ScriptAction action : actionSequence) {
-        if (action instanceof CreateTableAction)
-        {
-          CreateTableAction createTableAction = (CreateTableAction) action;
-          if (tableName.equals( createTableAction.getTableName()))
-          {
-             return createTableAction;
-          }
-        }
-      }
-      return null;
-    }
+	public CreateTableAction getCreateTableAction(String tableName)
+	{
+		for (ScriptAction action : actionSequence)
+		{
+			if (action instanceof CreateTableAction)
+			{
+				CreateTableAction createTableAction = (CreateTableAction) action;
+				if (tableName.equals(createTableAction.getTableName()))
+				{
+					return createTableAction;
+				}
+			}
+		}
+		return null;
+	}
 }

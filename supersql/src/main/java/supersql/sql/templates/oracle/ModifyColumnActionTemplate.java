@@ -1,12 +1,10 @@
 package supersql.sql.templates.oracle;
 
 import supersql.ast.actions.CopyTableAction;
-import supersql.ast.actions.CreateTableAction;
 import supersql.ast.actions.CreateTempTableCopyAction;
 import supersql.ast.actions.DeleteAllAction;
 import supersql.ast.actions.ModifyColumnTypeAction;
 import supersql.ast.actions.ScriptAction;
-import supersql.ast.entities.ColumnDefinition;
 import supersql.sql.templates.ActionTemplate;
 import supersql.sql.templates.ActionTemplateCode;
 import supersql.sql.templates.ActionTemplateHelper;
@@ -36,17 +34,12 @@ public class ModifyColumnActionTemplate extends ActionTemplate
 		StringBuffer sb = new StringBuffer();
 
 		ModifyColumnTypeAction anAction = (ModifyColumnTypeAction) action;
-		ColumnDefinition prevColDef = anAction.getPreviousColumnDefinition();
-		ColumnDefinition nextColDef = anAction.getNextColumnDefinition();
-		CreateTableAction prevCreateTableAction = anAction
-				.getPreviousCreateTableAction();
-		CreateTableAction nextCreateTableAction = anAction
-				.getNextCreateTableAction();
+		String tableName = anAction.getTableName();
 
 		// create temp table
-		String tempTableName = prevCreateTableAction.getTableName() + "_TMP";
+		String tempTableName = tableName + "_TMP";
 		ScriptAction createTempTableAction = new CreateTempTableCopyAction(
-				prevCreateTableAction.getTableName(), tempTableName);
+				tableName, tempTableName);
 		ActionTemplate createTempTableActionTemplate = actionTemplateManager
 				.getActionTemplate(vendor,
 						ActionTemplateCode.CREATE_TEMP_TABLE_COPY);
@@ -76,8 +69,7 @@ public class ModifyColumnActionTemplate extends ActionTemplate
 		// sb.append(copyOut);
 
 		// Delete FROM table
-		DeleteAllAction deleteAllAction = new DeleteAllAction(
-				nextCreateTableAction.getTableName());
+		DeleteAllAction deleteAllAction = new DeleteAllAction(tableName);
 		ActionTemplate deleteAllActionTemplate = actionTemplateManager
 				.getActionTemplate(vendor, deleteAllAction);
 		String deleteOut = deleteAllActionTemplate.apply(deleteAllAction,
@@ -89,7 +81,7 @@ public class ModifyColumnActionTemplate extends ActionTemplate
 
 		// copy from Temp table back to inital table
 		CopyTableAction copyTableContentsBackAction = new CopyTableAction(
-				tempTableName, prevCreateTableAction.getTableName());
+				tempTableName, tableName);
 		ActionTemplate copyTableContentsBackTemplate = actionTemplateManager
 				.getActionTemplate(vendor, copyTableContentsBackAction);
 		String copyBackOut = copyTableContentsBackTemplate.apply(

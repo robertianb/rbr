@@ -1,13 +1,5 @@
 package supersql.rest;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -17,19 +9,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
+import supersql.CrebasScriptProducer;
 import supersql.SuperSqlEvents;
-import supersql.ast.actions.ActionCodes;
-import supersql.diff.CrebasComparator;
-import supersql.sql.templates.ActionTemplateCode;
-import supersql.sql.templates.ActionTemplateHelperFactory;
-import supersql.sql.templates.TemplateScriptVisitor;
-import supersql.sql.templates.TypeVisitorFactory;
-import supersql.sql.templates.Vendor;
-import supersql.sql.templates.factory.ChangePrimaryKeyTemplateFactory;
-import supersql.sql.templates.factory.CreateTableTemplateFactory;
-import supersql.sql.templates.factory.CreateTempTableTemplateFactory;
-import supersql.sql.templates.factory.ModifyColumnWithTempTableTemplateFactory;
-import supersql.sql.templates.factory.UpgradeVersionTemplateFactory;
+import supersql.TranslateScriptProducer;
+import supersql.sql.templates.factory.Options;
 
 /**
  * Created with IntelliJ IDEA. User: ian Date: 01/02/13 Time: 08:35 To change
@@ -39,148 +22,75 @@ import supersql.sql.templates.factory.UpgradeVersionTemplateFactory;
 public class SupersqlResource
 {
 
-  public static final Logger log = Logger.getLogger(SupersqlResource.class);
+	public static final Logger log = Logger.getLogger(SupersqlResource.class);
 
-  @POST
-  @Produces("text/plain")
-  @Path("/alter")
-  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-  public String postAlter(@FormParam("vendor")
-  String vendor, @FormParam("component")
-  String component, @FormParam("prev")
-  String prev, @FormParam("next")
-  String next, @FormParam("crebas1")
-  String crebas1, @FormParam("crebas2")
-  String crebas2, @FormParam("check")
-  String check)
-  {
-    // log.info("Alter request from " + request.getRemoteUser() +
-    // " on " + request.getRemoteAddr() + "(" + request.getRemoteHost() + ")");
-    log.info("Alter Request for " + vendor + " script (" + prev + " to " + next
-        + ") with check[" + check + "]");
-    return produceScripts(vendor, component, prev, next, crebas1, crebas2,
-                          "on".equals(check));
-  }
+	@POST
+	@Produces("text/plain")
+	@Path("/translate")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String postTranslate(@FormParam("vendor") String vendor,
+			@FormParam("component") String component,
+			@FormParam("prev") String prev, @FormParam("next") String next,
+			@FormParam("script") String script, @FormParam("check") String check)
+	{
 
-  private String produceScripts(String vendor, String component, String prev,
-                                String next, String crebas1, String crebas2,
-                                boolean check)
-  {
-    SuperSqlEvents.getInstance().clear();
-    StringBuffer sb = new StringBuffer();
-    try {
-      if (vendor.equalsIgnoreCase("All")) {
+		// log.info("Alter request from " + request.getRemoteUser() +
+		// " on " + request.getRemoteAddr() + "(" + request.getRemoteHost() +
+		// ")");
+		log.info("Translate Request for " + vendor + " script (" + prev
+				+ " to " + next + ") with check[" + check + "]");
+		SuperSqlEvents.getInstance().clear();
+		Options outputOptions = new Options(Boolean.valueOf(check), component);
+		TranslateScriptProducer crebasScriptProducer = new TranslateScriptProducer(
+				outputOptions, vendor, prev, next, script);
+		return crebasScriptProducer.produce();
+	}
 
-        for (String v : Vendor.ALL) {
-          sb.append("-- ############################### " + v + (Vendor.MYSQL.equals(v)?"/MariaDB":"")
-              + " ############################### \n");
-          sb.append(produceAlterScript(v, component,
-                                       new CrebasComparator(new StringReader(
-                                           crebas1), new StringReader(crebas2),
-                                           prev, next),
-                                       new TypeVisitorFactory(),
-                                       new ActionTemplateHelperFactory(), check));
-        }
-      }
-      else {
-        sb.append(produceAlterScript(vendor, component,
-                                     new CrebasComparator(new StringReader(
-                                         crebas1), new StringReader(crebas2),
-                                         prev, next),
-                                     new TypeVisitorFactory(),
-                                     new ActionTemplateHelperFactory(), check));
-      }
-    }
-    catch (Exception e) {
-      StringWriter sw = new StringWriter();
-      PrintWriter p = new PrintWriter(sw);
-      sb.append(SuperSqlEvents.getInstance().getErrorSummary());
-      sb.append("\nAre you sure this is Oracle SQL ? /!\\ ONLY ORACLE SQL CAN BE PARSED WITH THIS TOOL /!\\ (actually only a subset included that generated by PowerAMC)");
-      e.printStackTrace(p);
-      sb.append('\n');
-      sb.append(sw.getBuffer());
-    }
-    if (SuperSqlEvents.getInstance().hasErrors()) {
-      log.warn(SuperSqlEvents.getInstance().getErrorSummary());
-      FileWriter fileWriter1 = null;
-      FileWriter fileWriter2 = null;
-      try {
-        fileWriter1 = new FileWriter("crebas1."
-            + new SimpleDateFormat("yyyyMMdd_HH-mm-ss").format(new Date())
-            + ".sql");
-        fileWriter1.append(crebas1);
-        fileWriter1.flush();
+	@POST
+	@Produces("text/plain")
+	@Path("/alter")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String postAlter(@FormParam("vendor") String vendor,
+			@FormParam("component") String component,
+			@FormParam("prev") String prev, @FormParam("next") String next,
+			@FormParam("crebas1") String crebas1,
+			@FormParam("crebas2") String crebas2,
+			@FormParam("check") String check)
+	{
+		// log.info("Alter request from " + request.getRemoteUser() +
+		// " on " + request.getRemoteAddr() + "(" + request.getRemoteHost() +
+		// ")");
+		log.info("Alter Request for " + vendor + " script (" + prev + " to "
+				+ next + ") with check[" + check + "]");
+		return produceScripts(vendor, component, prev, next, crebas1, crebas2,
+				"on".equals(check));
+	}
 
-        fileWriter2 = new FileWriter("crebas2."
-            + new SimpleDateFormat("yyyyMMdd_HH-mm-ss").format(new Date())
-            + ".sql");
-        fileWriter2.append(crebas2);
-        fileWriter2.flush();
+	private String produceScripts(String vendor, String component, String prev,
+			String next, String crebas1, String crebas2, boolean check)
+	{
+		SuperSqlEvents.getInstance().clear();
+		Options outputOptions = new Options(check, component);
+		CrebasScriptProducer crebasScriptProducer = new CrebasScriptProducer(
+				outputOptions, vendor, prev, next, crebas1, crebas2);
+		return crebasScriptProducer.produce();
+	}
 
-      }
-      catch (IOException e) {
-        log.error(e);
-      }
-      finally {
-        try {
-          fileWriter1.close();
-          fileWriter2.close();
-        }
-        catch (Exception e) {
-          log.error(e);
-        }
-      }
-    }
-    return sb.toString();
-  }
-
-  @POST
-  @Produces("text/plain")
-  @Path("/rollback")
-  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-  public String postRollback(@FormParam("vendor")
-  String vendor, @FormParam("component")
-  String component, @FormParam("prev")
-  String prev, @FormParam("next")
-  String next, @FormParam("crebas1")
-  String crebas1, @FormParam("crebas2")
-  String crebas2, @FormParam("check")
-  String check)
-  {
-    log.info("Rollback Request for " + vendor + " script (" + prev + " to "
-        + next + ") with check[" + check + "]");
-    return produceScripts(vendor, component, next, prev, crebas2, crebas1,
-                          "on".equals(check));
-  }
-
-  private String produceAlterScript(String vendor, String component,
-                                    CrebasComparator crebasComparator,
-                                    TypeVisitorFactory typeVisitorFactory,
-                                    ActionTemplateHelperFactory helperFactory,
-                                    boolean check)
-  {
-
-    TemplateScriptVisitor scriptVisitor = new TemplateScriptVisitor(vendor,
-        helperFactory.createHelper(vendor), check);
-    if (!Vendor.SUMMARY.equals(vendor)) {
-      // create table template
-      scriptVisitor.setActionTemplateFactory(ActionCodes.CREATE_TABLE,
-                                             new CreateTableTemplateFactory(
-                                                 check));
-      scriptVisitor.setActionTemplateFactory(ActionCodes.CHANGE_PRIMARY_KEY,
-                                             new ChangePrimaryKeyTemplateFactory());
-      scriptVisitor.setActionTemplateFactory(ActionTemplateCode.CREATE_TEMP_TABLE,
-                                             new CreateTempTableTemplateFactory(
-                                                                            check));
-      scriptVisitor.setActionTemplateFactory(ActionCodes.MODIFY_COLUMN,
-                                             new ModifyColumnWithTempTableTemplateFactory(vendor, scriptVisitor.getActionTemplateManager())); 
-    } 
-    scriptVisitor.setActionTemplateFactory(ActionCodes.UPGRADE_VERSION,
-                                           new UpgradeVersionTemplateFactory(
-                                                                             component));
-
-    crebasComparator.accept(scriptVisitor);
-    return scriptVisitor.getOutput().toString();
-  }
+	@POST
+	@Produces("text/plain")
+	@Path("/rollback")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String postRollback(@FormParam("vendor") String vendor,
+			@FormParam("component") String component,
+			@FormParam("prev") String prev, @FormParam("next") String next,
+			@FormParam("crebas1") String crebas1,
+			@FormParam("crebas2") String crebas2,
+			@FormParam("check") String check)
+	{
+		log.info("Rollback Request for " + vendor + " script (" + prev + " to "
+				+ next + ") with check[" + check + "]");
+		return produceScripts(vendor, component, next, prev, crebas2, crebas1,
+				"on".equals(check));
+	}
 
 }

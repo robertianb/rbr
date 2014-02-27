@@ -17,6 +17,7 @@ import supersql.ast.*;
 	return newToken(Terminals.EOF, "end-of-file");
 %eofval}
 %unicode
+
 %line
 %column
 
@@ -60,6 +61,7 @@ StringCharacter = [^\r\n\'\\]
 <YYINITIAL> {
 	"create"       { return newToken(Terminals.CREATE);  }
 	"alter"       { return newToken(Terminals.ALTER);  }
+        "modify"       { return newToken(Terminals.MODIFY);  }
 	"table"       { return newToken(Terminals.TABLE);  }
 	"add"       { return newToken(Terminals.ADD);  }
 	"drop"       { return newToken(Terminals.DROP);  }

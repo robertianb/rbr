@@ -24,7 +24,7 @@ import beaver.Parser;
  * Created with IntelliJ IDEA. User: ian Date: 29/01/13 Time: 22:00 To change
  * this template use File | Settings | File Templates.
  */
-public class CrebasComparator
+public class CrebasComparator implements ScriptSemantics
 {
     public static final Logger log = Logger.getLogger(CrebasComparator.class);
 
@@ -102,7 +102,7 @@ public class CrebasComparator
       dbVendor = args[4];
     }
     
-    CrebasComparator crebasComparator;
+    ScriptSemantics crebasComparator;
     if (previousVersion != null)
     {
       crebasComparator = new CrebasComparator(previous, next, previousVersion, nextVersion);
@@ -125,7 +125,11 @@ public class CrebasComparator
 
   }
 
-  public void accept(ScriptSemanticsVisitor visitor) {
+  /* (non-Javadoc)
+ * @see supersql.diff.ScriptSemantics#accept(supersql.sql.ScriptSemanticsVisitor)
+ */
+@Override
+public void accept(ScriptSemanticsVisitor visitor) {
     DatabaseModel previousModel = previousCrebas.getDatabaseModel();
     DatabaseModel nextModel = nextCrebas.getDatabaseModel();
     

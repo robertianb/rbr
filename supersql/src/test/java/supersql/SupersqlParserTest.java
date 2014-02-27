@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import supersql.ast.types.TypeVisitor;
 import supersql.diff.CrebasComparator;
+import supersql.diff.ScriptSemantics;
 import supersql.sql.templates.ActionTemplateHelper;
 import supersql.sql.templates.TemplateScriptVisitor;
 import supersql.sql.templates.TypeVisitorFactory;
@@ -78,7 +79,7 @@ public class SupersqlParserTest {
                         File expectedResult = new File(summaryFilePath);
                         if (previous.exists() && expectedResult.exists()) {
                             String nextFilePath = f.getPath();
-                            CrebasComparator crebasComparator = new CrebasComparator(previousFilePath, nextFilePath);
+                            ScriptSemantics crebasComparator = new CrebasComparator(previousFilePath, nextFilePath);
                             TypeVisitor typeVisitor = new TypeVisitorFactory().createTypeVisitor(Vendor.SUMMARY);
 
                             TemplateScriptVisitor scriptVisitor = new TemplateScriptVisitor(

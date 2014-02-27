@@ -11,73 +11,104 @@ import supersql.ast.types.TypeVisitor;
 public abstract class ActionTemplateHelper
 {
 
-  TypeVisitor typeVisitor;
+	TypeVisitor typeVisitor;
 
-  protected ActionTemplateHelper(TypeVisitor typeVisitor) {
-    this.typeVisitor = typeVisitor;
-  }
+	protected ActionTemplateHelper(TypeVisitor typeVisitor)
+	{
+		this.typeVisitor = typeVisitor;
+	}
 
-  public String getColumnDefinition(ColumnDefinition colDef) {
-    colDef.getType().accept(typeVisitor);
+	public String getColumnDefinition(ColumnDefinition colDef)
+	{
+		colDef.getType().accept(typeVisitor);
 
-    return colDef.getName()
-        + " "
-        + typeVisitor.getResult()
-        + " "
-        + (colDef.isMandatory() ? "not null" : "null")
-        + " "
-        + (colDef.getDefaultValue() != null ? "default "
-            + colDef.getDefaultValue() : "");
-  }
+		ExprTextVisitor exprTextVisitor = new ExprTextVisitor();
 
-  public String getColumnSeparator() {
-    return ",";
-  }
+		String constraintString;
 
-  public String getDefinitionBegin() {
-    return "(";
-  }
+		if (colDef.getConstraint() != null && !colDef.getConstraint().isEmpty())
+		{
+			PredicateTextVisitor ptv = new PredicateTextVisitor();
+			colDef.getConstraint().getPredicate().accept(ptv);
+			constraintString = colDef.getConstraint().getName() + " CHECK "
+					+ ptv.getString();
+		} else
+		{
+			constraintString = "";
+		}
 
-  public String getDefinitionEnd() {
-    return ")";
-  }
+		String toReturn = colDef.getName()
+				+ " "
+				+ typeVisitor.getResult()
+				+ " "
+				+ (colDef.isMandatory() ? "not null" : "null")
+				+ " "
+				+ (colDef.getDefaultValue() != null ? "default "
+						+ colDef.getDefaultValue() : "") + " "
+				+ constraintString;
+		return toReturn;
+	}
 
-  public String getCreateTempTable() {
-    return "create global temporary table ";
-  }
-  
-  public String getCreateTable() {
-    return "create table ";
-  }
+	public String getColumnSeparator()
+	{
+		return ",";
+	}
 
-  public String getPrimaryKey(String tableName,
-                              String id, Column... primaryKeyColumns)
-  {
-    // eg. constraint PK_LEVELLEDMKTSPREADRULE primary key (ulId, bidPrice,
-    // maturityValue, maturityUnit)
-    StringBuffer result = new StringBuffer(" constraint "
-        + id + " primary key (");
-    for (int i = 0; i < primaryKeyColumns.length - 1; i++) {
-      Column colDef = primaryKeyColumns[i];
-      result.append(colDef.getName());
-      result.append(",");
-    }
-    if (primaryKeyColumns.length > 0) {
-      // last
-      result.append(primaryKeyColumns[primaryKeyColumns.length - 1].getName());
-    }
-    result.append(")");
-    return result.toString();
-  }
+	public String getDefinitionBegin()
+	{
+		return "(";
+	}
 
-    public String getSendCommand() {
-        return "go";
-    }
-    public TypeVisitor getTypeVisitor() {
-        return typeVisitor;
-    }
+	public String getDefinitionEnd()
+	{
+		return ")";
+	}
 
-    public String getLineFeed() {
-      return  "'\n" + "||" +  "'";
-    }
+	public String getCreateTempTable()
+	{
+		return "create global temporary table ";
+	}
+
+	public String getCreateTable()
+	{
+		return "create table ";
+	}
+
+	public String getPrimaryKey(String tableName, String id,
+			Column... primaryKeyColumns)
+	{
+		// eg. constraint PK_LEVELLEDMKTSPREADRULE primary key (ulId, bidPrice,
+		// maturityValue, maturityUnit)
+		StringBuffer result = new StringBuffer(" constraint " + id
+				+ " primary key (");
+		for (int i = 0; i < primaryKeyColumns.length - 1; i++)
+		{
+			Column colDef = primaryKeyColumns[i];
+			result.append(colDef.getName());
+			result.append(",");
+		}
+		if (primaryKeyColumns.length > 0)
+		{
+			// last
+			result.append(primaryKeyColumns[primaryKeyColumns.length - 1]
+					.getName());
+		}
+		result.append(")");
+		return result.toString();
+	}
+
+	public String getSendCommand()
+	{
+		return "go";
+	}
+
+	public TypeVisitor getTypeVisitor()
+	{
+		return typeVisitor;
+	}
+
+	public String getLineFeed()
+	{
+		return "'\n" + "||" + "'";
+	}
 }

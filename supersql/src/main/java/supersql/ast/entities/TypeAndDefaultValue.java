@@ -1,22 +1,23 @@
 package supersql.ast.entities;
 
+import supersql.ast.entities.expr.EmptyExpr;
+import supersql.ast.entities.expr.Expr;
 import supersql.ast.types.TypeDefinition;
 import beaver.Symbol;
 
 public class TypeAndDefaultValue extends Symbol
 {
 
-	private static final Object NO_DEFAULT_VALUE = new Object();
+	private static final Expr NO_DEFAULT_VALUE = new EmptyExpr();
 	private TypeDefinition typeDefinition;
-	private Object defaultValue;
+	private Expr defaultValue;
 
 	public TypeAndDefaultValue(TypeDefinition typeDefinition)
 	{
 		this(typeDefinition, NO_DEFAULT_VALUE);
 	}
 
-	public TypeAndDefaultValue(TypeDefinition typeDefinition,
-			Object defaultValue)
+	public TypeAndDefaultValue(TypeDefinition typeDefinition, Expr defaultValue)
 	{
 		super();
 		this.typeDefinition = typeDefinition;
@@ -86,7 +87,7 @@ public class TypeAndDefaultValue extends Symbol
 		return true;
 	}
 
-	public Object getDefaultValue()
+	public Expr getDefaultValue()
 	{
 		return defaultValue;
 	}
