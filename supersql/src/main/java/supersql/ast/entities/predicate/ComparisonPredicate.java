@@ -49,4 +49,42 @@ public class ComparisonPredicate extends Predicate
 		return operation;
 	}
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((expr1 == null) ? 0 : expr1.hashCode());
+    result = prime * result + ((expr2 == null) ? 0 : expr2.hashCode());
+    result = prime * result + ((operation == null) ? 0 : operation.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ComparisonPredicate other = (ComparisonPredicate) obj;
+    if (expr1 == null) {
+      if (other.expr1 != null)
+        return false;
+    }
+    else if (!expr1.equals(other.expr1))
+      return false;
+    if (expr2 == null) {
+      if (other.expr2 != null)
+        return false;
+    }
+    else if (!expr2.equals(other.expr2))
+      return false;
+    if (operation != other.operation)
+      return false;
+    return true;
+  }
+	
+	
+
 }

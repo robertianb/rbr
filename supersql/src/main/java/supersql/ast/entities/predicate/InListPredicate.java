@@ -54,4 +54,46 @@ public class InListPredicate extends Predicate
 		return ident;
 	}
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((ident == null) ? 0 : ident.hashCode());
+    result = prime * result + ((names == null) ? 0 : names.hashCode());
+    result = prime * result + ((values == null) ? 0 : values.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    InListPredicate other = (InListPredicate) obj;
+    if (ident == null) {
+      if (other.ident != null)
+        return false;
+    }
+    else if (!ident.equals(other.ident))
+      return false;
+    if (names == null) {
+      if (other.names != null)
+        return false;
+    }
+    else if (!names.equals(other.names))
+      return false;
+    if (values == null) {
+      if (other.values != null)
+        return false;
+    }
+    else if (!values.equals(other.values))
+      return false;
+    return true;
+  }
+	
+	
+
 }

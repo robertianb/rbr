@@ -29,4 +29,41 @@ public class OrPredicate extends Predicate
 		v.visit(this);
 	}
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result
+        + ((predicate1 == null) ? 0 : predicate1.hashCode());
+    result = prime * result
+        + ((predicate2 == null) ? 0 : predicate2.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    OrPredicate other = (OrPredicate) obj;
+    if (predicate1 == null) {
+      if (other.predicate1 != null)
+        return false;
+    }
+    else if (!predicate1.equals(other.predicate1))
+      return false;
+    if (predicate2 == null) {
+      if (other.predicate2 != null)
+        return false;
+    }
+    else if (!predicate2.equals(other.predicate2))
+      return false;
+    return true;
+  }
+	
+	
+
 }
