@@ -209,4 +209,10 @@ public class ColumnDefinition extends Symbol implements Cloneable
 	{
 		return constraint;
 	}
+	
+	
+	public void accept(ColumnDefinitionVisitor visitor)
+	{
+	  visitor.columnDefinition(this);
+	}
 }

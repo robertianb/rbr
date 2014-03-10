@@ -75,7 +75,7 @@ public class CreateTableActionTemplate extends ActionTemplate{
         {
             ColumnDefinition colDef = columns.get(i);
             buf.append(INDENT);
-            buf.append(actionTemplateHelper.getColumnDefinition(colDef));
+            buf.append(actionTemplateHelper.getColumnDefinition(colDef, inner));
             buf.append(actionTemplateHelper.getColumnSeparator());
             buf.append(lineSeparator);
 
@@ -96,7 +96,7 @@ public class CreateTableActionTemplate extends ActionTemplate{
             // add last
             buf.append(INDENT);
             ColumnDefinition colDef = columns.get(columns.size() - 1);
-            buf.append(actionTemplateHelper.getColumnDefinition(colDef));
+            buf.append(actionTemplateHelper.getColumnDefinition(colDef, inner));
             if (primaryKeyConstraint != null)
             {
               buf.append(actionTemplateHelper.getColumnSeparator());

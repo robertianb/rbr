@@ -1,6 +1,8 @@
 package supersql.sql.templates;
 
+import supersql.sql.templates.h2.H2ColumnDefinitionVisitor;
 import supersql.sql.templates.h2.H2TypeVisitor;
+import supersql.sql.templates.mysql.MySqlColumnDefinitionVisitor;
 import supersql.sql.templates.mysql.MySqlTypeVisitor;
 import supersql.sql.templates.oracle.OracleTypeVisitor;
 import supersql.sql.templates.sqlserver.SqlserverTypeVisitor;
@@ -48,10 +50,16 @@ public class ActionTemplateHelperFactory
       };
     } else if (Vendor.MYSQL.equals(vendor))
     {
-      result = new ActionTemplateHelper(new MySqlTypeVisitor()) {
+      MySqlTypeVisitor mySqlTypeVisitor = new MySqlTypeVisitor();
+      result = new ActionTemplateHelper(mySqlTypeVisitor, new MySqlColumnDefinitionVisitor(mySqlTypeVisitor)) {
         @Override
         public String getSendCommand() {
           return SEMICOLON;
+        }
+        
+        @Override
+        public String getQuote(boolean inner) {
+          return "'";
         }
         
         @Override
@@ -61,7 +69,8 @@ public class ActionTemplateHelperFactory
       };
     } else if (Vendor.H2.equals(vendor))
     {
-      result = new ActionTemplateHelper(new H2TypeVisitor()) {
+      H2TypeVisitor h2TypeVisitor = new H2TypeVisitor();
+      result = new ActionTemplateHelper(h2TypeVisitor, new H2ColumnDefinitionVisitor(h2TypeVisitor)) {
         @Override
         public String getSendCommand() {
           return SEMICOLON;

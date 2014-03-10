@@ -15,11 +15,16 @@ public class PredicateTextVisitor implements PredicateVisitor
 {
 
 	private StringBuilder sb;
+	private boolean escapeQuotes;
 
 	public PredicateTextVisitor()
 	{
 		sb = new StringBuilder();
 	}
+	
+	public void setEscapeQuotes(boolean escapeQuotes) {
+      this.escapeQuotes = escapeQuotes;
+    }
 
 	@Override
 	public void visit(AndPredicate predicate)
@@ -93,14 +98,14 @@ public class PredicateTextVisitor implements PredicateVisitor
 		ArrayList<String> names = new ArrayList(predicate.getNames());
 		for (int i = 0; i < names.size() - 1; i++)
 		{
-			sb.append("'");
+			sb.append((escapeQuotes?"''":"'"));
 			sb.append(names.get(i));
-			sb.append("'");
+			sb.append((escapeQuotes?"''":"'"));
 			sb.append(",");
 		}
-		sb.append("'");
+		sb.append((escapeQuotes?"''":"'"));
 		sb.append(names.get(names.size() - 1));
-		sb.append("'");
+		sb.append((escapeQuotes?"''":"'"));
 		sb.append(" )");
 	}
 

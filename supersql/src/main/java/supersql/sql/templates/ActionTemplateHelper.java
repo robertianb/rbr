@@ -2,6 +2,7 @@ package supersql.sql.templates;
 
 import supersql.ast.entities.Column;
 import supersql.ast.entities.ColumnDefinition;
+import supersql.ast.entities.ColumnDefinitionVisitor;
 import supersql.ast.types.TypeVisitor;
 
 /**
@@ -12,40 +13,32 @@ public abstract class ActionTemplateHelper
 {
 
 	TypeVisitor typeVisitor;
+	ColumnDefinitionVisitor columnDefinitionVisitor;
 
 	protected ActionTemplateHelper(TypeVisitor typeVisitor)
 	{
 		this.typeVisitor = typeVisitor;
+		this.columnDefinitionVisitor = new DefaultColumnDefinitionVisitor(typeVisitor, false);
 	}
+	
+	
 
-	public String getColumnDefinition(ColumnDefinition colDef)
+	public ActionTemplateHelper(TypeVisitor typeVisitor,
+                              ColumnDefinitionVisitor columnDefinitionVisitor)
+  {
+    super();
+    this.typeVisitor = typeVisitor;
+    this.columnDefinitionVisitor = columnDefinitionVisitor;
+  }
+
+
+
+  public String getColumnDefinition(ColumnDefinition colDef, boolean inner)
 	{
 		colDef.getType().accept(typeVisitor);
-
-		ExprTextVisitor exprTextVisitor = new ExprTextVisitor();
-
-		String constraintString;
-
-		if (colDef.getConstraint() != null && !colDef.getConstraint().isEmpty())
-		{
-			PredicateTextVisitor ptv = new PredicateTextVisitor();
-			colDef.getConstraint().getPredicate().accept(ptv);
-			constraintString = colDef.getConstraint().getName() + " CHECK "
-					+ ptv.getString();
-		} else
-		{
-			constraintString = "";
-		}
-
-		String toReturn = colDef.getName()
-				+ " "
-				+ typeVisitor.getResult()
-				+ " "
-				+ (colDef.isMandatory() ? "not null" : "null")
-				+ " "
-				+ (colDef.getDefaultValue() != null ? "default "
-						+ colDef.getDefaultValue() : "") + " "
-				+ constraintString;
+        columnDefinitionVisitor.setEscapeQuotes(inner);
+		colDef.accept(columnDefinitionVisitor);
+		String toReturn = columnDefinitionVisitor.getResult();
 		return toReturn;
 	}
 
@@ -105,6 +98,11 @@ public abstract class ActionTemplateHelper
 	public TypeVisitor getTypeVisitor()
 	{
 		return typeVisitor;
+	}
+	
+	public String getQuote(boolean inner)
+	{
+	  return (inner?"''":"'");
 	}
 
 	public String getLineFeed()
