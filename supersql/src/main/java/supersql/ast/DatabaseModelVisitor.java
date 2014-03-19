@@ -23,6 +23,7 @@ import supersql.ast.entities.Column;
 import supersql.ast.entities.ColumnDefinition;
 import supersql.ast.entities.DeleteColumnAction;
 import supersql.ast.entities.TableDefinition;
+import supersql.diff.ApplicableVisitor;
 import supersql.sql.ScriptSemanticsVisitor;
 
 /**
@@ -196,6 +197,14 @@ public class DatabaseModelVisitor implements ScriptSemanticsVisitor
     @Override
     public void changePrimaryKey(ChangePrimaryKeyAction changePrimaryKeyAction)
     {
+      
+      ApplicableVisitor applicableVisitor = new ApplicableVisitor(databaseModel);
+      applicableVisitor.changePrimaryKey(changePrimaryKeyAction);
+      if (!applicableVisitor.isApplicable())
+      {
+        log.error("Not applicable " + changePrimaryKeyAction + " on " + databaseModel);
+      }
+      
       TableDefinition modelTableDef = databaseModel.getTablesDefinitions().get(changePrimaryKeyAction.getTableName());
       List<ColumnDefinition> newColumnDefinitions = new LinkedList<ColumnDefinition>();
       for (int i = 0; i < modelTableDef.getColumns().size();i++) {

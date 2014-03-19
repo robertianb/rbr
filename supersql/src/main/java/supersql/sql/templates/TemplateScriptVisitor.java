@@ -1,5 +1,8 @@
 package supersql.sql.templates;
 
+import org.apache.log4j.Logger;
+
+import supersql.ast.DatabaseModel;
 import supersql.ast.actions.ActionCodes;
 import supersql.ast.actions.AddColumnAction;
 import supersql.ast.actions.AddColumnsAction;
@@ -16,6 +19,7 @@ import supersql.ast.actions.UpgradeVersionAction;
 import supersql.ast.entities.Column;
 import supersql.ast.entities.ColumnDefinition;
 import supersql.ast.entities.DeleteColumnAction;
+import supersql.diff.ApplicableVisitor;
 import supersql.sql.ScriptSemanticsVisitor;
 
 /**
@@ -29,20 +33,32 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
 
 
 
+  private static Logger log = Logger.getLogger(TemplateScriptVisitor.class);
     private StringBuffer out;
+    private StringBuffer remainingActionsBuffer;
     private String prefix;
     private ActionTemplateHelper actionTemplateHelper;
     private final ActionTemplateManager actionTemplateManager;
     private boolean check;
+    private DatabaseModel databaseModel;
+    private ApplicableVisitor applicableVisitor;
 
 
-    public TemplateScriptVisitor(String prefix, ActionTemplateHelper actionTemplateHelper, boolean check) {
+    public TemplateScriptVisitor(String prefix, ActionTemplateHelper actionTemplateHelper, boolean check, DatabaseModel model) {
+      databaseModel = model;
       this.check = check;
       this.prefix = prefix;
       this.actionTemplateHelper = actionTemplateHelper;
       this.actionTemplateManager = new ActionTemplateManager(check);
+      applicableVisitor = new ApplicableVisitor(databaseModel);
       out = new StringBuffer();
+      remainingActionsBuffer = new StringBuffer();
     }
+    
+    public TemplateScriptVisitor(String prefix, ActionTemplateHelper actionTemplateHelper, boolean check) {
+      this (prefix, actionTemplateHelper, check, new DatabaseModel());
+    }
+    
     public TemplateScriptVisitor(String prefix, ActionTemplateHelper actionTemplateHelper) {
       this(prefix, actionTemplateHelper, true);
     }
@@ -50,18 +66,21 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
 
     @Override
     public void createTable(CreateTableAction action) {
+        applicableVisitor.createTable(action);
         ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
         out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
 
     @Override
     public void upgradeVersion(UpgradeVersionAction action) {
+        applicableVisitor.upgradeVersion(action);
         ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
         out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
 
     @Override
     public void addColumns(AddColumnsAction action) {
+        applicableVisitor.addColumns(action);
         for (ColumnDefinition c : action.getColumns())
         {
             addColumn(new AddColumnAction(action.getTableName(), c));
@@ -70,6 +89,7 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
 
     @Override
     public void deleteColumns(DeleteColumnsAction action) {
+        applicableVisitor.deleteColumns(action); 
         for (Column c : action.getColumns())
         {
             deleteColumn(new DeleteColumnAction(action.getTableName(), c.getName()));
@@ -95,19 +115,25 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
 
     }
 
-    public StringBuffer getOutput() {
-        return out;
+  public StringBuffer getOutput() {
+    if (remainingActionsBuffer != null) {
+      out.append(remainingActionsBuffer.toString());
+      remainingActionsBuffer = null;
     }
+    return out;
+  }
 
 
     @Override
     public void dropTable(DropTableAction action) {
+      applicableVisitor.dropTable(action);
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
     
     @Override
     public void modifyColumn(ModifyColumnTypeAction action) {
+      applicableVisitor.modifyColumn(action);
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
@@ -115,6 +141,7 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
 
     @Override
     public void renameColumn(RenameColumnAction action) {
+      applicableVisitor.renameColumn(action);
       // TODO Auto-generated method stub
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
@@ -137,18 +164,21 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     
     @Override
     public void copyTableContents(CopyTableAction action) {
+      applicableVisitor.copyTableContents(action);
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
     
     @Override
     public void deleteTableContents(DeleteAllAction action) {
+      applicableVisitor.deleteTableContents(action);
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
     @Override
     public void copyInTempTable(CreateTempTableCopyAction action)
     {
+      applicableVisitor.copyInTempTable(action);
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
       out.append(actionTemplate.apply(action, actionTemplateHelper));
     }
@@ -156,7 +186,13 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     @Override
     public void changePrimaryKey(ChangePrimaryKeyAction action)
     {
+      applicableVisitor.changePrimaryKey(action);
       ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix,action);
-      out.append(actionTemplate.apply(action, actionTemplateHelper));   
+      if (applicableVisitor.isApplicable())
+      {
+        out.append(actionTemplate.apply(action, actionTemplateHelper));   
+      } else {
+        remainingActionsBuffer.append(actionTemplate.apply(action, actionTemplateHelper));
+      }
     }
 }

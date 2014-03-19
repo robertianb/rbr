@@ -29,7 +29,10 @@ public class SqlserverTypeVisitor
     if (typeDefinition.getNbDigit() == 1)
     {
       result = "INT";
+    } else if (typeDefinition.getNbDigit()==19) {
+      result = "NUMERIC(15,0)";
     } else {
+      
       result = "NUMBER(" + typeDefinition.getNbDigit() + ")";
     }
   }

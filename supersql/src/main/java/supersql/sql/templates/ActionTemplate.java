@@ -47,6 +47,7 @@ public class ActionTemplate {
                 valueToString = value.toString();
             }
             res = res.replaceAll("\\$\\{" + (String) entry.getKey() + "\\}", valueToString);
+            res = res.replaceAll("\\$\\{\\{" + (String) entry.getKey() + "\\}\\}", (valueToString.indexOf('\'')>=0?"'" + valueToString + "'":valueToString));
         }
         return res;
     }

@@ -38,12 +38,13 @@ public class CreateTableActionComparator {
         PrimaryKeyConstraint previousPK = previousCreateTableAction.getPrimaryKey();
         PrimaryKeyConstraint nextPK = nextCreateTableAction.getPrimaryKey();
         ChangePrimaryKeyAction changePrimaryKeyAction = null;
-        if (!previousPK.equals(nextPK))
+        if (previousPK!=null && !previousPK.equals(nextPK))
         {
           if (log.isDebugEnabled()) {
             log.debug("Primary key has changed, previous[" + previousPK +
                     "] new [" + nextPK + "]");
           }
+          
           changePrimaryKeyAction = new ChangePrimaryKeyAction(tableName, previousPK, nextPK, previousCreateTableAction, nextCreateTableAction);
           visitor.changePrimaryKey(changePrimaryKeyAction);
         }

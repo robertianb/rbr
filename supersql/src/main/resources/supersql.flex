@@ -59,13 +59,13 @@ StringCharacter = [^\r\n\'\\]
 
 
 <YYINITIAL> {
-	"create"       { return newToken(Terminals.CREATE);  }
-	"alter"       { return newToken(Terminals.ALTER);  }
-        "modify"       { return newToken(Terminals.MODIFY);  }
-	"table"       { return newToken(Terminals.TABLE);  }
-	"add"       { return newToken(Terminals.ADD);  }
-	"drop"       { return newToken(Terminals.DROP);  }
-	"column"       { return newToken(Terminals.COLUMN);  }
+	("create"|"CREATE")       { return newToken(Terminals.CREATE);  }
+	("alter"|"ALTER")       { return newToken(Terminals.ALTER);  }
+    ("modify"|"MODIFY")       { return newToken(Terminals.MODIFY);  }
+	("table"|"TABLE")       { return newToken(Terminals.TABLE);  }
+	("add"|"ADD")       { return newToken(Terminals.ADD);  }
+	("drop"|"DROP")       { return newToken(Terminals.DROP);  }
+	("column"|"COLUMN")       { return newToken(Terminals.COLUMN);  }
     "("         { return newToken(Terminals.LPAREN); }
     ")"         { return newToken(Terminals.RPAREN); }
     "<="         { return newToken(Terminals.LE); }
@@ -76,46 +76,33 @@ StringCharacter = [^\r\n\'\\]
     "-"         { return newToken(Terminals.MINUS); }
     "/"         { return newToken(Terminals.DIV); }
     "*"         { return newToken(Terminals.MULT); }
-    "CLOB"       { return newToken(Terminals.CLOB); }
-    "clob"       { return newToken(Terminals.CLOB); }
-    "is"       { return newToken(Terminals.IS); }
-    "between"       { return newToken(Terminals.BETWEEN); }
-    "CHAR"    { return newToken(Terminals.CHAR); }
-    "char"    { return newToken(Terminals.CHAR); }
-    "DATE"    { return newToken(Terminals.DATE); }
-    "TIMESTAMP"    { return newToken(Terminals.TIMESTAMP); }
-    "NUMBER"    { return newToken(Terminals.NUMBER); }
-    "number"    { return newToken(Terminals.NUMBER); }
-    "int"       { return newToken(Terminals.INT); }
-    "INT"       { return newToken(Terminals.INT); }
-    "INTEGER"    { return newToken(Terminals.INT); }
-    "integer"    { return newToken(Terminals.INT); }
-    "LONG"    { return newToken(Terminals.LONG); }
-    "long"    { return newToken(Terminals.LONG); }
-    "float"       { return newToken(Terminals.FLOAT); }
-    "FLOAT"       { return newToken(Terminals.FLOAT); }
-    "primary"   { return newToken(Terminals.PRIMARY); }
-    "PRIMARY"   { return newToken(Terminals.PRIMARY); }
-    "constraint"   { return newToken(Terminals.CONSTRAINT); }
-    "CONSTRAINT"   { return newToken(Terminals.CONSTRAINT); }
-    "key"   { return newToken(Terminals.KEY); }
-    "null"   { return newToken(Terminals.NULL); }
-    "default"  { return newToken(Terminals.DEFAULT); }
-    "check"   { return newToken(Terminals.CHECK); }
-    "in"   { return newToken(Terminals.IN); }
-    "and"   { return newToken(Terminals.AND); }
-    "or"   { return newToken(Terminals.OR); }
-    "not"   { return newToken(Terminals.NOT); }
-    "VARCHAR2"       { return newToken(Terminals.VARCHAR); }
-    "varchar2"       { return newToken(Terminals.VARCHAR); }
-    "varchar"       { return newToken(Terminals.VARCHAR); }
-    "VARCHAR"       { return newToken(Terminals.VARCHAR); }
-    "NVARCHAR2"       { return newToken(Terminals.NVARCHAR); }
-    "NVARCHAR"       { return newToken(Terminals.NVARCHAR); }
-    "nvarchar2"       { return newToken(Terminals.NVARCHAR); }
-    "nvarchar"       { return newToken(Terminals.NVARCHAR); }
+    ("CLOB"|"clob")       { return newToken(Terminals.CLOB); }
+    ("is"|"IS")       { return newToken(Terminals.IS); }
+    ("between"|"BETWEEN")       { return newToken(Terminals.BETWEEN); }
+    ("CHAR"|"char")    { return newToken(Terminals.CHAR); }
+    ("DATE"|"date")    { return newToken(Terminals.DATE); }
+    ("TIMESTAMP")    { return newToken(Terminals.TIMESTAMP); }
+    ("NUMBER"|"number")    { return newToken(Terminals.NUMBER); }
+    ("int"|"INT")       { return newToken(Terminals.INT); }
+    ("INTEGER"|"integer")     { return newToken(Terminals.INT); }
+    ("LONG"|"long")    { return newToken(Terminals.LONG); }
+    ("FLOAT"|"float")       { return newToken(Terminals.FLOAT); }
+    ("PRIMARY"|"primary")    { return newToken(Terminals.PRIMARY); }
+    ("CONSTRAINT"|"constraint")   { return newToken(Terminals.CONSTRAINT); }
+    ("KEY"|"key")   { return newToken(Terminals.KEY); }
+    ("NULL"|"null")   { return newToken(Terminals.NULL); }
+    ("DEFAULT"|"default")  { return newToken(Terminals.DEFAULT); }
+    ("CHECK"|"check")   { return newToken(Terminals.CHECK); }
+    ("IN"|"in")   { return newToken(Terminals.IN); }
+    ("AND"|"and")   { return newToken(Terminals.AND); }
+    ("OR"|"or")   { return newToken(Terminals.OR); }
+    ("NOT"|"not")   { return newToken(Terminals.NOT); }
+    ("VARCHAR2"|"varchar2")       { return newToken(Terminals.VARCHAR); }
+    ("VARCHAR"|"varchar")       { return newToken(Terminals.VARCHAR); }
+    ("NVARCHAR2"|"nvarchar2")       { return newToken(Terminals.NVARCHAR); }
+    ("NVARCHAR"|"nvarchar")       { return newToken(Terminals.NVARCHAR); }
     ","         { return newToken(Terminals.COMMA); }
-    \'                             { yybegin(STRING); string.setLength(0); }
+    \'                             { yybegin(STRING); string.setLength(0); string.append("'");}
     {DecIntegerLiteral}    { return newToken(Terminals.INTEGER_LITERAL, new Integer(yytext())); }
     {FloatLiteral}            { return newToken(Terminals.FLOATING_POINT_LITERAL, Float.valueOf(yytext())); }
     {EndOfLineComment}      { /* ignore */ }
@@ -125,7 +112,7 @@ StringCharacter = [^\r\n\'\\]
 
 
 <STRING> {
-  \'                             { yybegin(YYINITIAL); return newToken(Terminals.STRING_LITERAL, string.toString()); }
+  \'                             { yybegin(YYINITIAL); string.append("'"); return newToken(Terminals.STRING_LITERAL, string.toString()); }
 
   {StringCharacter}+             { string.append( yytext() ); }
 

@@ -71,7 +71,7 @@ public class CrebasScriptProducer extends ScriptProducer
 	protected void tryProduce() throws Exception
 	{
 		TypeVisitorFactory typeVisitorFactory = new TypeVisitorFactory();
-		supersql.diff.ScriptSemantics crebasComparator = new CrebasComparator(
+		CrebasComparator crebasComparator = new CrebasComparator(
 				new StringReader(crebas1), new StringReader(crebas2),
 				currentVersion, nextVersion);
 		if (vendor.equalsIgnoreCase("All"))
@@ -94,12 +94,12 @@ public class CrebasScriptProducer extends ScriptProducer
 	}
 
 	private String produceAlterScript(String vendor,
-			supersql.diff.ScriptSemantics crebasComparator,
+			CrebasComparator crebasComparator,
 			TypeVisitorFactory typeVisitorFactory, Options options)
 	{
 		TemplateScriptVisitorFactory factory = new TemplateScriptVisitorFactory();
 		TemplateScriptVisitor templateScriptVisitor = factory.create(vendor,
-				options);
+				options, crebasComparator.getPreviousModel());
 		crebasComparator.accept(templateScriptVisitor);
 		return templateScriptVisitor.getOutput().toString();
 	}

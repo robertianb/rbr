@@ -184,4 +184,9 @@ public void accept(ScriptSemanticsVisitor visitor) {
         log.debug(sb.toString());
   }
 
+  public DatabaseModel getPreviousModel()
+  {
+    return previousCrebas.getDatabaseModel(); 
+  }
+
 }

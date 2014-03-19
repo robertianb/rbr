@@ -8,7 +8,7 @@ BEGIN
 IF EXISTS( (SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()
         AND TABLE_NAME='${tableName}') ) THEN
     ALTER TABLE ${tableName} DROP PRIMARY KEY;
-	ALTER TABLE ${tableName} ADD PRIMARY KEY  ${nextPrimaryKey};
+	ALTER TABLE ${tableName} ADD ${nextPrimaryKey};
 END IF;
 
 END $$

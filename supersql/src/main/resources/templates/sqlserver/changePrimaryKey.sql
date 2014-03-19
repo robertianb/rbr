@@ -5,11 +5,11 @@ declare @userid int;
 set @userid = (select user_id(@username))
 
 declare @nm varchar(128)
-select @nm = name from sysobjects where xtype='PK' and object_name(parent_obj) = 'tableName' and uid=@userid
+select @nm = name from sysobjects where xtype='PK' and object_name(parent_obj) = '${tableName}' and uid=@userid
 if (@nm is not null)
 begin
  execute ('alter table ${tableName} drop constraint ' + @nm)
 end
 go
-alter table ${tableName} add constraint ${nextConstraintId} primary key ${nextPrimaryKey}
+alter table ${tableName} add ${nextPrimaryKey}
 go
