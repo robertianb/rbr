@@ -1,7 +1,9 @@
 package supersql.ast.entities;
 
+import supersql.ast.Type;
 import supersql.ast.actions.ActionCodes;
 import supersql.ast.actions.ScriptAction;
+import supersql.ast.types.TypeDefinition;
 import supersql.sql.ScriptSemanticsVisitor;
 
 /**
@@ -12,17 +14,25 @@ public class DeleteColumnAction extends ScriptAction
 {
 	private String tableName;
 	private String columnName;
+  private final ColumnDefinition columnDefinition;
 
 	public DeleteColumnAction(String tableName, String columnName)
 	{
-		super(ActionCodes.DELETE_COLUMN);
-		this.tableName = tableName;
-		this.columnName = columnName;
-		parameters.put("tableName", tableName);
-		parameters.put("columnName", columnName);
+		this(tableName, columnName, new ColumnDefinition(columnName, new TypeDefinition(Type.BOOLEAN)));
 	}
 
-	@Override
+  public DeleteColumnAction(String tableName, String colName,
+                            ColumnDefinition prevCol)
+  {
+    super(ActionCodes.DELETE_COLUMN);
+    this.columnDefinition = prevCol;
+    this.tableName = tableName;
+    this.columnName = colName;
+    parameters.put("tableName", tableName);
+    parameters.put("columnName", columnName);
+  }
+
+  @Override
 	protected void setParameters()
 	{
 
@@ -51,5 +61,10 @@ public class DeleteColumnAction extends ScriptAction
 	{
 		return columnName;
 	}
+	
+	
+	public ColumnDefinition getColumnDefinition() {
+      return columnDefinition;
+    }
 
 }

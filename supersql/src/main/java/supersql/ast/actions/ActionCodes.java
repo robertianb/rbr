@@ -15,6 +15,7 @@ public class ActionCodes {
     public static final String ADD_COLUMN = "addColumn";
     public static final String DELETE_COLUMNS = "deleteColumns";
     public static final String DELETE_COLUMN = "deleteColumn";
+    public static final String DELETE_COLUMN_WITH_DEFAULT_VALUE = "deleteColumnWithDefaultValue";
     public static final String ADD_COLUMN_WITHOUT_DEFAULT_VALUE = "addColumnWithoutDefaultValue";
     public static final String RENAME_COLUMN = "renameColumn";
     public static final String MODIFY_COLUMN = "modifyColumn";

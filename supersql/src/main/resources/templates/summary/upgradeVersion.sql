@@ -1,1 +1,1 @@
--- Change ${component} component from ${previous} to ${next}
+-- Change ${component} component from ${previousVerbatim} to ${next}

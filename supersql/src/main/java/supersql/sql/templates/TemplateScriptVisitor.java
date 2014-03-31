@@ -96,11 +96,23 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
         }
     }
 
-    @Override
-    public void deleteColumn(DeleteColumnAction action) {
-        ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
-        out.append(actionTemplate.apply(action, actionTemplateHelper));
+  @Override
+  public void deleteColumn(DeleteColumnAction action) {
+    if (action.getColumnDefinition().getDefaultValue() != null) {
+      ActionTemplate actionTemplate = actionTemplateManager
+          .getActionTemplate(prefix,
+                             ActionCodes.DELETE_COLUMN_WITH_DEFAULT_VALUE);
+      out.append(actionTemplate.apply(action, actionTemplateHelper));
+//       out.append("-- <<<<<<<<<<<<<< WARNING >>>>>>>>>>>>>>\n");
+//       out.append("-- Deleting column with default value $\n");
+//       out.append("-- <<<<<<<<<<<<<< ------- >>>>>>>>>>>>>>\n");
     }
+    else {
+      ActionTemplate actionTemplate = actionTemplateManager
+          .getActionTemplate(prefix, action);
+      out.append(actionTemplate.apply(action, actionTemplateHelper));
+    }
+  }
 
     @Override
     public void addColumn(AddColumnAction action) {

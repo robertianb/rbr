@@ -57,7 +57,7 @@ public class CreateTableActionComparator {
             if (nextCol == null) {
                 // columns were deleted
                 visitor.deleteColumn(new DeleteColumnAction(tableName, prevCol
-                        .getName()));
+                        .getName(), prevCol));
                 newIndex++;
             } else if (prevCol.isTheSameAs(nextCol)) {
                 // column unchanged, do nothing
@@ -91,7 +91,7 @@ public class CreateTableActionComparator {
                     log.warn(this + "Supposing column [" + prevCol.getName()
                         + "] was deleted");
                     visitor.deleteColumn(new DeleteColumnAction(tableName, prevCol
-                        .getName()));
+                        .getName(), prevCol));
                   }
                   else {
                     log.warn(this + "Supposing column [" + prevCol.getName()
@@ -106,7 +106,7 @@ public class CreateTableActionComparator {
                             + "] was deleted and column [" + nextCol.getName()
                             + "] was added in its place");
                     visitor.deleteColumn(new DeleteColumnAction(tableName, prevCol
-                            .getName()));
+                            .getName(), prevCol));
                     if (previousCreateTableAction.indexOfSame(nextCol) >= 0) {
                     } else {
                       
