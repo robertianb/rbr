@@ -24,4 +24,5 @@ public class ActionCodes {
     public static final String CREATE_TABLE_COPY = "createTableCopy";
     public static final String DELETE_ALL = "delete";
     public static final String CHANGE_PRIMARY_KEY = "changePrimaryKey";
+    public static final String RENAME_COLUMN_WITHOUT_DEFAULT_VALUE = "renameColumnWithoutDefaultValue";
 }

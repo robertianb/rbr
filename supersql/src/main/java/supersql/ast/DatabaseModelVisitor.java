@@ -146,18 +146,20 @@ public class DatabaseModelVisitor implements ScriptSemanticsVisitor
 		TableDefinition tableDefinition = databaseModel.getTablesDefinitions()
 				.get(renameColumnAction.getTableName());
 		List<ColumnDefinition> newColumnDefinitions = new LinkedList<ColumnDefinition>();
-		for (ColumnDefinition colDef : tableDefinition.getColumns())
-		{
-			if (colDef.getName().equalsIgnoreCase(
-					renameColumnAction.getPreviousName()))
-			{
-				newColumnDefinitions.add(new ColumnDefinition(
-						renameColumnAction.getNewName(), colDef.getType()));
-			} else
-			{
-				newColumnDefinitions.add(colDef);
-			}
-		}
+//		for (ColumnDefinition colDef : tableDefinition.getColumns())
+//		{
+//			if (colDef.getName().equalsIgnoreCase(
+//					renameColumnAction.getPreviousName()))
+//			{
+//				newColumnDefinitions.add(new ColumnDefinition(
+//						renameColumnAction.getNewName(), colDef.getType()));
+//			} else
+//			{
+//				newColumnDefinitions.add(colDef);
+//			}
+//		}
+		newColumnDefinitions.add(renameColumnAction.getNewColumnDefinition());
+		
 		databaseModel.getTablesDefinitions().put(
 				tableDefinition.getName(),
 				new TableDefinition(tableDefinition.getName(),

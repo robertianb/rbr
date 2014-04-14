@@ -86,7 +86,7 @@ public class ColumnDefinition extends Symbol implements Cloneable
 	@Override
 	public String toString()
 	{
-		return "Column[" + name + " " + type + "default " + defaultValue + " "
+		return "Column[" + name + " " + type + " default " + defaultValue + " "
 				+ (mandatory ? "not null" : "") + "]";
 	}
 

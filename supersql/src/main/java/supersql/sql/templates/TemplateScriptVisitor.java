@@ -154,9 +154,14 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     @Override
     public void renameColumn(RenameColumnAction action) {
       applicableVisitor.renameColumn(action);
-      // TODO Auto-generated method stub
-      ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
-      out.append(actionTemplate.apply(action, actionTemplateHelper));
+      if (action.getDefaultValue() != null)
+      {
+          ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
+          out.append(actionTemplate.apply(action, actionTemplateHelper));
+      } else {
+          ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, ActionCodes.RENAME_COLUMN_WITHOUT_DEFAULT_VALUE);
+          out.append(actionTemplate.apply(action, actionTemplateHelper));
+      }
     }
 
 

@@ -1,0 +1,1 @@
+-- Table ${tableName} : rename column ${previous} to ${next}

@@ -97,7 +97,7 @@ public class CreateTableActionComparator {
                     log.warn(this + "Supposing column [" + prevCol.getName()
                         + "] was renamed to [" + nextCol.getName() + "]");
                     visitor.renameColumn(new RenameColumnAction(tableName, prevCol
-                        .getName(), nextCol.getName()));
+                        .getName(), nextCol));
                   }
                   newIndex++;
                 } else {

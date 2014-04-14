@@ -5,7 +5,7 @@ BEGIN
 -- Table ${tableName} : rename column ${previous} to ${next}
 IF EXISTS( (SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()
         AND COLUMN_NAME='${previous}' AND TABLE_NAME='${tableName}') ) THEN
-    alter table ${tableName} change ${previous} ${columnName} ${columnType} ${mandatory} default ${defaultValue};
+    alter table ${tableName} change ${previous} ${columnName} ${columnType} ${mandatory};
 END IF;
 
 END $$
