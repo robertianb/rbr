@@ -31,6 +31,17 @@ public class ModifyColumnTypeAction extends ScriptAction
 		parameters.put("tableName", tableName);
 		// TODO type must be converted
 		parameters.put("columnType", newColumnDefinition.getType());
+		if (newColumnDefinition.getDefaultValue() != null)
+        {
+            parameters.put("defaultValue", newColumnDefinition.getDefaultValue());
+        }
+        if (newColumnDefinition.isMandatory())
+        {
+            parameters.put("mandatory", "not null");
+        } else
+        {
+            parameters.put("mandatory", "null");
+        }
 	}
 
 	public ModifyColumnTypeAction(String tableName,
@@ -43,6 +54,17 @@ public class ModifyColumnTypeAction extends ScriptAction
 		parameters.put("tableName", tableName);
 		// TODO type must be converted
 		parameters.put("columnType", newColumnDefinition.getType());
+		if (newColumnDefinition.getDefaultValue() != null)
+        {
+            parameters.put("defaultValue", newColumnDefinition.getDefaultValue());
+        }
+        if (newColumnDefinition.isMandatory())
+        {
+            parameters.put("mandatory", "not null");
+        } else
+        {
+            parameters.put("mandatory", "null");
+        }
 	}
 
 	public String getTableName()
@@ -80,5 +102,9 @@ public class ModifyColumnTypeAction extends ScriptAction
 	{
 		visitor.modifyColumn(this);
 	}
+
+  public Object getDefaultValue() {
+    return nextColumnDefinition.getDefaultValue();
+  }
 
 }

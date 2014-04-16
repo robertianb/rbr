@@ -146,8 +146,14 @@ public class TemplateScriptVisitor implements ScriptSemanticsVisitor {
     @Override
     public void modifyColumn(ModifyColumnTypeAction action) {
       applicableVisitor.modifyColumn(action);
-      ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
-      out.append(actionTemplate.apply(action, actionTemplateHelper));
+      if (action.getDefaultValue() != null)
+      {
+          ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, ActionCodes.MODIFY_COLUMN_WITH_DEFAULT_VALUE);
+          out.append(actionTemplate.apply(action, actionTemplateHelper));
+      } else {
+        ActionTemplate actionTemplate = actionTemplateManager.getActionTemplate(prefix, action);
+          out.append(actionTemplate.apply(action, actionTemplateHelper));
+      }
     }
 
 

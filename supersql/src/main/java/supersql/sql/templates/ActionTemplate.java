@@ -49,6 +49,7 @@ public class ActionTemplate {
             res = res.replaceAll("\\$\\{" + (String) entry.getKey() + "\\}", valueToString);
             res = res.replaceAll("\\$\\{\\{" + (String) entry.getKey() + "\\}\\}", (valueToString.indexOf('\'')>=0?"'" + valueToString + "'":valueToString));
         }
+//        res = res.replaceAll("\\$\\{[a-zA-Z0-9]*\\}", "");
         return res;
     }
 

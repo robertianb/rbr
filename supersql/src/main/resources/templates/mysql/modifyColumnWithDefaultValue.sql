@@ -1,4 +1,4 @@
--- Table ${tableName} : modify column ${columnName} 's type from ${columnPreviousType} to ${columnType} ${mandatory} 
+-- Table ${tableName} : modify column ${columnName} 's type from ${columnPreviousType} to ${columnType} ${mandatory} default ${defaultValue}
 
 
 DROP PROCEDURE IF EXISTS upgrade_database $$

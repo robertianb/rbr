@@ -1,1 +1,1 @@
--- Table ${tableName} : modify column ${columnName} 's type from ${columnPreviousType} to ${columnType}
+-- Table ${tableName} : modify column ${columnName} 's type from ${columnPreviousType} to ${columnType} ${mandatory} 

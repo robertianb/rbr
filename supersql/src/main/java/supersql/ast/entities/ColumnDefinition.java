@@ -164,6 +164,10 @@ public class ColumnDefinition extends Symbol implements Cloneable
 		{
 			return false;
 		}
+		if (mandatory != other.isMandatory())
+		{
+		  return false;
+		}
 		return true;
 	}
 
