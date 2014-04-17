@@ -11,7 +11,7 @@ public class MySqlColumnDefinitionVisitor extends DefaultColumnDefinitionVisitor
   }
 
   @Override
-  public String getQuote(boolean inner) {
+  public String getQuotes(boolean inner) {
     return "'";
   }
 

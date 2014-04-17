@@ -9,9 +9,9 @@ public class H2ColumnDefinitionVisitor extends DefaultColumnDefinitionVisitor
   {
     super(typeVisitor, false);
   }
-
+  
   @Override
-  public String getQuote(boolean inner) {
+  public String getQuotes(boolean inner) {
     return "'";
   }
 

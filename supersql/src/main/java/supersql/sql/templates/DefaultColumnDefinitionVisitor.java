@@ -49,9 +49,7 @@ public class DefaultColumnDefinitionVisitor
     if (colDef.getDefaultValue() != null)
     {
       result.append(" default ");
-      result.append(getQuote(escapeQuotes));
-      result.append(colDef.getDefaultValue());
-      result.append(getQuote(escapeQuotes));
+      result.append(escapeQuotes(colDef.getDefaultValue()));
     }
     result.append(" ");
     result.append((colDef.isMandatory() ? "not null" : "null"));
@@ -59,12 +57,22 @@ public class DefaultColumnDefinitionVisitor
 //      + constraintString;
   }
 
+  protected String escapeQuotes(String defaultValue) {
+    String singleQuote = getQuotes(false);
+    String escapedQuotes = getQuotes(true);
+    if (defaultValue.indexOf(singleQuote) >= 0 && escapeQuotes)
+    {
+      defaultValue = defaultValue.replaceAll(singleQuote, escapedQuotes);
+    }
+    return defaultValue;
+  }
+
   @Override
   public String getResult() {
     return result.toString();
   }
 
-  public String getQuote(boolean inner)
+  public String getQuotes(boolean inner)
   {
     return (inner?"''":"'");
   }
