@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>supersql</groupId>
-    <artifactId>supersql</artifactId>
-    <version>1.0-SNAPSHOT</version>
+	<groupId>supersql</groupId>
+	<artifactId>supersql</artifactId>
+	<version>1.0-SNAPSHOT</version>
 
 	<repositories>
 		<repository>
@@ -18,61 +17,87 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-	
-	 	<!-- <repository>
-      		<id>repo1</id>
-      		<url>http://repo1.maven.org/maven2/</url>
-    	</repository> -->
+
+		<!-- <repository> <id>repo1</id> <url>http://repo1.maven.org/maven2/</url> 
+			</repository> -->
 	</repositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>net.sf.beaver</groupId>
-            <artifactId>beaver-rt</artifactId>
-            <version>0.9.11</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.beaver</groupId>
-            <artifactId>beaver-cc</artifactId>
-            <version>0.9.11</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>1.16</version>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>net.sf.beaver</groupId>
+			<artifactId>beaver-rt</artifactId>
+			<version>0.9.11</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.beaver</groupId>
+			<artifactId>beaver-cc</artifactId>
+			<version>0.9.11</version>
+		</dependency>
 
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-grizzly2</artifactId>
-            <version>1.16</version>
-        </dependency>
-	
-	 <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>1.12</version>
-        </dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.16</version>
+		</dependency>
 
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-core</artifactId>
-            <version>1.16</version>
-        </dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-grizzly2</artifactId>
+			<version>1.16</version>
+		</dependency>
 
-        <dependency>
-        	<groupId>log4j</groupId>
-        	<artifactId>log4j</artifactId>
-        	<version>1.2.16</version>
-        </dependency>
-        <dependency>
-        	<groupId>junit</groupId>
-        	<artifactId>junit</artifactId>
-        	<version>3.8.1</version>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>1.16</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>fully.qualified.MainClass</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
 
 
-    
 </project>
