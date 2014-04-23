@@ -9,10 +9,11 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 
+import supersql.SupersqlProperties;
+
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
-import supersql.SupersqlProperties;
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,7 +48,7 @@ public class Main {
             return httpServer;
         }
 
-        public static void main(String[] args) throws IOException
+        public static void main(String[] args) throws IOException, InterruptedException
         {
             HttpServer httpServer = startServer();
 
@@ -57,8 +58,9 @@ public class Main {
                             .format("Jersey app started with WADL available at "
                                     + "%sapplication.wadl\nTry out %screbas2alter\nHit enter to stop it...",
                                     BASE_URI, BASE_URI));
-            System.in.read();
-            httpServer.stop();
+            Thread.sleep(Long.MAX_VALUE);
+//            System.in.read();
+//            httpServer.stop();
         }
 
     }

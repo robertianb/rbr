@@ -43,7 +43,7 @@ public class HttpStaticMain
   }
 
   public static void main(String[] args)
-      throws IOException
+      throws IOException, InterruptedException
   {
 
     HttpStaticMain httpStaticMain = new HttpStaticMain();
@@ -52,7 +52,7 @@ public class HttpStaticMain
   }
 
   private void doMain(String[] args)
-      throws IOException
+      throws IOException, InterruptedException
   {
     SupersqlProperties properties = new SupersqlProperties();
     HttpServer httpServer = startServer(properties);
@@ -63,8 +63,9 @@ public class HttpStaticMain
                             properties.getResourcePath()),
                         "/");
     System.out.println(String.format("Server started at %s", baseURI));
-    System.in.read();
-    httpServer.stop();
+    Thread.sleep(Long.MAX_VALUE);
+//    System.in.read();
+//    httpServer.stop();
 
   }
 
