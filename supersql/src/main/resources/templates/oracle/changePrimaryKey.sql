@@ -7,6 +7,7 @@ select count(*) into l_count from user_constraints WHERE table_name=upper('${tab
 if (l_count = 1)
 then
     select CONSTRAINT_NAME into l_name from user_constraints WHERE table_name=upper('${tableName}') AND constraint_type = 'P';
+    execute immediate 'alter table ${tableName} drop constraint ' || l_name || ' drop index';
 end if;
 END;
 /
