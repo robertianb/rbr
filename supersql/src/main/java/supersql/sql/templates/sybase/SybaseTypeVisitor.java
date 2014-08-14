@@ -30,7 +30,7 @@ public class SybaseTypeVisitor
     {
       result = "INT";
     } else {
-      result = "NUMBER(" + typeDefinition.getNbDigit() + ")";
+      result = "NUMERIC(" + typeDefinition.getNbDigit() + ",0)";
     }
   }
 
