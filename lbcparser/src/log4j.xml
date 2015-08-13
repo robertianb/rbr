@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- Declaration des appenders et Loggers -->
+    
+    <appender name="A1" class="org.apache.log4j.RollingFileAppender">
+         <param name="Threshold" value="DEBUG" />
+	     <param name="File" value="log/abc.log"/>
+	     <param name="MaxBackupIndex" value="2"/>
+	     <param name="MaxFileSize" value="10400KB"/>
+	     <layout class="org.apache.log4j.PatternLayout">
+	         <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
+	     </layout>
+	     
+ 	 </appender>
+ 	 <appender name="ERRORS" class="org.apache.log4j.RollingFileAppender">
+         <param name="Threshold" value="ERROR" />
+         <param name="File" value="lbcparser.log"/>
+         <param name="MaxBackupIndex" value="2"/>
+         <param name="MaxFileSize" value="10000KB"/>
+         <layout class="org.apache.log4j.PatternLayout">
+             <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
+         </layout>
+     </appender>
+     
+     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="DEBUG" />
+        <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d %5p - %m%n"/>
+        </layout>
+    </appender>
+ 	     
+    
+    
+        
+    <root>
+       <level value="DEBUG" />
+	   <!--  appender-ref ref="A1"/ -->
+	   <!--  appender-ref ref="ERRORS"/-->
+	   <appender-ref ref="CONSOLE"/>
+    </root>
+</log4j:configuration>
