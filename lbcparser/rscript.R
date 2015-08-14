@@ -28,5 +28,6 @@ fit <- hclust(d, method="ward.D")
 # draw dendogram with red borders around the 5 clusters
 # rect.hclust(fit, k=5, border="red")
 
-
+png('~/Sites/home.brouard.bzh/img/wordcloud.png')
 wordcloud(mydata.corpus, scale=c(5,0.5), max.words=100, random.order=FALSE, rot.per=0.35, use.r.layout=FALSE, colors=brewer.pal(8,"Dark2"))
+dev.off()
