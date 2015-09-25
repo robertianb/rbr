@@ -2,6 +2,7 @@ package lbc.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,7 +39,7 @@ public class Main
   private static Pattern pricePattern = Pattern.compile("[0-9]+");
 
   public static void main(String[] args)
-      throws IOException
+      throws IOException, InterruptedException
   {
     Repository repository = new Repository();
     repository.loadRecent();
@@ -57,18 +58,18 @@ public class Main
   }
 
   private static ParseBatch parseDoc(ParseBatch batch)
-      throws IOException
+      throws IOException, InterruptedException
   {
     String url = batch.nextURL;
     Repository repository = batch.repository;
     batch.nbIterations++;
     
-    Document doc;
+    Document doc = null;
     if (DEBUG) {
       doc = Jsoup.parse(new File("lbc-test.html"), "iso-8859-1");
     }
     else {
-      int delay = random.nextInt(5000) + 1093;
+      int delay = random.nextInt(2000) + 500;
       try {
         System.out.println("Delaying for " + (delay / 1000) + " s");
         Thread.sleep(delay);
@@ -76,7 +77,23 @@ public class Main
       catch (InterruptedException e1) {
         e1.printStackTrace();
       }
-      doc = Jsoup.connect(url).get();
+      int nbTries = 0;
+      boolean success = false;
+      do {
+        try {
+          doc = Jsoup.connect(url).get();
+          success = true;
+        } catch (SocketTimeoutException e)
+        {
+          Thread.sleep(2000);
+        }
+      } while (nbTries < 5 && !success);
+    }
+    
+    if (doc == null)
+    {
+      batch.nextURL = null;
+      return batch;
     }
 
     Elements links = doc.select("div.list-lbc"); // a with href
@@ -174,7 +191,8 @@ public class Main
     }
 
     if (!added) {
-      System.out.println("End");
+      log.info("End");
+      batch.nextURL = null;
       return batch;
     }
 

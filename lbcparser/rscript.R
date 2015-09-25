@@ -1,7 +1,7 @@
 require(tm) 
 require(wordcloud)
 
-mydata.csv <- read.csv(file='~/dev/rbr/lbcparser/items.csv',sep=";", quote="", header=TRUE)
+mydata.csv <- read.csv(file='B:\\rbrouard\\eclipse_workspaces\\hmm-trunk-test\\rbr\\lbcparser\\items.csv',sep=";", quote="", header=TRUE)
 mydata.vectors <- mydata.csv$title
 mydata.corpus <- Corpus(VectorSource(mydata.vectors))
 mydata.corpus <- tm_map(mydata.corpus, removePunctuation)
@@ -19,15 +19,15 @@ nrow(mydata.df)
 ncol(mydata.df)
 
 
-mydata.df.scale <- scale(mydata.df)
-d <- dist(mydata.df.scale, method = "euclidean") # distance matrix
-fit <- hclust(d, method="ward.D")
+# mydata.df.scale <- scale(mydata.df)
+# d <- dist(mydata.df.scale, method = "euclidean") # distance matrix
+# fit <- hclust(d, method="ward.D")
 # plot(fit) # display dendogram?
  
 # groups <- cutree(fit, k=5) # cut tree into 5 clusters
 # draw dendogram with red borders around the 5 clusters
 # rect.hclust(fit, k=5, border="red")
 
-png('~/Sites/home.brouard.bzh/img/wordcloud.png')
+png('B:\\rbrouard\\eclipse_workspaces\\hmm-trunk-test\\rbr\\lbcparser\\wordcloud.png')
 wordcloud(mydata.corpus, scale=c(5,0.5), max.words=100, random.order=FALSE, rot.per=0.35, use.r.layout=FALSE, colors=brewer.pal(8,"Dark2"))
 dev.off()
