@@ -101,7 +101,18 @@ public class Repository
 
   public boolean addItem(OfferItem item) {
     OfferItem replaced = items.put(item.getId(), item);
-    return replaced == null;
+    boolean added;
+    if (replaced == null)
+    {
+      added = true;  
+    } else if (!replaced.getCreationDate().equals(item.getCreationDate()))
+    {
+      // creation date has changed, so this is a new offer
+      added = true;
+    } else {
+      added = false;
+    }
+    return added;
   }
 
   public void loadRecent() {

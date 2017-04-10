@@ -1,7 +1,7 @@
 require(tm) 
 require(wordcloud)
 
-mydata.csv <- read.csv(file='~/dev/rbr/lbcparser/items.csv',sep=";", quote="", header=TRUE)
+mydata.csv <- read.csv(file='B:\\rbrouard\\eclipse_workspaces\\hmm-trunk-test\\rbr\\lbcparser\\items.csv',sep=";", quote="", header=TRUE)
 mydata.vectors <- mydata.csv$title
 mydata.corpus <- Corpus(VectorSource(mydata.vectors))
 mydata.corpus <- tm_map(mydata.corpus, removePunctuation)
@@ -19,9 +19,9 @@ nrow(mydata.df)
 ncol(mydata.df)
 
 
-mydata.df.scale <- scale(mydata.df)
-d <- dist(mydata.df.scale, method = "euclidean") # distance matrix
-fit <- hclust(d, method="ward.D")
+# mydata.df.scale <- scale(mydata.df)
+# d <- dist(mydata.df.scale, method = "euclidean") # distance matrix
+# fit <- hclust(d, method="ward.D")
 # plot(fit) # display dendogram?
  
 # groups <- cutree(fit, k=5) # cut tree into 5 clusters
