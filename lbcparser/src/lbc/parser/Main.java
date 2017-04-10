@@ -22,12 +22,16 @@ import org.jsoup.select.Elements;
 
 public class Main
 {
+  private static final int DELAY_MINIMUM = 500;
+
+  private static final int DELAY = 2000;
+
   private static final boolean DEBUG = false;
 
-  private static final int MAX_ITERATIONS = 200;
+  private static final int MAX_ITERATIONS = 2;
 
   private static final Logger log = Logger.getLogger(Main.class);
-  
+
   static Random random = new Random();
 
   static Calendar calendar = Calendar.getInstance();
@@ -41,15 +45,19 @@ public class Main
   public static void main(String[] args)
       throws IOException, InterruptedException
   {
+    
+    System.setProperty("javax.net.ssl.trustStore", "./leboncoin.fr.jks");
+    
+    
     Repository repository = new Repository();
     repository.loadRecent();
 
     try {
-      ParseBatch batch = new ParseBatch(repository, "http://www.leboncoin.fr/annonces/offres/pays_de_la_loire/loire_atlantique/?f=a&th=1", 0, 0);
-      do
-      {
+      ParseBatch batch = new ParseBatch(repository, "https://www.leboncoin.fr/annonces/offres/pays_de_la_loire/loire_atlantique/?f=a&th=1", 0, 0);
+      do {
         batch = parseDoc(batch);
-      } while (batch.nextURL != null && batch.nbNewItems > 0 && batch.nbIterations < MAX_ITERATIONS);
+      }
+      while (batch.nextURL != null && batch.nbNewItems > 0 && batch.nbIterations < MAX_ITERATIONS);
       log.info("Made " + batch.nbIterations + "iteration(s). Found " + batch.nbNewItems + " new items");
     }
     finally {
@@ -63,13 +71,13 @@ public class Main
     String url = batch.nextURL;
     Repository repository = batch.repository;
     batch.nbIterations++;
-    
+
     Document doc = null;
     if (DEBUG) {
-      doc = Jsoup.parse(new File("lbc-test.html"), "iso-8859-1");
+      doc = Jsoup.parse(new File("lbc-test2.htm"), "iso-8859-1");
     }
     else {
-      int delay = random.nextInt(2000) + 500;
+      int delay = random.nextInt(DELAY) + DELAY_MINIMUM;
       try {
         System.out.println("Delaying for " + (delay / 1000) + " s");
         Thread.sleep(delay);
@@ -83,112 +91,150 @@ public class Main
         try {
           doc = Jsoup.connect(url).get();
           success = true;
-        } catch (SocketTimeoutException e)
-        {
-          Thread.sleep(2000);
         }
-      } while (nbTries < 5 && !success);
+        catch (SocketTimeoutException e) {
+          Thread.sleep(DELAY);
+        }
+      }
+      while (nbTries < 5 && !success);
     }
-    
-    if (doc == null)
-    {
+
+    if (doc == null) {
       batch.nextURL = null;
       return batch;
     }
 
-    Elements links = doc.select("div.list-lbc"); // a with href
+    Elements links = doc.select("section[id=listingAds]");
     boolean added = true;
-    for (Element link : links.first().select("a[href]")) {
-      OfferItem item = new OfferItem();
-      Elements dateDiv = link.select("div.date");
-      Elements dateDivs = dateDiv.first().children();
-      String dateString = dateDivs.first().text();
-      String timeString = dateDivs.get(1).text();
-
-      if ("aujourd'hui".equalsIgnoreCase(dateString)) {
-        String[] split = timeString.split(":");
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
-        calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
-        item.setCreationDate(calendar.getTime());
-      }
-      else if ("hier".equalsIgnoreCase(dateString)) {
-        String[] split = timeString.split(":");
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
-        calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        item.setCreationDate(calendar.getTime());
-      }
-      else {
+    for (Element link1 : links) {
+      for (Element link : link1.select("a[href]")) {
         try {
-          String[] split = timeString.split(":");
-          Date parsedDate = dayOnlyDateFormat.parse(dateString);
-          calendar.setTime(parsedDate);
-          calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
-          calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
-          item.setCreationDate(calendar.getTime());
-        }
-        catch (ParseException e) {
-          e.printStackTrace();
-        }
+          OfferItem item = new OfferItem();
+          Elements dateDiv = link.select("p[itemprop=availabilityStarts]");
+          if (dateDiv != null && !dateDiv.isEmpty()) {
 
-      }
-      String title = link.attr("title").toString();
+            String dateString = dateDiv.attr("content");
+            String timeString = dateDiv.text();
+            timeString = timeString.split(",")[1].trim();
 
-      Elements priceDiv = link.select("div.price");
-      String price = priceDiv.text();
+            if ("aujourd'hui".equalsIgnoreCase(dateString)) {
+              String[] split = timeString.split(":");
+              calendar.setTime(new Date());
+              calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
+              calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
+              item.setCreationDate(calendar.getTime());
+            }
+            else if ("hier".equalsIgnoreCase(dateString)) {
+              String[] split = timeString.split(":");
+              calendar.setTime(new Date());
+              calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
+              calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
+              calendar.add(Calendar.DAY_OF_MONTH, -1);
+              item.setCreationDate(calendar.getTime());
+            }
+            else {
+              try {
+                String[] split = timeString.split(":");
+                Date parsedDate = dayOnlyDateFormat.parse(dateString);
+                calendar.setTime(parsedDate);
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
+                calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
+                item.setCreationDate(calendar.getTime());
+              }
+              catch (ParseException e) {
+                e.printStackTrace();
+              }
 
-      Elements categoryDiv = link.select("div.category");
-      String categoryString = categoryDiv.text();
-
-      Elements placementDiv = link.select("div.placement");
-      String placementString = placementDiv.text();
-
-      item.setCategory(categoryString);
-      item.setTitle(title);
-      String href = link.attr("href");
-      System.out.println("href" + href);
-
-      item.setUrl(href);
-
-      Matcher idMatcher = idPattern.matcher(href);
-      if (idMatcher.find()) {
-        item.setId(idMatcher.group(1));
-      }
-      item.setPlaceName(placementString);
-      if (price != null) {
-
-        Matcher matcher = pricePattern.matcher(price);
-        if (matcher.find()) {
-
-          String priceString = matcher.group(0);
-          try {
-            if (!priceString.isEmpty()) {
-
-              Float priceFloat = Float.valueOf(priceString);
-              item.setPrice(priceFloat);
             }
           }
-          catch (Exception e) {
-            //
-            System.out.println("Failed to parse ");
-            e.printStackTrace();
-          }
-        }
+          String title = link.select("h2.item_title").text().toString();
 
+          Elements priceDiv = link.select("h3[itemprop=price]");
+          String price = priceDiv.attr("content");
+
+          String categoryString = "";
+          Elements categoryDiv = link.select("p[itemprop=category]");
+          if (categoryDiv != null)
+            categoryString = categoryDiv.text();
+
+          String placementString = "";
+          Elements placementDiv = link.select("p[itemprop=availableAtOrFrom]");
+          if (placementDiv != null)
+            placementString = placementDiv.text();
+
+          item.setCategory(categoryString);
+          item.setTitle(title);
+          String href = link.attr("href");
+          if (href.startsWith("//"))
+          { 
+            href = "http:" + href;
+          }
+                              // System.out.println("href" + href);
+
+          item.setUrl(href);
+
+          Matcher idMatcher = idPattern.matcher(href);
+          if (idMatcher.find()) {
+            item.setId(idMatcher.group(1));
+          }
+          item.setPlaceName(placementString);
+          if (price != null) {
+
+            Matcher matcher = pricePattern.matcher(price);
+            if (matcher.find()) {
+
+              String priceString = matcher.group(0);
+              try {
+                if (!priceString.isEmpty()) {
+
+                  Float priceFloat = Float.valueOf(priceString);
+                  item.setPrice(priceFloat);
+                }
+              }
+              catch (Exception e) {
+                //
+                System.out.println("Failed to parse ");
+                e.printStackTrace();
+              }
+            }
+
+          }
+          if (title == null || title.isEmpty()) {
+            // nothing
+            added = true;
+          }
+          else if (DEBUG) {
+            log.info("Item to add (DEBUG) : " + item);
+            added = true;
+          }
+          else {
+            added = repository.addItem(item);
+          }
+
+          if (!added) {
+            if (title == null || title.isEmpty()) {
+              // nothing
+            }
+            else {
+              log.info("Item already existed : " + item);
+              batch.nextURL = null;
+            }
+
+            break;
+          }
+          else {
+            batch.nbNewItems++;
+          }
+          // System.out.println(" " + dateString + " at " + timeString +
+          if (added && title != null && !title.isEmpty()) {
+            log.debug("Title: " + title + " cat. " + categoryString + ")");
+          }
+          // + " @ " + price + "( " + categoryString + ")");
+        }
+        catch (Exception e) {
+          log.error("Parse exception ", e);
+        }
       }
-      added = repository.addItem(item);
-      if (!added) {
-        log.info("Item already existed : " + item);
-        batch.nextURL = null;
-        break;
-      } else {
-        batch.nbNewItems++;
-      }
-      // System.out.println(" " + dateString + " at " + timeString +
-      System.out.println(" " + title + "( " + categoryString + ")");
-      // + " @ " + price + "( " + categoryString + ")");
     }
 
     if (!added) {
@@ -197,17 +243,17 @@ public class Main
       return batch;
     }
 
-    Elements nav = doc.select("nav"); // a with href
-    Elements nextPages = nav.get(3).select("a[href]").select(":contains(Page suivante)");
-    if (nextPages.isEmpty())
-    {
+    // Elements nav = doc.select("div.pagination_links_container"); // a with
+    // href
+    Elements nextPages = doc.select("a[id=next]");
+    if (nextPages.isEmpty()) {
       batch.nextURL = null;
     }
     for (Element link : nextPages) {
       batch.nextURL = link.attr("href");
       break;
     }
-    
+
     return batch;
 
   }

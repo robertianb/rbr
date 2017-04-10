@@ -1,11 +1,11 @@
 require(tm) 
 require(wordcloud)
 
-mydata.csv <- read.csv(file='B:\\rbrouard\\eclipse_workspaces\\hmm-trunk-test\\rbr\\lbcparser\\items.csv',sep=";", quote="", header=TRUE)
-mydata.vectors <- mydata.csv$title
+mydata.csv <- read.csv(file='~/dev/rbr/lbcparser/leipzig100k.txt',sep=";", quote="", header=TRUE)
+mydata.vectors <- mydata.csv$sentence
 mydata.corpus <- Corpus(VectorSource(mydata.vectors))
 mydata.corpus <- tm_map(mydata.corpus, removePunctuation)
-my_stopwords <- c(stopwords('french'), 'prix', 'taille', 'ans', 'bon', 'état', 'pack', 'lot', 'ensemble', 'neuf', 'mois', 'très', 'tbe', 'grand' )
+my_stopwords <- c(stopwords('english'), 'prix', 'taille', 'ans', 'bon', 'état', 'pack', 'lot', 'ensemble', 'neuf', 'mois', 'très', 'tbe', 'grand' )
 mydata.corpus <- tm_map(mydata.corpus, removeWords, my_stopwords)
 mydata.dtm <- TermDocumentMatrix(mydata.corpus)
 

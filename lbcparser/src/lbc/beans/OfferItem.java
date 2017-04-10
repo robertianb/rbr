@@ -1,10 +1,9 @@
 package lbc.beans;
 
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class OfferItem implements Item {
@@ -154,7 +153,7 @@ public class OfferItem implements Item {
 
 	@Override
 	public String toString() {
-		return "OfferItem [" + title + ", Id:" + getId() + "]";
+		return "OfferItem [" + title + ", Id:" + getId() + ", cat:" + category + ", price=" + price + (creationDate != null?", date=" + dateFormat.format(creationDate):"") + "]";
 	}
 	
 	
