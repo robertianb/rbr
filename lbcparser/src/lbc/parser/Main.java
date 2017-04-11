@@ -250,7 +250,13 @@ public class Main
       batch.nextURL = null;
     }
     for (Element link : nextPages) {
-      batch.nextURL = link.attr("href");
+      String href = link.attr("href");
+      if (href.startsWith("//"))
+      { 
+        href = "http:" + href;
+      }
+      batch.nextURL = href;
+      
       break;
     }
 
