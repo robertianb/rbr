@@ -8,8 +8,12 @@ import java.text.SimpleDateFormat;
 import lbc.beans.OfferItem;
 import lbc.beans.Repository;
 
+import org.apache.log4j.Logger;
+
 public class ExtractToCsv {
 
+  
+    private static final Logger log = Logger.getLogger(ExtractToCsv.class);
     private static final String SEPARATOR = ";";
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
   
@@ -32,6 +36,7 @@ public class ExtractToCsv {
 		
 		bf.flush();
 		bf.close();
+		log.info("Done.");
 	}
 
 

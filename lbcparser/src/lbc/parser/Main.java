@@ -72,6 +72,242 @@ public class Main
     Repository repository = batch.repository;
     batch.nbIterations++;
 
+    Document doc = readDoc(url);
+
+    if (doc == null) {
+      batch.nextURL = null;
+      return batch;
+    }
+
+    Elements links = doc.select("section[id=listingAds]");
+    boolean foundNewItem = true;
+    for (Element link1 : links) {
+      for (Element link : link1.select("a[href]")) {
+        foundNewItem = extractItem(batch, repository, link);
+      }
+    }
+
+    if (!foundNewItem) {
+      log.info("End");
+      batch.nextURL = null;
+      return batch;
+    }
+
+    // Elements nav = doc.select("div.pagination_links_container"); // a with
+    // href
+    fillNextPageURL(batch, doc);
+
+    return batch;
+
+  }
+
+  private static void fillNextPageURL(ParseBatch batch, Document doc) {
+    Elements nextPages = doc.select("a[id=next]");
+    if (nextPages.isEmpty()) {
+      batch.nextURL = null;
+    }
+    for (Element link : nextPages) {
+      String href = link.attr("href");
+      if (href.startsWith("//"))
+      { 
+        href = "http:" + href;
+      }
+      batch.nextURL = href;
+      
+      break;
+    }
+  }
+
+  /**
+   * 
+   * 
+   * @param batch
+   * @param repository
+   * @param link
+   * @return true if a new item was found even if it was not added
+   */
+  private static boolean extractItem(ParseBatch batch, Repository repository, Element link) {
+    
+    boolean newItem = false;
+    boolean added = false;
+    try {
+      OfferItem item = new OfferItem();
+      fillCreationDate(link, item);
+      String title = fillTitle(link, item);
+
+      Elements priceDiv = link.select("h3[itemprop=price]");
+      fillPrice(item, priceDiv);
+      String categoryString = fillCategory(link, item);
+      fillPlace(link, item);
+
+      String href = fillURL(link, item);
+      fillId(item, href);
+      
+      
+      
+     
+      if (title == null || title.isEmpty()) {
+        // nothing
+        added = true;
+      }
+      else if (DEBUG) {
+        log.info("Item to add (DEBUG) : " + item);
+        added = true;
+        newItem = true;
+      }
+      else {
+        newItem = repository.addItem(item);
+      }
+
+      if (!added) {
+        if (title == null || title.isEmpty()) {
+          // nothing
+        }
+        else {
+          log.info("Item already existed : " + item);
+          batch.nextURL = null;
+          newItem = false;
+        }
+      }
+      else {
+        batch.nbNewItems++;
+      }
+      // System.out.println(" " + dateString + " at " + timeString +
+      if (added && title != null && !title.isEmpty()) {
+        log.debug("Title: " + title + " cat. " + categoryString + ")");
+      }
+      // + " @ " + price + "( " + categoryString + ")");
+    }
+    catch (Exception e) {
+      log.error("Parse exception ", e);
+      // suppose it was a new item
+      newItem = true;
+    }
+    return newItem;
+  }
+
+  private static void fillId(OfferItem item, String href) {
+    Matcher idMatcher = idPattern.matcher(href);
+    if (idMatcher.find()) {
+      item.setId(idMatcher.group(1));
+    }
+  }
+
+  private static String fillURL(Element link, OfferItem item) {
+    String href = link.attr("href");
+    if (href.startsWith("//"))
+    { 
+      href = "http:" + href;
+    }
+    item.setUrl(href);
+    return href;
+  }
+
+  private static void fillPlace(Element link, OfferItem item) {
+    String placementString = "";
+    Elements placementDiv = link.select("p[itemprop=availableAtOrFrom]");
+    if (placementDiv != null)
+    {
+      placementString = placementDiv.text();
+      item.setPlaceName(placementString);
+    }
+  }
+
+  private static String fillCategory(Element link, OfferItem item) {
+    String categoryString = "";
+    Elements categoryDiv = link.select("p[itemprop=category]");
+    if (categoryDiv != null)
+    {
+      categoryString = categoryDiv.text();
+      item.setCategory(categoryString);
+    }
+    return categoryString;
+  }
+
+  private static Float fillPrice(OfferItem item, Elements priceDiv) {
+    String price = priceDiv.attr("content");
+    if (price != null) {
+
+      Matcher matcher = pricePattern.matcher(price);
+      if (matcher.find()) {
+
+        String priceString = matcher.group(0);
+        try {
+          if (!priceString.isEmpty()) {
+
+            Float priceFloat = Float.valueOf(priceString);
+            item.setPrice(priceFloat);
+          }
+        }
+        catch (Exception e) {
+          //
+          System.out.println("Failed to parse ");
+          e.printStackTrace();
+        }
+      }
+
+    }
+    
+    return item.getPrice();
+  }
+
+  private static String fillTitle(Element link, OfferItem item) {
+    String title = link.select("h2.item_title").text().toString();
+    item.setTitle(title);
+    return title;
+  }
+
+  private static Date fillCreationDate(Element link, OfferItem item) {
+    Elements dateDiv = link.select("p[itemprop=availabilityStarts]");
+    if (dateDiv != null && !dateDiv.isEmpty()) {
+
+      String dateString = dateDiv.attr("content");
+      String timeString = dateDiv.text();
+      timeString = timeString.split(",")[1].trim();
+
+      if ("aujourd'hui".equalsIgnoreCase(dateString)) {
+        String[] split = timeString.split(":");
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
+        calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
+        item.setCreationDate(calendar.getTime());
+      }
+      else if ("hier".equalsIgnoreCase(dateString)) {
+        String[] split = timeString.split(":");
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
+        calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        item.setCreationDate(calendar.getTime());
+      }
+      else {
+        try {
+          String[] split = timeString.split(":");
+          Date parsedDate = dayOnlyDateFormat.parse(dateString);
+          calendar.setTime(parsedDate);
+          calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
+          calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
+          item.setCreationDate(calendar.getTime());
+        }
+        catch (ParseException e) {
+          e.printStackTrace();
+        }
+
+      }
+    }
+    
+    if (item.getCreationDate() == null)
+    {
+      // use default time
+      item.setCreationDate(calendar.getTime());
+    }
+    
+    return item.getCreationDate();
+  }
+
+  private static Document readDoc(String url)
+      throws IOException, InterruptedException
+  {
     Document doc = null;
     if (DEBUG) {
       doc = Jsoup.parse(new File("lbc-test2.htm"), "iso-8859-1");
@@ -98,170 +334,7 @@ public class Main
       }
       while (nbTries < 5 && !success);
     }
-
-    if (doc == null) {
-      batch.nextURL = null;
-      return batch;
-    }
-
-    Elements links = doc.select("section[id=listingAds]");
-    boolean added = true;
-    for (Element link1 : links) {
-      for (Element link : link1.select("a[href]")) {
-        try {
-          OfferItem item = new OfferItem();
-          Elements dateDiv = link.select("p[itemprop=availabilityStarts]");
-          if (dateDiv != null && !dateDiv.isEmpty()) {
-
-            String dateString = dateDiv.attr("content");
-            String timeString = dateDiv.text();
-            timeString = timeString.split(",")[1].trim();
-
-            if ("aujourd'hui".equalsIgnoreCase(dateString)) {
-              String[] split = timeString.split(":");
-              calendar.setTime(new Date());
-              calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
-              calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
-              item.setCreationDate(calendar.getTime());
-            }
-            else if ("hier".equalsIgnoreCase(dateString)) {
-              String[] split = timeString.split(":");
-              calendar.setTime(new Date());
-              calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
-              calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
-              calendar.add(Calendar.DAY_OF_MONTH, -1);
-              item.setCreationDate(calendar.getTime());
-            }
-            else {
-              try {
-                String[] split = timeString.split(":");
-                Date parsedDate = dayOnlyDateFormat.parse(dateString);
-                calendar.setTime(parsedDate);
-                calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(split[0]));
-                calendar.set(Calendar.MINUTE, Integer.valueOf(split[1]));
-                item.setCreationDate(calendar.getTime());
-              }
-              catch (ParseException e) {
-                e.printStackTrace();
-              }
-
-            }
-          }
-          String title = link.select("h2.item_title").text().toString();
-
-          Elements priceDiv = link.select("h3[itemprop=price]");
-          String price = priceDiv.attr("content");
-
-          String categoryString = "";
-          Elements categoryDiv = link.select("p[itemprop=category]");
-          if (categoryDiv != null)
-            categoryString = categoryDiv.text();
-
-          String placementString = "";
-          Elements placementDiv = link.select("p[itemprop=availableAtOrFrom]");
-          if (placementDiv != null)
-            placementString = placementDiv.text();
-
-          item.setCategory(categoryString);
-          item.setTitle(title);
-          String href = link.attr("href");
-          if (href.startsWith("//"))
-          { 
-            href = "http:" + href;
-          }
-                              // System.out.println("href" + href);
-
-          item.setUrl(href);
-
-          Matcher idMatcher = idPattern.matcher(href);
-          if (idMatcher.find()) {
-            item.setId(idMatcher.group(1));
-          }
-          item.setPlaceName(placementString);
-          if (price != null) {
-
-            Matcher matcher = pricePattern.matcher(price);
-            if (matcher.find()) {
-
-              String priceString = matcher.group(0);
-              try {
-                if (!priceString.isEmpty()) {
-
-                  Float priceFloat = Float.valueOf(priceString);
-                  item.setPrice(priceFloat);
-                }
-              }
-              catch (Exception e) {
-                //
-                System.out.println("Failed to parse ");
-                e.printStackTrace();
-              }
-            }
-
-          }
-          if (title == null || title.isEmpty()) {
-            // nothing
-            added = true;
-          }
-          else if (DEBUG) {
-            log.info("Item to add (DEBUG) : " + item);
-            added = true;
-          }
-          else {
-            added = repository.addItem(item);
-          }
-
-          if (!added) {
-            if (title == null || title.isEmpty()) {
-              // nothing
-            }
-            else {
-              log.info("Item already existed : " + item);
-              batch.nextURL = null;
-            }
-
-            break;
-          }
-          else {
-            batch.nbNewItems++;
-          }
-          // System.out.println(" " + dateString + " at " + timeString +
-          if (added && title != null && !title.isEmpty()) {
-            log.debug("Title: " + title + " cat. " + categoryString + ")");
-          }
-          // + " @ " + price + "( " + categoryString + ")");
-        }
-        catch (Exception e) {
-          log.error("Parse exception ", e);
-        }
-      }
-    }
-
-    if (!added) {
-      log.info("End");
-      batch.nextURL = null;
-      return batch;
-    }
-
-    // Elements nav = doc.select("div.pagination_links_container"); // a with
-    // href
-    Elements nextPages = doc.select("a[id=next]");
-    if (nextPages.isEmpty()) {
-      batch.nextURL = null;
-    }
-    for (Element link : nextPages) {
-      String href = link.attr("href");
-      if (href.startsWith("//"))
-      { 
-        href = "http:" + href;
-      }
-      batch.nextURL = href;
-      
-      break;
-    }
-
-    return batch;
-
+    return doc;
   }
 
   static class ParseBatch
